@@ -4,7 +4,7 @@
     <title>class introduction input</title>
     <script>
         function add_input() {
-            var count = document.getElementById("count").value + 1;
+            var count = document.getElementById("count").value;
             count++;
             document.getElementById("count").value = count;
 
@@ -14,8 +14,15 @@
             var chapter_input = document.createElement("input");
             chapter_input.type = "text";
             chapter_input.name = "chapter_id";
-            console.log("chapter_input_name:" + chapter_input.name)
             chapterDiv.appendChild(chapter_input)
+
+            var chapter_titleDiv = document.createElement("div");
+            var chapter_titleContent = document.createTextNode("chapter title:");
+            chapter_titleDiv.appendChild(chapter_titleContent);
+            var chapter_title_input = document.createElement("input");
+            chapter_title_input.type = "text";
+            chapter_title_input.name = "chapter_title";
+            chapter_titleDiv.appendChild(chapter_title_input)
 
             var sectionDiv = document.createElement("div");
             var sectionContent = document.createTextNode("section id:");
@@ -28,10 +35,18 @@
             var section_titleDiv = document.createElement("div");
             var section_titleContent = document.createTextNode("section title:");
             section_titleDiv.appendChild(section_titleContent);
-            var section__title_input = document.createElement("input");
-            section__title_input.type = "text";
-            section__title_input.name = "section_title";
-            section_titleDiv.appendChild(section__title_input)
+            var section_title_input = document.createElement("input");
+            section_title_input.type = "text";
+            section_title_input.name = "section_title";
+            section_titleDiv.appendChild(section_title_input)
+
+            var section_introDiv = document.createElement("div");
+            var section_introContent = document.createTextNode("section introduction:");
+            section_introDiv.appendChild(section_introContent);
+            var section_intro_input = document.createElement("input");
+            section_intro_input.type = "text";
+            section_intro_input.name = "section_intro";
+            section_introDiv.appendChild(section_intro_input)
 
             var videoDiv = document.createElement("div");
             var videoContent = document.createTextNode("video:");
@@ -42,8 +57,10 @@
             videoDiv.appendChild(videoinput)
 
             document.getElementById("video").appendChild(chapterDiv);
+            document.getElementById("video").appendChild(chapter_titleDiv);
             document.getElementById("video").appendChild(sectionDiv);
             document.getElementById("video").appendChild(section_titleDiv);
+            document.getElementById("video").appendChild(section_introDiv);
             document.getElementById("video").appendChild(videoDiv);
         }
     </script>
@@ -59,10 +76,24 @@
                 <p><b>chapter id:</b></p>
                 <input type='text' name='chapter_id' /><br><br>
             </div>
+
+            <div id="chapter_title">
+                <p><b>chapter title:</b></p>
+                <input type='text' name='chapter_title' /><br><br>
+            </div>
+
             <div id="section_id">
-                <p><b>section id:</b></p><input type='text' name='section_id'></div>
+                <p><b>section id:</b></p><input type='text' name='section_id'>
+            </div>
+
             <div id="section_title">
-                <p><b>section title:</b></p><input type='text' name='section_title'></div>
+                <p><b>section title:</b></p><input type='text' name='section_title'>
+            </div>
+
+            <div id="section_intro">
+                <p><b>section introduction:</b></p><input type='text' name='section_intro'>
+            </div>
+
             <p>
                 <b>
                 video:

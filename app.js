@@ -9,8 +9,8 @@ app.use(express.static('uploads'));
 
 
 //使用router資料夾下的video
-const video = require('./routes/video');
-app.use('/', video);
+const course = require('./routes/course');
+app.use('/', course);
 
 
 
