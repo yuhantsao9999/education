@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <title>class</title>
-    <link rel="stylesheet" href="./css/course.css" />
+    <link rel="stylesheet" href="./css/acd.css" />
 </head>
 
 <body class="about">
     <div id="header">
-
         <div class="full-width container clearfix">
             <div>
                 <div class="nav_item_bar">
@@ -17,7 +16,6 @@
                     <a class="search" href="">探索</a>
                     <input id="search" style="font-size:20px">
                     <button onclick="search_course()" type="submit"></button>
-
                     <div id="nav" class="col-8">
                         <ul class="clearfix">
                             <li class="active"><a href="#">我要開課</a></li>
@@ -29,31 +27,47 @@
             </div>
         </div>
     </div>
-    <!-- ---------大報 -->
+    <!-------大報 ------>
     <div id="content">
         <div class="header">
             <div class="container clearfix">
-
                 <div class="row">
                     <div class="col-12">
-                        <h1 class="title" id="title"></h1>
-                        <h3 class="subtitle" id="course_content"></h3>
-                        <h3 class="subtitle" id="course_teacher"></h3>
-                        <input class="add_class" type="button" value="加入課表" name="按鈕名稱">
+                        <h1 class="title" id="title">我是大標題</h1>
+                        <h3 class="subtitle" id="course_content">我是副標題</h3>
+                        <h3 class="subtitle" id="course_teacher">我是小標題</h3>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- ---------內容 ------->
+        <!------- 內容 ------->
+        <div>
+            <div class="container">
+                <div class="class_container" id="class_container">
+                    <div class="row clearfix">
+                        <div class="col-4">
+                            <img class="class_picture" src="./img/golang.png" alt="photo" />
+                        </div>
+                        <div class="col-8">
+                            <h3 class="title">welcome to my class</h3>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, similique, quia, iste sed possimus blanditiis dolor eligendi numquam nemo incidunt laudantium consectetur voluptatibus tempora. Sit, quae, ut, temporibus, porro ipsa id consequuntur
+                                impedit reprehenderit eligendi ad quia laboriosam dolores numquam ab neque suscipit natus assumenda.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt, obcaecati illo architecto sapiente repellendus molestiae veniam hic minus magni error.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="class_chapter_section">
             <div class="class_chapter_section_container" id="class_chapter_section_container">
                 <!-- <div class="row clearfix">
-
                     <div class="col-2">
-                        <div class="one" id="test"></div>
+                        <div class="one" id="test"z</div>
                     </div>
-
-
                     <div id=chapter_section_detail>
                         <div class="col-10">
                             <h3 class="title"></h3>
@@ -65,7 +79,6 @@
                     </div>
                 </div> -->
             </div>
-
         </div>
 
         <div class="summary gray-bg">
@@ -107,22 +120,22 @@
 
                 <div class="row">
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                 </div>
 
@@ -138,7 +151,7 @@
 
                 <div class="row">
                     <div class="col-3">
-                        <img id="logo" src="./img/logo.png" alt="massive" />
+                        <img id="logo" src="./img/logo.png" alt="logo" />
                         <p>讓學習<br>無時無刻無距離</p>
                     </div>
                     <div class="col-3">
@@ -189,84 +202,68 @@
 
 </body>
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const title = urlParams.get('title');
+    // get search course data
+    function search_course() {
+        var keyword = document.getElementById("search").value;
+        window.location.replace("./search.html?keyword=" + keyword);
+    }
+
+
+    let currentUrl = window.location.href;
+    currentUrl = new URL(currentUrl);
+    let courseHttp = new XMLHttpRequest();
+    var keyword = currentUrl.searchParams.get("keyword");
+    let courseUrl = "/education/classinfo/search/?keyword=" + keyword;
+
+
+
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "/education/classinfo?title=" + title, true);
+    xmlhttp.open("GET", courseUrl, true);
     xmlhttp.send(null);
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-
-            //替換課程名稱
-            var titleDiv = document.createElement("div");
-            var titleContent = document.createTextNode(obj.data.Course_title);
-            titleDiv.appendChild(titleContent);
-            document.getElementById("title").appendChild(titleDiv)
-
-            //替換課程內容
-            var contentDiv = document.createElement("div");
-            var contentContent = document.createTextNode(obj.data.Course_intro);
-            contentDiv.appendChild(contentContent);
-            document.getElementById("course_content").appendChild(contentDiv)
-
-            //替換課程老師
-            var teacherDiv = document.createElement("div");
-            var teacherContent = document.createTextNode("授課教師 : " + obj.data.Course_teacher);
-            teacherDiv.appendChild(teacherContent);
-            document.getElementById("course_teacher").appendChild(teacherDiv)
-
-            //替換章節ID
-            var number = obj.data.Course_detail.length
-                // console.log(number)
-            for (var i = 0; i < obj.data.Course_detail.length; i++) {
-
-                var chapterDiv = document.createElement("div");
-                var rowDiv = document.createElement("div");
+            console.log("OBJ : " + obj)
+            for (var i = 0; i < 3; i++) {
+                //替換課程圖片
+                var classImg = document.createElement("img");
                 var colDiv = document.createElement("div");
-                rowDiv.className = "col-2"
-                colDiv.className = "one"
-                var chapterContent = document.createTextNode(obj.data.Course_detail[i].Chapter_id);
-                chapterDiv.className = "row clearfix"
-                colDiv.appendChild(chapterContent);
-                rowDiv.appendChild(colDiv);
-                chapterDiv.appendChild(rowDiv);
-                // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
+                var rowA = document.createElement("a");
+                // var titleContent = document.createTextNode(obj.Course_title);
+                classImg.className = "class_picture";
+                classImg.src = "./img/golang.png"
+                colDiv.className = "col-4"
+                rowA.className = "row clearfix"
 
-                //替換章節內容
-                var chapter_title_Div = document.createElement("div");
-                var chapter_row_Div = document.createElement("h3");
-                var chapter_section_detail_div = document.createElement("div");
 
-                chapter_row_Div.className = "col-10"
-                chapter_section_detail_div.className = "chapter_section_detail"
+                rowA.href = ("/course.html?title=" + obj[i].title);
+                console.log("TITLE IS" + obj[i].title)
 
-                var chapter_title_Content = document.createTextNode(obj.data.Course_detail[i].Chapter_title);
-                // console.log(chapter_title_Content)
+                colDiv.appendChild(classImg)
+                    // document.getElementById("class_container").appendChild(rowDiv)
+                    //替換課程標題
 
-                chapter_row_Div.appendChild(chapter_title_Content)
-                chapter_section_detail_div.appendChild(chapter_row_Div)
-                chapterDiv.appendChild(chapter_section_detail_div);
-                // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
+                var titleh3 = document.createElement("h3");
+                var introP = document.createElement("p");
+                var col_8Div = document.createElement("div");
+                titleh3.className = "title"
 
-                console.log(obj.data.Course_detail[i].Chapter_detail.length)
-                for (var k = 0; k < obj.data.Course_detail[i].Chapter_detail.length; k++) {
-                    //替換節的內容
-                    var section_title_Div = document.createElement("p");
-                    var section_title_Content = document.createTextNode(obj.data.Course_detail[i].Chapter_detail[k].Section_title);
-                    // console.log(section_title_Content)
-                    section_title_Div.appendChild(section_title_Content);
-                    chapterDiv.appendChild(section_title_Div);
-                    document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
+                col_8Div.className = "col-8"
 
-                }
-
+                var titleContent = document.createTextNode(obj[i].title);
+                console.log(titleContent)
+                var introContent = document.createTextNode(obj[i].intro);
+                titleh3.appendChild(titleContent)
+                introP.appendChild(introContent)
+                col_8Div.appendChild(titleh3)
+                col_8Div.appendChild(introP)
+                rowA.appendChild(colDiv)
+                rowA.appendChild(col_8Div)
+                document.getElementById("class_container").appendChild(rowA)
             }
 
+
         }
-
-
-
     }
 </script>
 

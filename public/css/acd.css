@@ -1,7 +1,7 @@
-.one {
+/* .one {
     height: 200px;
     font-size: 4em;
-}
+} */
 
 .nav_item_bar>input#search {
     width: 292px;
@@ -60,7 +60,7 @@ button {
 .about #content .gray-bg {
     padding: 100px 0;
     text-align: center;
-    background-color: #CEDADA;
+    /* background-color: #CEDADA; */
 }
 
 .about #content .gray-bg .count {
@@ -121,12 +121,7 @@ a {
     display: block;
     width: 1170px;
     margin: 0 auto;
-}
-
-.class_chapter_section_container {
-    display: block;
-    width: 70%;
-    margin: 0 auto;
+    text-decoration: none;
 }
 
 .container.full-width {
@@ -195,6 +190,11 @@ a {
     height: 100px
 }
 
+.class_picture {
+    width: 300px;
+    height: 300px
+}
+
 .search {
     padding: 0 12px;
     color: black;
@@ -232,6 +232,7 @@ a {
 
 .boundary:after {
     content: "|";
+    font-size: 20px;
     padding: 0 12px;
 }
 
@@ -264,32 +265,46 @@ a {
 }
 
 #content div.header {
-    padding: 70px 0;
-    background-color: #131B23;
+    margin: auto 0;
+    padding: 200px 0;
+    height: 580px;
+    background-image: url(../img/banner.jpg);
     background-size: cover;
     background-position: 100%;
+    background-repeat: no-repeat;
 }
+
+
+/* #content div.header {
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+    display: block;
+    background-image: url(https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/Campaigns/files-1565255258090.jpg);
+    background-size: cover;
+    background-position: 50% 50%;
+} */
 
 #content div.header .title {
     /* float: left; */
     margin: 0;
-    color: white;
+    color: black;
     text-transform: uppercase;
     font-weight: normal;
     letter-spacing: 2px;
     font-size: 50px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 #content div.header .subtitle {
     /* float: left; */
     margin: 0;
-    color: white;
+    color: black;
     text-transform: uppercase;
     font-weight: normal;
     letter-spacing: 2px;
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .intro {

@@ -8,9 +8,19 @@ app.use(express.static('public'));
 app.use(express.static('uploads'));
 
 
-//使用router資料夾下的video
+//使用router資料夾下的course
 const course = require('./routes/course');
 app.use('/', course);
+
+const course_list = require('./routes/course_list');
+app.use('/', course_list);
+
+const course_search = require('./routes/course_search');
+app.use('/', course_search);
+
+
+
+
 
 
 

@@ -3,10 +3,23 @@ var bodyParser = require('body-parser')
 var con = require('../module/db');
 const path = require('path')
 const app = express();
-// var mysql = require("mysql");
-var multer = require('multer');
 const router = express.Router();
 var async = require('async');
+// var mysql = require("mysql");
+var aws = require('aws-sdk');
+var multerS3 = require('multer-s3');
+var multer = require('multer');
+
+//s3的帳號密碼
+// const BUCKET_NAME = 'my-first-education-project';
+// const IAM_USER_KEY = 'AKIAWUNAWR5D2K6QYK4J';
+// const IAM_USER_SECRET = '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';
+
+// aws.config.update({
+//     accessKeyId: IAM_USER_KEY,
+//     secretAccessKey: IAM_USER_SECRET
+// });
+// const s3 = new aws.S3();
 
 // 從根目錄使用router
 app.use('/', router);
@@ -24,6 +37,7 @@ router.get('/', (req, res) => {
 });
 
 
+
 //使用multer將影片傳到assets並幫影片命名
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -37,6 +51,19 @@ var upload = multer({ storage: storage })
 
 router.use(express.static(path.join(__dirname, 'public')))
 
+//s3取代multer
+// var upload = multer({
+//     storage: multerS3({
+//         s3: s3,
+//         bucket: 'my-first-education-project',
+//         metadata: function(req, file, cb) {
+//             cb(null, { fieldName: file.fieldname });
+//         },
+//         key: function(req, file, cb) {
+//             cb(null, 'video/' + file.fieldname + '-' + Date.now() + ".mp4")
+//         }
+//     })
+// })
 
 // var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'main_video', maxCount: 1 }]);
 router.post("/education/class_introduction", upload.array("class_video"), function(req, res) {
@@ -109,6 +136,8 @@ router.post("/education/class_introduction", upload.array("class_video"), functi
     });
 })
 
+
+//course detail api
 router.get("/education/classinfo", function(req, res) {
     var title = req.query.title;
     var mysql_course = `select * from course where title='${title}'`;
@@ -150,8 +179,10 @@ router.get("/education/classinfo", function(req, res) {
                     }
                     obj["Course_detail"].push(chp_obj)
                 }
-                console.log(obj)
-                res.send(obj)
+                var test = {};
+                test["data"] = obj
+                console.log(test)
+                res.send(test)
             });
         });
     });
