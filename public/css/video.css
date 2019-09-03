@@ -1,8 +1,3 @@
-/* .one {
-    height: 200px;
-    font-size: 4em;
-} */
-
 .nav_item_bar>input#search {
     width: 292px;
     margin: 0px;
@@ -39,63 +34,23 @@ button {
     width: 50px
 }
 
-.add_class {
-    border: 0;
-    background-color: #9BC4CB;
-    color: #007791;
-    border-radius: 10px;
-    width: 150px;
-    height: 50px;
-    margin-top: 20px;
-    cursor: pointer;
-}
-
-.add_class:hover {
-    color: #007791;
-    background-color: #fff;
-    width: 150px;
-    height: 50px;
-}
-
-.about #content .gray-bg {
-    padding: 100px 0;
-    text-align: center;
-    /* background-color: #CEDADA; */
-}
-
-.about #content .gray-bg .count {
-    font-size: 36px;
-}
-
-.about #content .gray-bg h4 {
-    margin: 0;
-    text-transform: uppercase;
-    font-weight: normal;
-    color: #323232;
-}
-
-.about #content .clients {
-    padding: 100px 0;
-}
-
-.about .summary i {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 36px;
-}
-
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 15px;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
+}
+
+.level {
+    line-height: 48px;
+    height: 50px;
+    color: #eee;
+    font-size: 2em;
+    margin-left: 5%;
+    /* line-height: 100px; */
+    vertical-align: middle;
+    font-family: Microsoft JhengHei;
 }
 
 ul {
@@ -128,21 +83,6 @@ a {
     width: 100%;
 }
 
-.button {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 15px 30px;
-    background: #fff;
-    color: #222;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 14px;
-}
-
-.button.bordered {
-    border: 1px solid black;
-}
-
 .clearfix:after,
 .row:after {
     content: "";
@@ -156,7 +96,6 @@ a {
 }
 
 .col-2,
-.col-3,
 .col-4,
 .col-6,
 .col-12 {
@@ -169,6 +108,7 @@ a {
 }
 
 .col-3 {
+    float: left;
     width: 25%;
 }
 
@@ -188,11 +128,6 @@ a {
     float: left;
     width: 100px;
     height: 100px
-}
-
-.class_picture {
-    width: 300px;
-    height: 300px
 }
 
 .search {
@@ -236,8 +171,82 @@ a {
     padding: 0 12px;
 }
 
-#content>div {
-    padding-top: 100px;
+.theDiv {
+    float: left;
+    width: 15%;
+    height: 100vh;
+    /* overflow-x: hidden;
+    overflow-y: auto; */
+    overflow-y: scroll;
+}
+
+.scroll {
+    padding: 16px 0;
+    max-height: 70%;
+    /* overflow-y: scroll; */
+}
+
+.scroll_chapter {
+    text-decoration: none;
+    font-size: 20px;
+    font-family: Microsoft JhengHei;
+    letter-spacing: 3px;
+}
+
+.scroll_section {
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 45px;
+    font-family: Microsoft JhengHei;
+    letter-spacing: 3px;
+}
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.video_intro_Div {
+    width: 85%;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.videoDiv {
+    width: 100%
+}
+
+#video {
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 70%;
+}
+
+.class_intro {
+    padding: 5%;
 }
 
 #content>div.full-padding {
@@ -266,65 +275,24 @@ a {
 
 #content div.header {
     margin: auto 0;
-    padding: 200px 0;
-    height: 580px;
-    background-image: url(../img/banner.jpg);
+    /* padding: 200px 0; */
+    height: 50px;
+    background-color: black;
+    /* background-image: url(../img/banner.jpg); */
     background-size: cover;
     background-position: 100%;
     background-repeat: no-repeat;
-}
-
-
-/* #content div.header {
-    width: 100%;
-    height: 600px;
-    margin: 0 auto;
-    display: block;
-    background-image: url(https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/Campaigns/files-1565255258090.jpg);
-    background-size: cover;
-    background-position: 50% 50%;
-} */
-
-#content div.header .title {
-    /* float: left; */
-    margin: 0;
-    color: black;
-    text-transform: uppercase;
-    font-weight: normal;
-    letter-spacing: 2px;
-    font-size: 50px;
-    margin-bottom: 30px;
-}
-
-#content div.header .subtitle {
-    /* float: left; */
-    margin: 0;
-    color: black;
-    text-transform: uppercase;
-    font-weight: normal;
-    letter-spacing: 2px;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.intro {
-    text-align: center;
-    margin-bottom: 100px;
-}
-
-.intro h2 {
-    margin: 0;
-    padding-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #333;
-    font-weight: normal;
 }
 
 #footer {
     background: #f5f5f5;
     position: relative;
     padding: 80px 0;
+}
+
+#footer .col-3 {
+    float: left;
+    padding: 0 30px;
 }
 
 #footer .logo {

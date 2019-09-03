@@ -19,8 +19,8 @@ const course_search = require('./routes/course_search');
 app.use('/', course_search);
 
 
-
-
+const video = require('./routes/video');
+app.use('/', video);
 
 
 

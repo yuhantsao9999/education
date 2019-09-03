@@ -1,10 +1,8 @@
 const express = require('express')
-var bodyParser = require('body-parser')
 var con = require('../module/db');
-const path = require('path')
 const app = express();
 const router = express.Router();
-var async = require('async');
+
 
 
 // 從根目錄使用router

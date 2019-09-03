@@ -137,7 +137,7 @@ router.post("/education/class_introduction", upload.array("class_video"), functi
 })
 
 
-//course detail api
+//course detail api  (同video.js)
 router.get("/education/classinfo", function(req, res) {
     var title = req.query.title;
     var mysql_course = `select * from course where title='${title}'`;
