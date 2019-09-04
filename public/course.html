@@ -229,9 +229,14 @@
                 colDiv.className = "one"
                 var chapterContent = document.createTextNode(obj.data.Course_detail[i].Chapter_id);
                 chapterDiv.className = "row clearfix"
+
+                var chapterDiv_a = document.createElement("a");
+                chapterDiv_a.href = ("/video.html?title=" + obj.data.Course_title + "&chapter=" + obj.data.Course_detail[i].Chapter_id + "&section=1");
+
                 colDiv.appendChild(chapterContent);
                 rowDiv.appendChild(colDiv);
-                chapterDiv.appendChild(rowDiv);
+                chapterDiv_a.appendChild(rowDiv);
+                // chapterDiv.appendChild(chapterDiv_a);
                 // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
                 //替換章節內容
@@ -247,7 +252,8 @@
 
                 chapter_row_Div.appendChild(chapter_title_Content)
                 chapter_section_detail_div.appendChild(chapter_row_Div)
-                chapterDiv.appendChild(chapter_section_detail_div);
+                chapterDiv_a.appendChild(chapter_section_detail_div);
+                // chapterDiv.appendChild(chapterDiv_a);
                 // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
                 console.log(obj.data.Course_detail[i].Chapter_detail.length)
@@ -257,7 +263,8 @@
                     var section_title_Content = document.createTextNode(obj.data.Course_detail[i].Chapter_detail[k].Section_title);
                     // console.log(section_title_Content)
                     section_title_Div.appendChild(section_title_Content);
-                    chapterDiv.appendChild(section_title_Div);
+                    chapterDiv_a.appendChild(section_title_Div);
+                    chapterDiv.appendChild(chapterDiv_a);
                     document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
                 }

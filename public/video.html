@@ -31,17 +31,7 @@
     <!-------大報 ------>
     <div id="content">
         <div class="header">
-
-            <!-- <div class="container clearfix"> -->
-            <div class="level">golang 程式設計入門</div>
-            <!-- <div class="row"> -->
-            <!-- <div class="col-12">
-                        <h1 class="title" id="title">我是大標題</h1>
-                        <h3 class="subtitle" id="course_content">我是副標題</h3>
-                        <h3 class="subtitle" id="course_teacher">我是小標題</h3>
-                    </div> -->
-            <!-- </div> -->
-            <!-- </div> -->
+            <div class="level"></div>
         </div>
         <!------- 內容 ------->
         <div class="container_video">
@@ -54,119 +44,15 @@
                     <!-- //整個課程 -->
                     <li>
                         <!------- 單一課程------->
-                        <div>
-                            <!------- 單一課程------->
-                            <h3 class="scroll_chapter">章節</h3>
-                            <!------- chapter------->
-                            <div>
-                                <!------- 所有section------->
-                                <ul>
-                                    <!-------所有 section------->
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3 class="scroll_chapter">章節</h3>
-                            <!------- chapter------->
-                            <div>
-                                <!------- 所有section------->
-                                <ul>
-                                    <!-------所有 section------->
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div id="course_menu">
 
-                            <h3 class="scroll_chapter">章節</h3>
-                            <!------- chapter------->
-                            <div>
-                                <!------- 所有section------->
-                                <ul>
-                                    <!-------所有 section------->
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3 class="scroll_chapter">章節</h3>
-                            <!------- chapter------->
-                            <div>
-                                <!------- 所有section------->
-                                <ul>
-                                    <!-------所有 section------->
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3 class="scroll_chapter">章節</h3>
-                            <!------- chapter------->
-                            <div>
-                                <!------- 所有section------->
-                                <ul>
-                                    <!-------所有 section------->
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                    <li class="scroll_section">小節
-                                        <!------- 單一video------->
-                                        <a href="">video</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </li>
                 </ul>
             </div>
             <div class="video_intro_Div">
-                <div class="videoDiv">
-                    <video id="video" src="https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/video/sample.mp4" controls></video>
-                    <!-- <div>
-                        <button onclick="playVideo();">play</button>
-                    </div> -->
+                <div class="videoDiv" id="videoDiv">
+                    <!-- <video id="video" src="https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/video/sample.mp4" controls></video> -->
                 </div>
                 <div class="class_intro">
                     <h3>關於此課程</h3>
@@ -193,6 +79,68 @@
 
 </body>
 <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get('title');
+    const chapter = urlParams.get('chapter');
+    const section = urlParams.get('section');
+    console.log(typeof(title))
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("get", "/education/classinfo?title=" + title, true)
+    xmlhttp.send(null);
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var obj = JSON.parse(xmlhttp.responseText)
+                // 課程名稱
+            document.getElementsByClassName("level")[0].innerHTML = title + " > " + chapter + " > " + section;
+
+            //左側列表
+            var chapter_number = obj.data.Course_detail.length
+            for (i = 0; i < chapter_number; i++) {
+                var section_number = obj.data.Course_detail[i].Chapter_detail.length
+                var chapterDiv = document.createElement("div");
+                var chapterUl = document.createElement("ul");
+                for (k = 0; k < section_number; k++) {
+                    var sectionLi = document.createElement("li");
+                    var section_a = document.createElement("a");
+                    var section_title = obj.data.Course_detail[i].Chapter_detail[k].Section_title
+                    var sectionContent = document.createTextNode(section_title);
+                    sectionLi.appendChild(sectionContent)
+                    sectionLi.className = "scroll_section"
+                    var chapter_id = obj.data.Course_detail[i].Chapter_id
+                    var section_id = obj.data.Course_detail[i].Chapter_detail[k].Section_id
+                    section_a.href = `http://localhost:3000/video.html?title=${title}&chapter=${chapter_id}&section=${section_id}`
+                    section_a.appendChild(sectionLi)
+                    chapterUl.appendChild(section_a)
+                }
+                chapterDiv.appendChild(chapterUl)
+                var chapterH3 = document.createElement("h3");
+                chapterH3.className = "scroll_chapter"
+                var chapter_title = obj.data.Course_detail[i].Chapter_title;
+                var chapterContent = document.createTextNode(chapter_title);
+
+                chapterH3.appendChild(chapterContent)
+                document.getElementById("course_menu").appendChild(chapterH3)
+                document.getElementById("course_menu").appendChild(chapterDiv)
+            }
+        }
+    }
+
+    var xmlhttp_video = new XMLHttpRequest();
+    xmlhttp_video.open("get", "/education/videoinfo?title=" + title + "&chapter=" + chapter + "&section=" + section, true)
+    xmlhttp_video.send(null);
+    xmlhttp_video.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var obj = JSON.parse(xmlhttp_video.responseText)
+            var video_name = obj.data[0].video
+            var video = document.createElement("video");
+            console.log(video_name)
+            video.id = "video"
+            video.controls = "controls"
+            video.src = "https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/education_video/" + video_name
+            console.log(video.src)
+            document.getElementById("videoDiv").appendChild(video)
+        }
+    }
 </script>
 
 </html>

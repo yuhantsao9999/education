@@ -3,7 +3,7 @@ var bodyParser = require('body-parser')
 var con = require('../module/db');
 const app = express();
 const router = express.Router();
-
+var async = require('async');
 
 // 從根目錄使用router
 app.use('/', router);
@@ -64,4 +64,38 @@ router.get("/education/classinfo", function(req, res) {
         });
     });
 })
+
+//course video api
+router.get("/education/videoinfo", function(req, res) {
+    var title = req.query.title;
+    var chapter_id = req.query.chapter;
+    var section_id = req.query.section;
+    async.waterfall([
+        (next) => {
+            var mysql_course = `select * from course where title='${title}'`;
+            con.query(mysql_course, function(err1, result_course) {
+                var course_id = result_course[0].course_id;
+                next(null, course_id)
+            });
+        },
+        (course_id, next) => {
+            var mysql_video = `select video from new_section where course_id='${course_id}' and chapter_id='${chapter_id}'and section_id='${section_id}'`;
+            con.query(mysql_video, function(err, result_video) {
+                var video = result_video;
+
+                var video = result_video;
+                var data = {};
+                data["data"] = video;
+                next(null)
+                res.send(data)
+            });
+
+        }
+    ], (err, rst) => {
+        if (err) return err;
+    });
+})
+
+
+
 module.exports = router;
