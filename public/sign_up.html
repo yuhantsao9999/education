@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>class</title>
+    <link rel="stylesheet" href="./css/sign_in.css" />
+</head>
+
+<body class="about">
+    <div id="header">
+        <div class="full-width container clearfix">
+            <div>
+                <div class="nav_item_bar">
+                    <a href="./acd.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
+                    <a class="search" href="">探索</a>
+                    <input id="search" style="font-size:20px">
+                    <button onclick="search_course()" type="submit"></button>
+                    <div id="nav" class="col-8">
+                        <ul class="clearfix">
+                            <li class="active"><a href="#">我要開課</a></li>
+                            <li class=""><a href="#">我的課表</a></li>
+                            <li class="boundary"><a href="#">登入</a></li>
+                            <li><a href="#"><i class="icon-search"></i> 註冊</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-------大報 ------>
+    <div id="content">
+        <div class="header">
+        </div>
+
+        <!------- 內容 ------->
+
+        <div class="total_container">
+            <div> <img src="./img/logo.png" alt="logo"></div>
+            <div class="title_container">註冊系統</div>
+
+            <div> <input name='name' type="name" id='name' placeholder="Name" required> </div>
+            <div> <input type="email" name="email" id='email' placeholder="Email" required> </div>
+            <div><input type="password" name='password' placeholder="Password" id='password' required> </div>
+
+            <p>Already have an account ? Please <a href="./sign_in.html">sign in</a> .</p>
+            <input type='submit' value='Submit' id="sumbit">
+
+
+            <div class="container">
+                <p></p>
+                <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                </fb:login-button enctype="application/json">
+                <p id="status"></p>
+                <!-- <form enctype="application/json"> -->
+                <!-- <p></p><input id="fb_token" type='text' name='fb_token' enctype="application/json"> -->
+                <!-- <input type='submit' value='Submit'> -->
+                <!-- </form> -->
+            </div>
+        </div>
+    </div>
+
+
+    <!------- footer ------->
+    <div id="footer" class="dark">
+
+        <div class="info">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-3">
+                        <img id="logo" src="./img/logo.png" alt="logo" />
+                        <p>讓學習<br>無時無刻無距離</p>
+                    </div>
+                    <div class="col-3">
+                        <h4 class="title">recent posts</h4>
+                        <ul class="common-list">
+                            <li><a href="#">standard blog post</a></li>
+                            <li><a href="#">quotation post</a></li>
+                            <li><a href="#">audio post</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="col-3">
+                        <h4 class="title">快速連結</h4>
+                        <ul class="common-list">
+                            <li><a href="#">關於我們</a></li>
+                            <li><a href="#">回到主頁</a></li>
+                            <li><a href="./course_input.html">我要開課</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="container clearfix">
+
+                <div class="copyright">
+                    <div class="title">Copyright 2019 by <a href="#">yuhan</a> | All Rights Reserved</div>
+                </div>
+
+                <div class="social-media">
+                    <ul>
+                        <li><a href="#"><i class="icon-facebook"></i></a></li>
+                        <li><a href="#"><i class="icon-twitter"></i></a></li>
+                        <li><a href="#"><i class="icon-dribbble"></i></a></li>
+                        <li><a href="#"><i class="icon-gplus"></i></a></li>
+                        <li><a href="#"><i class="icon-behance"></i></a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <a href="#header" id="go-top"><i class="icon-up-open"></i></a>
+
+</body>
+<script>
+    document.getElementById("sumbit").addEventListener("click", function() {
+        var xml = new XMLHttpRequest;
+        xml.open('post', '/user/signup', true);
+        xml.setRequestHeader('content-type', 'application/json')
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        console.log("this is" + name, email, password)
+        var profile = {
+                provider: "native",
+                name: name,
+                email: email,
+                password: password
+            }
+            // console.log(profile)
+        xml.send(JSON.stringify(profile));
+        xml.onload = function() {
+            if (xml.responseText == "error") {
+                console.log("duplicate")
+                alert("Cannot repeat registration!please sign in!")
+                window.location.assign('./sign_in.html')
+            } else {
+                console.log("not duplicate")
+                alert("sign up successful")
+                    // var accessToken = JSON.parse(xml.responseText).data.access_token;
+                    // localStorage.setItem("accessToken", accessToken);
+                    // window.location.assign('/acd.html');
+            }
+        }
+    });
+</script>
+
+</html>

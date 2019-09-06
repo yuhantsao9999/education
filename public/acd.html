@@ -20,8 +20,8 @@
                         <ul class="clearfix">
                             <li class="active"><a href="#">我要開課</a></li>
                             <li class=""><a href="#">我的課表</a></li>
-                            <li class="boundary"><a href="#">登入</a></li>
-                            <li><a href="#"><i class="icon-search"></i> 註冊</a></li>
+                            <li class="boundary"><a href="./sign_in.html">登入</a></li>
+                            <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li>
                         </ul>
                     </div>
                 </div>
@@ -45,11 +45,11 @@
         <div>
             <div class="container">
                 <div class="class_container" id="class_container">
-                    <div class="row clearfix">
-                        <div class="col-4">
+                    <!-- <div class="row clearfix"> -->
+                    <!-- <div class="col-4">
                             <img class="class_picture" src="./img/golang.png" alt="photo" />
-                        </div>
-                        <div class="col-8">
+                        </div> -->
+                    <!-- <div class="col-8">
                             <h3 class="title">welcome to my class</h3>
                             <p>
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, similique, quia, iste sed possimus blanditiis dolor eligendi numquam nemo incidunt laudantium consectetur voluptatibus tempora. Sit, quae, ut, temporibus, porro ipsa id consequuntur
@@ -58,8 +58,8 @@
                             <p>
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt, obcaecati illo architecto sapiente repellendus molestiae veniam hic minus magni error.
                             </p>
-                        </div>
-                    </div>
+                        </div> -->
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
                     <div class="col-3">
                         <i class="icon-squares108"></i>
                         <div class="count">36</div>
-                        <h4>人已選課</h4>
+                        <h4>人註冊</h4>
                     </div>
                     <div class="col-3">
                         <i class="icon-television53"></i>
@@ -258,63 +258,6 @@
         var keyword = document.getElementById("search").value;
         window.location.replace("./search.html?keyword=" + keyword);
     }
-
-
-    // let currentUrl = window.location.href;
-    // currentUrl = new URL(currentUrl);
-    // let courseHttp = new XMLHttpRequest();
-    // let courseUrl = "/education/classinfo/search/?keyword=" + keyword;
-
-
-
-    // var xmlhttp = new XMLHttpRequest();
-    // xmlhttp.open("GET", courseUrl, true);
-    // xmlhttp.send(null);
-    // xmlhttp.onreadystatechange = function() {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //         var obj = JSON.parse(xmlhttp.responseText)
-    //         console.log("OBJ : " + obj)
-    //         for (var i = 0; i < 3; i++) {
-    //             //替換課程圖片
-    //             var classImg = document.createElement("img");
-    //             var colDiv = document.createElement("div");
-    //             var rowA = document.createElement("a");
-    //             // var titleContent = document.createTextNode(obj.Course_title);
-    //             classImg.className = "class_picture";
-    //             classImg.src = "./img/golang.png"
-    //             colDiv.className = "col-4"
-    //             rowA.className = "row clearfix"
-
-
-    //             rowA.href = ("/course.html?title=" + obj[i].title);
-    //             console.log("TITLE IS" + obj[i].title)
-
-    //             colDiv.appendChild(classImg)
-    //                 // document.getElementById("class_container").appendChild(rowDiv)
-    //                 //替換課程標題
-
-    //             var titleh3 = document.createElement("h3");
-    //             var introP = document.createElement("p");
-    //             var col_8Div = document.createElement("div");
-    //             titleh3.className = "title"
-
-    //             col_8Div.className = "col-8"
-
-    //             var titleContent = document.createTextNode(obj[i].title);
-    //             console.log(titleContent)
-    //             var introContent = document.createTextNode(obj[i].intro);
-    //             titleh3.appendChild(titleContent)
-    //             introP.appendChild(introContent)
-    //             col_8Div.appendChild(titleh3)
-    //             col_8Div.appendChild(introP)
-    //             rowA.appendChild(colDiv)
-    //             rowA.appendChild(col_8Div)
-    //             document.getElementById("class_container").appendChild(rowA)
-    //         }
-
-
-    //     }
-    // }
 </script>
 
 </html>
