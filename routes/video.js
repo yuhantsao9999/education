@@ -14,13 +14,14 @@ router.get('/', (req, res) => {
     res.send('video');
 });
 
+
 //course detail api
 router.get("/education/classinfo", function(req, res) {
     var title = req.query.title;
     var mysql_course = `select * from course where title='${title}'`;
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
-        console.log(result_course) //所有課程資訊
+            // console.log(result_course) //所有課程資訊
         var course_id = result_course[0].course_id;
         var title = result_course[0].title;
         var intro = result_course[0].intro;
@@ -28,11 +29,11 @@ router.get("/education/classinfo", function(req, res) {
         var mysql_chapter = `select * from chapter where course_id='${course_id}'`;
         con.query(mysql_chapter, function(err, result_chapter) {
             if (err) throw err
-            console.log(result_chapter) //所有章節資訊
+                // console.log(result_chapter) //所有章節資訊
             var mysql_section = `select * from new_section where course_id='${course_id}'`;
             con.query(mysql_section, function(err, result_section) {
                 if (err) throw err
-                console.log(result_section) //所有節的資訊
+                    // console.log(result_section) //所有節的資訊
                 var obj = {};
                 obj['Course_id'] = result_course[0].course_id; //添加名稱
                 obj['Course_title'] = result_course[0].title;
@@ -58,13 +59,15 @@ router.get("/education/classinfo", function(req, res) {
                 }
                 var test = {};
                 test["data"] = obj
-                console.log(test)
+                    // console.log(test)
                 res.send(test)
             });
         });
     });
 })
 
+
+//video.html
 //course video api
 router.get("/education/videoinfo", function(req, res) {
     var title = req.query.title;
@@ -96,6 +99,12 @@ router.get("/education/videoinfo", function(req, res) {
     });
 })
 
+//update video length api
+// var title = req.query.title;
+// var chapter_id = req.query.chapter;
+// var section_id = req.query.section;
+// var currentTime = localStorage.getItem("currentTime")
+// var totalTime = localStorage.getItem("totalTime")
 
 
 module.exports = router;

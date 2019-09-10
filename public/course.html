@@ -13,17 +13,17 @@
         <div class="full-width container clearfix">
             <div>
                 <div class="nav_item_bar">
-                    <a href="./acd.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
+                    <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
                     <input id="search" style="font-size:20px">
                     <button onclick="search_course()" type="submit"></button>
 
                     <div id="nav" class="col-8">
-                        <ul class="clearfix">
+                        <ul class="clearfix" id="clearfix">
                             <li class="active"><a href="#">我要開課</a></li>
-                            <li class=""><a href="#">我的課表</a></li>
-                            <li class="boundary"><a href="#">登入</a></li>
-                            <li><a href="#"><i class="icon-search"></i> 註冊</a></li>
+                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
+                            <!-- <li class="boundary"><a href="./sign_in.html">登入</a></li> -->
+                            <!-- <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
                         </ul>
                     </div>
                 </div>
@@ -36,11 +36,11 @@
             <div class="container clearfix">
 
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12" id="classInfo">
                         <h1 class="title" id="title"></h1>
                         <h3 class="subtitle" id="course_content"></h3>
                         <h3 class="subtitle" id="course_teacher"></h3>
-                        <input class="add_class" type="button" value="加入課表" name="按鈕名稱">
+                        <!-- <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱"> -->
                     </div>
                 </div>
             </div>
@@ -108,22 +108,22 @@
 
                 <div class="row">
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                     <div class="col-2">
-                        <img src="http://lorempixel.com/145/111/" alt="logo" />
+                        <img src="#" alt="logo" />
                     </div>
                 </div>
 
@@ -256,7 +256,7 @@
                 // chapterDiv.appendChild(chapterDiv_a);
                 // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
-                console.log(obj.data.Course_detail[i].Chapter_detail.length)
+                // console.log(obj.data.Course_detail[i].Chapter_detail.length)
                 for (var k = 0; k < obj.data.Course_detail[i].Chapter_detail.length; k++) {
                     //替換節的內容
                     var section_title_Div = document.createElement("p");
@@ -276,6 +276,107 @@
 
 
     }
+
+    // get search course data
+    function search_course() {
+        var keyword = document.getElementById("search").value;
+        window.location.replace("./search.html?keyword=" + keyword);
+    }
+
+    //display none buttom
+    var xml = new XMLHttpRequest();
+    accessToken = localStorage.getItem("accessToken")
+    xml.open("POST", "/user/button");
+    const course_title = urlParams.get('title');
+    var js = {
+        course_title: course_title
+    }
+    xml.setRequestHeader('Content-Type', 'application/json');
+    xml.setRequestHeader("Authorization", "Bearer " + accessToken);
+    xml.send(JSON.stringify(js));
+    xml.onload = function() {
+        var registered = xml.responseText;
+        console.log(xml.responseText)
+        if (registered == "registered") {
+            // alert("課程已註冊過")
+        } else { //error
+            // alert("課程尚未註冊過");
+            var buttomInput = document.createElement("input");
+            buttomInput.className = "add_class"
+            buttomInput.setAttribute("onClick", "add_course()");
+            // buttomInput.onclick("onClick", "add_course()");
+            // buttomInput.onclick = function() {
+            //     add_course()
+            // };
+            // buttoninput.onclick = "add_course()"
+            buttomInput.type = "button"
+            buttomInput.value = "加入課程"
+            buttomInput.name = "按鈕名稱"
+            document.getElementById("classInfo").appendChild(buttomInput)
+                // <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱">
+
+        }
+    }
+
+    //add course in user table
+    function add_course() {
+        var xmlhttp = new XMLHttpRequest();
+        accessToken = localStorage.getItem("accessToken")
+        xmlhttp.open("POST", "/user/addcourse");
+        const urlParams = new URLSearchParams(window.location.search);
+        const course_title = urlParams.get('title');
+        var js = {
+            course_title: course_title
+        }
+        console.log("test")
+        xmlhttp.setRequestHeader('Content-Type', 'application/json');
+        xmlhttp.setRequestHeader("Authorization", "Bearer " + accessToken);
+        xmlhttp.send(JSON.stringify(js));
+        xmlhttp.onload = function() {
+            console.log(xmlhttp.responseText)
+            var email = xmlhttp.responseText;
+            if (!email) {
+                alert("請先登入會員");
+                var url = ("./sign_in.html")
+                window.location.assign(url)
+            } else {
+                alert("課程加入成功")
+                var url = ("./profile.html?email=" + email)
+                window.location.assign(url)
+            }
+        }
+    }
+    // user_icon
+    accessToken = localStorage.getItem("accessToken")
+    console.log("accessToken" + accessToken)
+    var xml_icon = new XMLHttpRequest();
+    xml_icon.open("post", "/user/profile", true);
+    xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
+    xml_icon.send(null);
+    xml_icon.onreadystatechange = function() {
+        if (xml_icon.readyState == 4) {
+            if (xml_icon.responseText == "error") {
+                //還沒登入
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("登入");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./sign_in.html"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+            } else {
+                //已登入
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("Hello!");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./profile.html"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+            }
+        }
+    }
 </script>
+
 
 </html>

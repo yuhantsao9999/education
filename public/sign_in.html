@@ -12,16 +12,16 @@
         <div class="full-width container clearfix">
             <div>
                 <div class="nav_item_bar">
-                    <a href="./acd.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
+                    <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
                     <input id="search" style="font-size:20px">
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
                         <ul class="clearfix">
-                            <li class="active"><a href="#">我要開課</a></li>
-                            <li class=""><a href="#">我的課表</a></li>
-                            <li class="boundary"><a href="#">登入</a></li>
-                            <li><a href="#"><i class="icon-search"></i> 註冊</a></li>
+                            <li class="active"><a href="./course_input.html">我要開課</a></li>
+                            <li class=""><a href="./profile.html">我的課表</a></li>
+                            <li class="boundary"><a href="./sign_in.html">登入</a></li>
+                            <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li>
                         </ul>
                     </div>
                 </div>
@@ -47,16 +47,7 @@
             <p>Do not have an account? Please <a href="./sign_up.html">sign up</a> .</p>
             <input type='submit' value='Submit' id="sumbit">
 
-            <div class="container">
-                <!-- <p></p>
-                <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-                </fb:login-button enctype="application/json">
-                <p id="status"></p> -->
-                <!-- <form enctype="application/json"> -->
-                <!-- <p></p><input id="fb_token" type='text' name='fb_token' enctype="application/json"> -->
-                <!-- <input type='submit' value='Submit'> -->
-                <!-- </form> -->
-            </div>
+
         </div>
     </div>
 
@@ -128,23 +119,23 @@
             // var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
         var password = document.getElementById("password").value;
-        console.log(name, email, password)
+        // console.log(name, email, password)
         var profile = {
-            provider: "native",
-            name: name,
-            email: email,
-            password: password
-        }
-        console.log(profile)
+                provider: "native",
+                name: name,
+                email: email,
+                password: password
+            }
+            // console.log(profile)
         xml.send(JSON.stringify(profile));
         xml.onload = function() {
-            console.log(xml.responseText)
+            // console.log(xml.responseText)
             if (xml.responseText == "error") {
                 alert("please sign up first!")
                 window.location.assign('./sign_up.html')
             } else {
                 var accessToken = JSON.parse(xml.responseText).data.access_token;
-                console.log(accessToken);
+                // console.log(accessToken);
                 localStorage.setItem("accessToken", accessToken);
                 alert("sign in successful")
                 window.location.assign('./profile.html')

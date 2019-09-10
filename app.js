@@ -9,8 +9,8 @@ app.use(express.static('uploads'));
 
 
 //使用router資料夾下的course
-const course = require('./routes/course');
-app.use('/', course);
+const course_input = require('./routes/course_input');
+app.use('/', course_input);
 
 const course_list = require('./routes/course_list');
 app.use('/', course_list);
@@ -23,8 +23,15 @@ const video = require('./routes/video');
 app.use('/', video);
 
 
-const sign_in = require('./routes/sign_api');
-app.use('/', sign_in);
+const sign_api = require('./routes/sign_api');
+app.use('/', sign_api);
+
+const course = require('./routes/course');
+app.use('/', course);
+
+const profile = require('./routes/profile');
+app.use('/', profile);
+
 
 
 

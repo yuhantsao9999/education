@@ -27,7 +27,7 @@ router.get("/education/classinfo/all", function(req, res) {
     var mysql_course = 'select * from course';
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
-        console.log(result_course)
+            // console.log(result_course)
         var test = {}
             //所有課程資訊
             // var course_id = result_course[0].course_id;

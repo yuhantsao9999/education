@@ -32,7 +32,7 @@ var upload = multer({ storage: storage })
 
 router.use(express.static(path.join(__dirname, 'public')))
 
-
+//use input.html
 // var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'main_video', maxCount: 1 }]);
 router.post("/education/class_introduction", upload.array("class_video"), function(req, res) {
     console.log(req.body)

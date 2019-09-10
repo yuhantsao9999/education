@@ -202,7 +202,7 @@ router.post('/user/signin', function(req, res) {
 
 
 //User Profile APIs
-// router.get('/user/profile', function(req, res) {
+// router.get('/user/icon', function(req, res) {
 //     var Bearer_token = String(req.headers.authorization)
 //     console.log("bt : " + Bearer_token)
 //     var test = {};
@@ -211,12 +211,12 @@ router.post('/user/signin', function(req, res) {
 //     var Token = Bearer_token.substr(7, Bearer_token.length - 1);
 //     console.log("tokn : " + Token)
 //         //取出mysql中的token
-//     var mysql5 = `
+//     var user_token = `
 //             SELECT * from user where access_token = '${Token}';
 //             `
-//     con.query(mysql5, function(err, result5) {
+//     con.query(user_token, function(err, user_token_result) {
 //         if (err) throw err;
-//         var profile = result5;
+//         var profile = user_token_result;
 //         console.log('token')
 //         if (Bearer == 'Bearer' && profile.length != 0) {
 //             array.push({

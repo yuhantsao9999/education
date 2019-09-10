@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>class</title>
-    <link rel="stylesheet" href="./css/acd.css" />
+    <link rel="stylesheet" href="./css/index.css" />
 </head>
 
 <body class="about">
@@ -12,16 +12,17 @@
         <div class="full-width container clearfix">
             <div>
                 <div class="nav_item_bar">
-                    <a href="./acd.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
+                    <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
                     <input id="search" style="font-size:20px">
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
-                        <ul class="clearfix">
-                            <li class="active"><a href="#">我要開課</a></li>
-                            <li class=""><a href="#">我的課表</a></li>
-                            <li class="boundary"><a href="./sign_in.html">登入</a></li>
-                            <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li>
+                        <ul class="clearfix" id="clearfix">
+                            <li class="active"><a href="./course_input.html">我要開課</a></li>
+                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
+                            <!-- <li><a href="./sign_in.html">登入</a></li>
+                            <li><a href="./profile.html">hi yuhan!</a></li> -->
+                            <!-- <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
                         </ul>
                     </div>
                 </div>
@@ -257,6 +258,37 @@
     function search_course() {
         var keyword = document.getElementById("search").value;
         window.location.replace("./search.html?keyword=" + keyword);
+    }
+
+    // user_icon
+    accessToken = localStorage.getItem("accessToken")
+    console.log("accessToken" + accessToken)
+    var xml_icon = new XMLHttpRequest();
+    xml_icon.open("post", "/user/profile", true);
+    xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
+    xml_icon.send(null);
+    xml_icon.onreadystatechange = function() {
+        if (xml_icon.readyState == 4) {
+            if (xml_icon.responseText == "error") {
+                //還沒登入
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("登入");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./sign_in.html"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+            } else {
+                //已登入
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("Hello!");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./profile.html"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+            }
+        }
     }
 </script>
 

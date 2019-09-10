@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>class</title>
+    <link rel="stylesheet" href="./css/profile.css" />
+</head>
+
+<body class="about">
+    <div id="header">
+        <div class="full-width container clearfix">
+            <div>
+                <div class="nav_item_bar">
+                    <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
+                    <a class="search" href="">探索</a>
+                    <input id="search" style="font-size:20px">
+                    <button onclick="search_course()" type="submit"></button>
+                    <div id="nav" class="col-8">
+                        <ul id="clearfix" class="clearfix">
+                            <li class="active"><a href="./course_input.html">我要開課</a></li>
+                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
+                            <!-- <li class="boundary"><a href="./sign_in.html">登入</a></li>
+                            <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-------大報 ------>
+    <div id="content">
+        <div class="header">
+        </div>
+
+        <!------- 內容 ------->
+
+        <div class="total_container">
+            <div class="container">
+                <div class="col-4" id="table">
+                    <a href="">
+                        <div class="profile_class">
+                            所有課程
+                        </div>
+                    </a>
+                    <a href="">
+                        <div class="profile_love">
+                            收藏
+                        </div>
+                    </a>
+                    <a href="">
+                        <div class="profile_finish">
+                            已完成
+                        </div>
+                    </a>
+                </div>
+
+
+                <div class="col-6" id="profile_add_info">
+                    <h3>所有課程</h3>
+                    <!-- <div class="profile_info">
+                        <img src="./img/go.jpg" alt="">
+                        <div class="profile_class_info">Golang 程式設計入門</div>
+                    </div> -->
+                    <!-- <div class="porfile_info">
+                        <img src="./img/go.jpg" alt="">
+                        <div class="profile_class_info">Golang 程式設計入門</div>
+                    </div> -->
+                    <!-- <div class="profile_info">
+                        <img src="./img/go.jpg" alt="">
+                        <div class="profile_class_info">Golang 程式設計入門</div>
+                    </div> -->
+                    <!-- <div class="porfile_info">
+                        <img src="./img/go.jpg" alt="">
+                        <div class="profile_class_info">Golang 程式設計入門</div>
+                    </div> -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!------- footer ------->
+    <div id="footer" class="dark">
+
+        <div class="info">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-3">
+                        <img id="logo" src="./img/logo.png" alt="logo" />
+                        <p>讓學習<br>無時無刻無距離</p>
+                    </div>
+                    <div class="col-3">
+                        <h4 class="title">recent posts</h4>
+                        <ul class="common-list">
+                            <li><a href="#">standard blog post</a></li>
+                            <li><a href="#">quotation post</a></li>
+                            <li><a href="#">audio post</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="col-3">
+                        <h4 class="title">快速連結</h4>
+                        <ul class="common-list">
+                            <li><a href="#">關於我們</a></li>
+                            <li><a href="#">回到主頁</a></li>
+                            <li><a href="./course_input.html">我要開課</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="container clearfix">
+
+                <div class="copyright">
+                    <div class="title">Copyright 2019 by <a href="#">yuhan</a> | All Rights Reserved</div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <a href="#header" id="go-top"><i class="icon-up-open"></i></a>
+
+</body>
+<script>
+    const accessToken = localStorage.getItem("accessToken")
+    console.log("accessToken" + accessToken)
+    var js = document.getElementById('content')
+    var xml = new XMLHttpRequest;
+    xml.open('post', '/user/profile', true);
+    xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
+    xml.send(null);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4) {
+            if (xml.responseText == "error") {
+                alert("please sign in first!")
+                window.location.assign('./sign_in.html');
+                //user icon
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("登入");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./sign_in.html"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+
+            } else if (xml.responseText == "no class") {
+                var noclassContent = document.createTextNode("尚未註冊任何課程哦!");
+                document.getElementById("profile_add_info").appendChild(noclassContent)
+                var sign_li = document.createElement("li");
+                //user icon
+                var signContent = document.createTextNode("登出");
+                var sign_a = document.createElement("a");
+                sign_a.setAttribute("onClick", "log_out()");
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+
+            } else {
+                var obj = JSON.parse(xml.responseText);
+                var count = obj.length;
+                console.log(count)
+
+                for (var i = 0; i < count; i++) {
+                    //替換課程圖片
+                    var classImg = document.createElement("img");
+                    var classDiv = document.createElement("div");
+                    var profileDiv = document.createElement("div");
+                    var titleContent = document.createTextNode(obj[i].title);
+                    classDiv.className = "profile_class_info";
+                    profileDiv.className = "profile_info"
+                        // profileDiv.href = ("/course.html?title=" + obj[i].title);
+                    classImg.src = "./img/go.jpg"
+                    classDiv.appendChild(titleContent)
+                    profileDiv.appendChild(classImg)
+                    profileDiv.appendChild(classDiv)
+                    document.getElementById("profile_add_info").appendChild(profileDiv)
+
+                }
+                //user icon
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("登出");
+                var sign_a = document.createElement("a");
+                sign_a.setAttribute("onClick", "log_out()");
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+
+            }
+        }
+    }
+
+    //log out
+    function log_out() {
+        localStorage.removeItem('accessToken');
+        alert("帳號登出囉!")
+        window.location.replace("./sign_in.html");
+    }
+</script>
+
+</html>
