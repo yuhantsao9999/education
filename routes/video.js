@@ -5,6 +5,9 @@ const app = express();
 const router = express.Router();
 var async = require('async');
 
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
 // 從根目錄使用router
 app.use('/', router);
 
@@ -80,7 +83,7 @@ router.get("/education/videoinfo", function(req, res) {
                 var course_id = result_course[0].course_id;
                 next(null, course_id)
             });
-        },
+        }, //TODO:之後可以新增使用者再次回到課程時，直接回到上次觀看的時候
         (course_id, next) => {
             var mysql_video = `select video from new_section where course_id='${course_id}' and chapter_id='${chapter_id}'and section_id='${section_id}'`;
             con.query(mysql_video, function(err, result_video) {
@@ -100,11 +103,48 @@ router.get("/education/videoinfo", function(req, res) {
 })
 
 //update video length api
-// var title = req.query.title;
-// var chapter_id = req.query.chapter;
-// var section_id = req.query.section;
-// var currentTime = localStorage.getItem("currentTime")
-// var totalTime = localStorage.getItem("totalTime")
+router.post("/videoupdate", function(req, res) {
+    var title = req.query.title;
+    var chapter_id = req.query.chapter;
+    var section_id = req.query.section;
+    var currentTime = req.body.currentTime;
+    var totalTime = req.body.totalTime;
+    var Token = req.body.accessToken;
+    async.waterfall([
+        (next) => {
+            var profile_checkmember = `SELECT user_id FROM user WHERE access_token='${Token}'`
+            con.query(profile_checkmember, function(err1, result_course) {
+                var user_id = result_course[0].user_id;
+                next(null, user_id)
+            });
+        },
+        (user_id, next) => {
+            var video_id_sql = `SELECT video_id FROM new_section JOIN course on course.course_id=new_section.course_id WHERE title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id}'`
+            con.query(video_id_sql, function(err1, video_id_result) {
+                if (err1)
+                    throw err1;
+                var video_id = video_id_result[0].video_id;
+                next(null, user_id, video_id)
+            });
+        },
+        (user_id, video_id, next) => {
+            var complete = Math.floor(currentTime / totalTime);
+            var update_videotime =
+                `UPDATE status SET video_time = '${currentTime}', complete = '${complete}'
+            WHERE user_id = '${user_id}'
+            and video_id = '${video_id}';`
+            con.query(update_videotime, function(err1, update_videotime_result) {
+                next(null)
+                res.send("data")
+            });
+        }
+    ], (err, rst) => {
+        if (err) return err;
+    });
+})
 
-
+router.get("/test", function(req, res) {
+    console.log("hi");
+    res.send();
+});
 module.exports = router;

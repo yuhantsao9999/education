@@ -133,13 +133,13 @@
 
 </body>
 <script>
-    //所有課程
+    //已完成的課程
     const accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
 
     var js = document.getElementById('content')
     var xml = new XMLHttpRequest;
-    xml.open('get', '/user/profile?tab=current', true);
+    xml.open('get', '/profile/done', true);
     xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml.send(null);
     xml.onreadystatechange = function() {
@@ -183,7 +183,6 @@
                     classDiv.className = "profile_class_info";
                     profileDiv.className = "profile_info"
 
-
                     var classDiv_a = document.createElement("a");
                     classDiv_a.href = ("/video.html?title=" + obj[i].title + "&chapter=1&section=1");
                     // profileDiv.href = ("/course.html?title=" + obj[i].title);
@@ -201,27 +200,6 @@
             }
         }
     }
-
-
-
-    //done api
-    // function done_course() {
-    //     window.location.replace("./profile_done.html");
-    // }
-
-
-    // //want api
-    // function want_course() {
-    //     document.getElementById("profile_add_info").innerHTML = '';
-    //     var xmlhttp = new XMLHttpRequest();
-    //     xmlhttp.open("get", "?tab=want", true)
-    //     xmlhttp.send(null);
-    //     xmlhttp.onreadystatechange = function() {
-    //         if (this.readyState == 4 && this.status == 200) {
-
-    //         }
-    //     }
-    // }
 
 
     //user icon

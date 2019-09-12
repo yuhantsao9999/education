@@ -2,110 +2,277 @@
 
 <head>
     <title>class introduction input</title>
-    <script>
-        function add_input() {
-            var count = document.getElementById("count").value;
-            count++;
-            document.getElementById("count").value = count;
-
-            var chapterDiv = document.createElement("div");
-            var chapterContent = document.createTextNode("chapter id:");
-            chapterDiv.appendChild(chapterContent);
-            var chapter_input = document.createElement("input");
-            chapter_input.type = "text";
-            chapter_input.name = "chapter_id";
-            chapterDiv.appendChild(chapter_input)
-
-            var chapter_titleDiv = document.createElement("div");
-            var chapter_titleContent = document.createTextNode("chapter title:");
-            chapter_titleDiv.appendChild(chapter_titleContent);
-            var chapter_title_input = document.createElement("input");
-            chapter_title_input.type = "text";
-            chapter_title_input.name = "chapter_title";
-            chapter_titleDiv.appendChild(chapter_title_input)
-
-            var sectionDiv = document.createElement("div");
-            var sectionContent = document.createTextNode("section id:");
-            sectionDiv.appendChild(sectionContent);
-            var section_input = document.createElement("input");
-            section_input.type = "text";
-            section_input.name = "section_id";
-            sectionDiv.appendChild(section_input)
-
-            var section_titleDiv = document.createElement("div");
-            var section_titleContent = document.createTextNode("section title:");
-            section_titleDiv.appendChild(section_titleContent);
-            var section_title_input = document.createElement("input");
-            section_title_input.type = "text";
-            section_title_input.name = "section_title";
-            section_titleDiv.appendChild(section_title_input)
-
-            var section_introDiv = document.createElement("div");
-            var section_introContent = document.createTextNode("section introduction:");
-            section_introDiv.appendChild(section_introContent);
-            var section_intro_input = document.createElement("input");
-            section_intro_input.type = "text";
-            section_intro_input.name = "section_intro";
-            section_introDiv.appendChild(section_intro_input)
-
-            var videoDiv = document.createElement("div");
-            var videoContent = document.createTextNode("video:");
-            videoDiv.appendChild(videoContent);
-            var videoinput = document.createElement("input");
-            videoinput.type = "file";
-            videoinput.name = "class_video";
-            videoDiv.appendChild(videoinput)
-
-            document.getElementById("video").appendChild(chapterDiv);
-            document.getElementById("video").appendChild(chapter_titleDiv);
-            document.getElementById("video").appendChild(sectionDiv);
-            document.getElementById("video").appendChild(section_titleDiv);
-            document.getElementById("video").appendChild(section_introDiv);
-            document.getElementById("video").appendChild(videoDiv);
-        }
-    </script>
+    <link rel="stylesheet" href="./css/course_input.css" />
 </head>
 
-<body>
-    <form action="/education/class_input" method='post' enctype="multipart/form-data">
-        <p><b>course title:</b></p><input type='text' name='course_title'>
-        <p><b>teacher:</b></p><input type='text' name='course_teacher'>
-        <p><b>introduction:</b></p><textarea style="width:300px;height:100px;" type='text' name='course_intro'></textarea>
-        <div id=video>
-            <div id="chapter_id">
-                <p><b>chapter id:</b></p>
-                <input type='text' name='chapter_id' /><br><br>
-            </div>
+<body class="about">
 
-            <div id="chapter_title">
-                <p><b>chapter title:</b></p>
-                <input type='text' name='chapter_title' /><br><br>
+    <div id="header">
+        <div class="full-width container clearfix">
+            <div>
+                <div class="nav_item_bar">
+                    <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
+                    <a class="search" href="">探索</a>
+                    <input id="search" style="font-size:20px">
+                    <button onclick="search_course()" type="submit"></button>
+                    <div id="nav" class="col-8">
+                        <ul id="clearfix" class="clearfix">
+                            <li class="active"><a href="./course_input.html">我要開課</a></li>
+                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
+                            <!-- <li class="boundary"><a href="./sign_in.html">登入</a></li>
+                                    <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-            <div id="section_id">
-                <p><b>section id:</b></p><input type='text' name='section_id'>
-            </div>
-
-            <div id="section_title">
-                <p><b>section title:</b></p><input type='text' name='section_title'>
-            </div>
-
-            <div id="section_intro">
-                <p><b>section introduction:</b></p><input type='text' name='section_intro'>
-            </div>
-
-            <p>
-                <b>
-                video:
-                </b>
-            </p>
-            <input type='file' name='class_video'>
+        </div>
+    </div>
+    <div id="content">
+        <div class="header">
         </div>
 
-        <p> <input type="button" value="Add" onclick="add_input()">
-            <input type="hidden" id="count" name="count" value="0"></p>
-        <input type='submit' value='Submit'>
-    </form>
+        <!------- 內容 ------->
+
+        <div class="total_container">
+            <div class="container">
+                <div enctype="multipart/form-data">
+                    <div id="maininfo">
+                        <div class="row-maininfo">
+                            <p><b>course title:</b></p><input type='text' name='course_title'></div>
+                        <div class="row-maininfo">
+                            <p><b>teacher:</b></p><input type='text' name='course_teacher'></div>
+                        <div class="row-maininfo">
+                            <p><b>introduction:</b></p><textarea style="width:300px;height:100px;" type='text' name='course_intro'></textarea></div>
+                    </div>
+
+                    <div id="videoinfo">
+                        <!-- <div id="1">
+
+                            <div class="chapter">
+                                <div id="chapter_id" class="row-video">
+                                    <p><b>chapter id:</b></p>
+                                    <input type='text' name='chapter_id' required><br><br>
+                                </div>
+
+                                <div id="chapter_title" class="row-video">
+                                    <p><b>chapter title:</b></p>
+                                    <input type='text' name='chapter_title' required><br><br>
+                                </div>
+
+                                <div id="section_id" class="row-video">
+                                    <p><b>section id:</b></p><input type='text' name='section_id' required>
+                                </div>
+
+                                <div id="section_title" class="row-video">
+                                    <p><b>section title:</b></p><input type='text' name='section_title' required>
+                                </div>
+
+                                <div id="section_intro" class="row-video">
+                                    <p><b>section introduction:</b></p><input type='text' name='section_intro' required>
+                                </div>
+                                <span><img src="../img/delete2.png" alt="delete"></span>
+                            </div>
+
+                            <div class="video">
+                                <p>
+                                    <b>
+                                video:
+                                </b>
+                                </p>
+
+                                <input type='file' name='class_video' required>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div>
+                        <p> <input type="button" value="Add" onclick="add_input()">
+                            <!-- <input type="hidden" id="count" name="count" value="0"></p> -->
+                            <input onclick="ajax()" type='submit' value='Submit' id="sumbit">
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
 </body>
+<script>
+    var count = 0;
+
+    function add_input() {
+        // var count = document.getElementById("count").value;
+        count++;
+        // document.getElementById("count").value = count;
+
+        var chaptermainDiv = document.createElement("div");
+        chaptermainDiv.className = "chapter"
+
+        var chapterDiv = document.createElement("div");
+        var chapterContent = document.createTextNode("chapter id:");
+        chapterDiv.className = "row-video"
+        chapterDiv.appendChild(chapterContent);
+        var chapter_input = document.createElement("input");
+        chapter_input.id = "chapter_id" + count
+        chapter_input.type = "text";
+        chapter_input.name = "chapter_id";
+
+        chapterDiv.appendChild(chapter_input)
+
+        var chapter_titleDiv = document.createElement("div");
+        chapter_titleDiv.className = "row-video";
+        var chapter_titleContent = document.createTextNode("chapter title:");
+        chapter_titleDiv.appendChild(chapter_titleContent);
+        var chapter_title_input = document.createElement("input");
+        chapter_title_input.id = "chapter_title" + count
+        chapter_title_input.type = "text";
+        chapter_title_input.name = "chapter_title";
+
+        chapter_titleDiv.appendChild(chapter_title_input)
+
+        var sectionDiv = document.createElement("div");
+        sectionDiv.className = "row-video";
+        var sectionContent = document.createTextNode("section id:");
+        sectionDiv.appendChild(sectionContent);
+        var section_input = document.createElement("input");
+        section_input.id = "section_id" + count
+        section_input.type = "text";
+        section_input.name = "section_id";
+        sectionDiv.appendChild(section_input)
+
+        var section_titleDiv = document.createElement("div");
+        section_titleDiv.className = "row-video";
+        var section_titleContent = document.createTextNode("section title:");
+        section_titleDiv.appendChild(section_titleContent);
+        var section_title_input = document.createElement("input");
+        section_title_input.id = "section_title" + count
+        section_title_input.type = "text";
+        section_title_input.name = "section_title";
+        section_titleDiv.appendChild(section_title_input)
+
+        var section_introDiv = document.createElement("div");
+        section_introDiv.className = "row-video";
+        var section_introContent = document.createTextNode("section introduction:");
+        section_introDiv.appendChild(section_introContent);
+        var section_intro_input = document.createElement("input");
+        section_intro_input.id = "section_intro" + count
+        section_intro_input.type = "text";
+        section_intro_input.name = "section_intro";
+        section_introDiv.appendChild(section_intro_input)
+
+
+        var deleteSpan = document.createElement("span");
+        var deleteImg = document.createElement("img");
+        deleteImg.src = "../img/delete2.png"
+        deleteImg.className = count
+        deleteImg.setAttribute("onClick", "delete_video(" + count + ")");
+        deleteSpan.appendChild(deleteImg);
+
+
+        var videomainDiv = document.createElement("div");
+        videomainDiv.className = "video"
+        var videomainp = document.createElement("p");
+        var videoContent = document.createTextNode("video:");
+        videomainp.appendChild(videoContent);
+        videomainDiv.appendChild(videomainp);
+        var videoinput = document.createElement("input");
+        videoinput.type = "file";
+        videoinput.name = "class_video";
+        videomainDiv.appendChild(videoinput)
+
+
+        chaptermainDiv.appendChild(chapterDiv);
+        chaptermainDiv.appendChild(chapter_titleDiv);
+        chaptermainDiv.appendChild(sectionDiv);
+        chaptermainDiv.appendChild(section_titleDiv);
+        chaptermainDiv.appendChild(section_introDiv);
+        chaptermainDiv.appendChild(deleteSpan);
+
+        var chapter_video_Div = document.createElement("div");
+        chapter_video_Div.id = parseInt(count);
+
+        chapter_video_Div.appendChild(chaptermainDiv);
+        chapter_video_Div.appendChild(videomainDiv);
+
+        document.getElementById("videoinfo").appendChild(chapter_video_Div);
+    }
+
+    //delete_video()
+    function delete_video(obj) {
+        var delete_id = document.getElementById(obj);
+        delete_id.parentNode.removeChild(delete_id);
+    }
+
+
+    function ajax() {
+        console.log(count)
+        var xml = new XMLHttpRequest;
+        xml.open('post', '/education/class_input', true);
+        xml.setRequestHeader('content-type', 'application/json')
+        var chapter_id = [];
+        var chapter_title = [];
+        var section_id = [];
+        var section_title = [];
+        var section_intro = [];
+
+
+        for (var i = 1; i < count + 1; i++) {
+            chapter_id.push(document.getElementById("chapter_id" + i).value);
+            chapter_title.push(document.getElementById("chapter_title" + i).value);
+            section_id.push(document.getElementById("section_id" + i).value);
+            section_title.push(document.getElementById("section_title" + i).value);
+            section_intro.push(document.getElementById("section_intro" + i).value);
+        }
+
+
+        var course = {
+            chapter_id: chapter_id,
+            chapter_title: chapter_title,
+            section_id: section_id,
+            section_title: section_title,
+            section_intro: section_intro,
+        }
+        console.log(course)
+        xml.send(JSON.stringify(course))
+
+    }
+    // document.getElementById("sumbit").addEventListener("click", function() {
+    //     var xml = new XMLHttpRequest;
+    //     xml.open('post', '/education/class_input', true);
+    //     xml.setRequestHeader('content-type', 'application/json')
+
+    //     var chapter_id = document.getElementById("chapter_id" + count).value;
+    //     var chapter_title = document.getElementById("chapter_title" + count).value;
+    //     var section_id = document.getElementById("section_id" + count).value;
+    //     var section_title = document.getElementById("section_title" + count).value;
+    //     var section_intro = document.getElementById("section_intro" + count).value;
+
+
+
+    //     var course = {
+    //         chapter_id: chapter_id,
+    //         chapter_title: chapter_title,
+    //         section_id: section_id,
+    //         section_title: section_title,
+    //         section_intro: section_intro,
+    //     }
+
+    // xml.send(JSON.stringify(profile));
+    // xml.onload = function() {
+
+    //     if (xml.responseText == "error") {
+    //         alert("please sign up first!")
+    //         window.location.assign('./sign_up.html')
+    //     } else {
+    //         var accessToken = JSON.parse(xml.responseText).data.access_token;
+
+    //         localStorage.setItem("accessToken", accessToken);
+    //         alert("sign in successful")
+    //         window.location.assign('./profile.html')
+    //     }
+    // }
+    // });
+</script>
 
 </html>

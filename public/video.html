@@ -146,7 +146,7 @@
     accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
     var xml_icon = new XMLHttpRequest();
-    xml_icon.open("post", "/user/profile", true);
+    xml_icon.open("get", "/user/profile", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml_icon.send(null);
     xml_icon.onreadystatechange = function() {
@@ -174,16 +174,50 @@
     }
 
 
-
     //離開時記下影片看到的時間
-    window.onunload = function() {
-            var currentTime = document.getElementById("video").currentTime;
-            var videoTime = document.getElementById("video").duration;
-            localStorage.setItem("currentTime", currentTime);
-            localStorage.setItem("totalTime", videoTime);
+    // window.onbeforeunload = function() {
+    //     var video = document.getElementById("video")
+    //     var currentTime = document.getElementById("video").currentTime;
+    //     var totalTime = document.getElementById("video").duration;
+
+    //     var js = {
+    //         course_title: currentTime,
+    //         totalTime: totalTime
+    //     }
+    //     var xmlhttp_videotime = new XMLHttpRequest();
+    //     xmlhttp_videotime.setRequestHeader('Content-Type', 'application/json');
+    //     xmlhttp_videotime.send(JSON.stringify(js));
+    //     xmlhttp_videotime.open("post", "/videoupdate?title=" + title + "&chapter=" + chapter + "&section=" + section, true)
+    //     xmlhttp_videotime.onreadystatechange = function() {
+    //         if (this.readyState == 4 && this.status == 200) {
+    //             // alert("successful")
+    //         }
+    //     }
+    // }
+
+    function send_ajax() {
+        var video = document.getElementById("video")
+        var currentTime = document.getElementById("video").currentTime;
+        var totalTime = document.getElementById("video").duration;
+        console.log("Timeeeeeeeeeeeeeeeeeeee" + currentTime);
+        var js = {
+            currentTime: currentTime,
+            totalTime: totalTime,
+            accessToken: localStorage.getItem("accessToken")
         }
-        // console.log(localStorage.getItem("currentTime"))
-        // console.log(localStorage.getItem("totalTime"))
+        var xmlhttp_videotime = new XMLHttpRequest();
+        xmlhttp_videotime.open("post", "/videoupdate?title=" + title + "&chapter=" + chapter + "&section=" + section, true)
+        xmlhttp_videotime.setRequestHeader('Content-Type', 'application/json');
+        xmlhttp_videotime.send(JSON.stringify(js));
+        // xmlhttp_videotime.onreadystatechange = function() {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         // alert("successful")
+        //     }
+        // }
+    }
+
+    setInterval("send_ajax()", 3000);
+    // video.addEventListener("timeupdate")
 </script>
 
 </html>

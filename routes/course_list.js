@@ -27,21 +27,8 @@ router.get("/education/classinfo/all", function(req, res) {
     var mysql_course = 'select * from course';
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
-            // console.log(result_course)
-        var test = {}
-            //所有課程資訊
-            // var course_id = result_course[0].course_id;
-            // var title = result_course[0].title;
-            // var intro = result_course[0].intro;
-            // var teacher = result_course[0].teacher;
-            // var mysql_chapter = `select * from chapter where course_id='${course_id}'`;
-            // con.query(mysql_chapter, function(err, result_chapter) {
-            //     if (err) throw err
-            //     console.log(result_chapter) //所有章節資訊
-            //     var mysql_section = `select * from new_section where course_id='${course_id}'`;
-            // });
+        var test = {};
         test['data'] = result_course
-
         res.send(test)
     });
 

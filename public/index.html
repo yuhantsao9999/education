@@ -14,7 +14,7 @@
                 <div class="nav_item_bar">
                     <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
-                    <input id="search" style="font-size:20px">
+                    <input id="search" style="font-size:20px" onkeyup="search_course_enter()">
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
                         <ul class="clearfix" id="clearfix">
@@ -254,17 +254,42 @@
 
     }
 
-    // get search course data
+
+    function search_course_enter() {
+        if (event.keyCode == 13)
+            search_course();
+    }
+    // get search course data 原本的@@
     function search_course() {
         var keyword = document.getElementById("search").value;
         window.location.replace("./search.html?keyword=" + keyword);
     }
 
+    //按下enter鍵，直接執行搜尋功能
+    //document.getElementById("search").addEventListener("click", function search_course(event) {
+    //    if (event.keyCode == 13) {
+    //        var keyword = document.getElementById("search").value;
+    //        console.log(keyword)
+    //        window.location.replace("./search.html?keyword=" + keyword);
+    //   }
+    //
+    //   });
+
+    //search(w3的應用範例))
+    // var input = document.getElementById("myInput");
+    // input.addEventListener("keyup", function(event) {
+    //     if (event.keyCode === 13) {
+    //         event.preventDefault();
+    //         document.getElementById("myBtn").click();
+    //     }
+    // });
+
+
     // user_icon
     accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
     var xml_icon = new XMLHttpRequest();
-    xml_icon.open("post", "/user/profile", true);
+    xml_icon.open("get", "/user/profile", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml_icon.send(null);
     xml_icon.onreadystatechange = function() {
@@ -283,7 +308,7 @@
                 var sign_li = document.createElement("li");
                 var signContent = document.createTextNode("Hello!");
                 var sign_a = document.createElement("a");
-                sign_a.href = "./profile.html"
+                sign_a.href = "./profile.html?tab=current"
                 sign_a.appendChild(signContent)
                 sign_li.appendChild(sign_a)
                 document.getElementById("clearfix").appendChild(sign_li)

@@ -116,6 +116,11 @@ img {
 p {
     color: #7e7e7e;
     line-height: 30px;
+    font-size: 25px;
+    font-family: "黑體";
+    /* Arial”, ” */
+    /* Microsoft YaHei */
+    /* ”, ”黑體”, ”宋體”, sans-serif; */
 }
 
 a {
@@ -195,6 +200,10 @@ a {
     width: 100%;
 }
 
+.col-10 {
+    font-size: 35px;
+}
+
 #logo {
     float: left;
     width: 100px;
@@ -270,6 +279,10 @@ a {
 }
 
 #content div.header {
+    box-shadow: 3px 3px 5px 6px #cccccc;
+    z-index: 1010;
+    border-bottom: 1px solid #dedfe0;
+    /* background-color: white; */
     padding: 70px 0;
     background-color: #187695;
     background-size: cover;
