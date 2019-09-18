@@ -153,13 +153,15 @@
         if (xml_icon.readyState == 4) {
             if (xml_icon.responseText == "error") {
                 //還沒登入
-                var sign_li = document.createElement("li");
-                var signContent = document.createTextNode("登入");
-                var sign_a = document.createElement("a");
-                sign_a.href = "./sign_in.html"
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
+                // var sign_li = document.createElement("li");
+                // var signContent = document.createTextNode("登入");
+                // var sign_a = document.createElement("a");
+                // sign_a.href = "./sign_in.html"
+                // sign_a.appendChild(signContent)
+                // sign_li.appendChild(sign_a)
+                // document.getElementById("clearfix").appendChild(sign_li)
+                alert("請先登入帳號哦!");
+                window.location.assign("./sign_in.html")
             } else {
                 //已登入
                 var sign_li = document.createElement("li");

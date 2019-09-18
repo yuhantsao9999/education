@@ -12,7 +12,7 @@
     margin-top: 1.7em;
 }
 
-button {
+#header button {
     position: absolute;
     width: 70px;
     height: 40px;
@@ -59,6 +59,10 @@ ul {
 
 #maininfo {
     display: flex;
+}
+
+#subinfo {
+    display: flex;
     border-bottom: dashed #1b1b1b;
 }
 
@@ -70,9 +74,18 @@ ul {
     display: flex;
 }
 
+.section {
+    display: flex;
+}
+
 .row-video {
     margin: 30px;
     float: left;
+}
+
+.button {
+    margin-top: 2em;
+    align-items: center;
 }
 
 .video {
@@ -208,8 +221,9 @@ a {
 
 #content input {
     padding: 10px 60px;
-    background: #ccc;
-    border: 0 none;
+    /* background: #ccc; */
+    border: 1px solid #187695;
+    /* border-style: groove; */
     cursor: pointer;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -239,6 +253,15 @@ span img {
     width: 40px;
     /* height: 20px; */
     margin: 20px;
+}
+
+.image {
+    width: 144px;
+    height: 40px;
+}
+
+.picture {
+    width: 40px;
 }
 
 #footer {

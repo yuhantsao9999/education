@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 
 //course api for all
 router.get("/education/classinfo/all", function(req, res) {
-    var mysql_course = 'select * from course';
+    var mysql_course = 'select * from new_course';
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
         var test = {};

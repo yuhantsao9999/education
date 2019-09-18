@@ -210,7 +210,7 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-                // console.log(obj.data[0])
+            console.log(obj.data[0])
             for (var i = 0; i < 6; i++) {
                 //替換課程圖片
                 var classImg = document.createElement("img");
@@ -223,7 +223,7 @@
                 rowA.className = "row clearfix"
 
 
-                rowA.href = ("/course.html?title=" + obj.data[i].title);
+                rowA.href = ("/course.html?title=" + obj.data[i].course_title);
 
 
                 colDiv.appendChild(classImg)
@@ -237,9 +237,9 @@
 
                 col_8Div.className = "col-8"
 
-                var titleContent = document.createTextNode(obj.data[i].title);
+                var titleContent = document.createTextNode(obj.data[i].course_title);
                 console.log(titleContent)
-                var introContent = document.createTextNode(obj.data[i].intro);
+                var introContent = document.createTextNode(obj.data[i].course_intro);
                 titleh3.appendChild(titleContent)
                 introP.appendChild(introContent)
                 col_8Div.appendChild(titleh3)

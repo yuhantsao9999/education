@@ -137,7 +137,68 @@ a {
 .class_chapter_section_container {
     display: block;
     width: 70%;
+    /* width: 1170px; */
     margin: 0 auto;
+}
+
+#class_chapter_section {
+    display: flex;
+    margin: 0 auto;
+}
+
+.teacher {
+    width: 30%
+}
+
+.teacher_name {
+    font-size: 25px;
+    text-align: center;
+    height: 100px;
+    background-color: #ededed;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    line-height: 4em;
+    /* margin-top: 15px;
+    margin-bottom: 15px */
+}
+
+.teacher_detail {
+    background-color: #ededed;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    font-family: "PingFang TC", "微軟正黑體", sans-serif;
+    line-height: 1.5em;
+}
+
+.small_icon {
+    display: flex;
+    justify-content: center;
+}
+
+.small_icon img {
+    width: 3em;
+    margin: 10px;
+}
+
+.picture_circle {
+    width: 100%;
+    height: 100%;
+    object-position: 50% 50%;
+    object-fit: cover;
+    font-family: 'object-fit: cover; object-position: bottom;';
+    margin-left: 4.5em;
+    padding-top: 1.5em;
+}
+
+.picture img {
+    border-radius: 50%;
+    overflow: hidden;
+    height: 170px;
+    width: 170px;
+    border: 2px solid white;
+    display: inline-block;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.24);
 }
 
 .container.full-width {
@@ -201,7 +262,7 @@ a {
 }
 
 .col-10 {
-    font-size: 35px;
+    font-size: 25px;
 }
 
 #logo {

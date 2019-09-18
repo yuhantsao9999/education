@@ -20,36 +20,37 @@ router.get('/', (req, res) => {
 
 //course detail api
 router.get("/education/classinfo", function(req, res) {
+    console.log(req.query)
     var title = req.query.title;
-    var mysql_course = `select * from course where title='${title}'`;
+    var mysql_course = `select * from new_course where course_title='${title}'`;
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
             // console.log(result_course) //所有課程資訊
         var course_id = result_course[0].course_id;
-        var title = result_course[0].title;
-        var intro = result_course[0].intro;
-        var teacher = result_course[0].teacher;
-        var mysql_chapter = `select * from chapter where course_id='${course_id}'`;
+        var title = result_course[0].course_title;
+        var intro = result_course[0].course_intro;
+        var teacher = result_course[0].course_teacher;
+        var mysql_chapter = `select * from new_chapter where course_id='${course_id}'`;
         con.query(mysql_chapter, function(err, result_chapter) {
             if (err) throw err
                 // console.log(result_chapter) //所有章節資訊
-            var mysql_section = `select * from new_section where course_id='${course_id}'`;
+            var mysql_section = `select * from final_section where course_id='${course_id}'`;
             con.query(mysql_section, function(err, result_section) {
                 if (err) throw err
                     // console.log(result_section) //所有節的資訊
                 var obj = {};
                 obj['Course_id'] = result_course[0].course_id; //添加名稱
-                obj['Course_title'] = result_course[0].title;
-                obj['Course_intro'] = result_course[0].intro;
-                obj['Course_teacher'] = result_course[0].teacher;
+                obj['Course_title'] = result_course[0].course_title;
+                obj['Course_intro'] = result_course[0].course_intro;
+                obj['Course_teacher'] = result_course[0].course_teacher;
                 obj["Course_detail"] = []
                 for (var i = 0; i < result_chapter.length; i++) {
                     var chp_obj = {}
-                    chp_obj['Chapter_id'] = result_chapter[i].chapter_id
+                    chp_obj['Chapter_id'] = result_chapter[i].chapter_auto_id
                     chp_obj['Chapter_title'] = result_chapter[i].chapter_title
                     chp_obj['Chapter_detail'] = []
                     for (var j = 0; j < result_section.length; j++) {
-                        if (result_section[j].chapter_id == chp_obj['Chapter_id']) {
+                        if (result_section[j].chapter_auto_id == chp_obj['Chapter_id']) {
                             var obj_tmp = {}
                             obj_tmp['Section_id'] = result_section[j].section_id
                             obj_tmp['Section_title'] = result_section[j].section_title
@@ -78,14 +79,15 @@ router.get("/education/videoinfo", function(req, res) {
     var section_id = req.query.section;
     async.waterfall([
         (next) => {
-            var mysql_course = `select * from course where title='${title}'`;
+
+            var mysql_course = `select * from new_course where course_title='${title}'`;
             con.query(mysql_course, function(err1, result_course) {
                 var course_id = result_course[0].course_id;
                 next(null, course_id)
             });
         }, //TODO:之後可以新增使用者再次回到課程時，直接回到上次觀看的時候
         (course_id, next) => {
-            var mysql_video = `select video from new_section where course_id='${course_id}' and chapter_id='${chapter_id}'and section_id='${section_id}'`;
+            var mysql_video = `select video from final_section where course_id='${course_id}' and chapter_id='${chapter_id}'and section_id='${section_id}'`;
             con.query(mysql_video, function(err, result_video) {
                 var video = result_video;
 
@@ -119,7 +121,9 @@ router.post("/videoupdate", function(req, res) {
             });
         },
         (user_id, next) => {
-            var video_id_sql = `SELECT video_id FROM new_section JOIN course on course.course_id=new_section.course_id WHERE title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id}'`
+            var video_id_sql = `SELECT video_id FROM final_section JOIN course on course.course_id=new_section.course_id 
+            WHERE course_title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id}'`
+                //TODO:新的表單final_section裡沒有chapter_id
             con.query(video_id_sql, function(err1, video_id_result) {
                 if (err1)
                     throw err1;
@@ -144,7 +148,7 @@ router.post("/videoupdate", function(req, res) {
 })
 
 router.get("/test", function(req, res) {
-    console.log("hi");
+    // console.log("hi");
     res.send();
 });
 module.exports = router;

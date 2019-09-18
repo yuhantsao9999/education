@@ -46,7 +46,7 @@
             </div>
         </div>
         <!-- ---------內容 ------->
-        <div id="class_chapter_section">
+        <div id="class_chapter_section" class="container">
             <div class="class_chapter_section_container" id="class_chapter_section_container">
                 <!-- <div class="row clearfix">
 
@@ -65,6 +65,26 @@
                         </div>
                     </div>
                 </div> -->
+            </div>
+            <div class="teacher">
+                <div class="teacher_name"><b>關於老師 XXXX</b></div>
+                <div class="teacher_detail">
+                    <div class="picture">
+                        <div class="picture_circle">
+                            <img src="./img/golang.png" alt=""></div>
+
+                    </div>
+                    <div class="small_icon">
+                        <a href="#"> <img src="./img/youtube2.png" alt=""></a>
+                        <a href="#"> <img src="./img/facebook2.png" alt=""></a>
+                    </div>
+
+
+                    <div class="teacher_intro">
+                        大家好，我是彭兆蔚，彭彭老師： - 台大訓練班十年教學經驗，對初學者的狀況有相當程度的了解。 - 世新大學、三創育成、蝦皮購物等單位擔任講師。 - 工程師、同時是連續創業家，思考面向多元廣泛。 - 具備獨立開發、經營大型網頁應用的能力。 我的經歷如下： - 台大心理系、台大資工所畢業。 - 曾任美商昇陽 (Sun Microsystems) 校園大使。 - 曾任資策會軟體工程師、Tomofun 網站工程師。 - 網頁多人線上遊戲開發。 - Piconion 影像處理軟體開發。 - COSCUP 2010、JSDC
+                        2017 講師。 - iThome Modern Web 2016、2017、2018 講師。 - 四年職場經驗、十年創業經驗。
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -193,6 +213,7 @@
     accessToken = localStorage.getItem("accessToken")
     const urlParams = new URLSearchParams(window.location.search);
     const title = urlParams.get('title');
+    console.log(title)
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", "/education/classinfo?title=" + title, true);
     xmlhttp.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
@@ -200,10 +221,11 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-
-            //替換課程名稱
+            console.log(obj)
+                //替換課程名稱
             var titleDiv = document.createElement("div");
             var titleContent = document.createTextNode(obj.data.Course_title);
+            console.log(titleContent)
             titleDiv.appendChild(titleContent);
             document.getElementById("title").appendChild(titleDiv)
 
@@ -215,13 +237,12 @@
 
             //替換課程老師
             var teacherDiv = document.createElement("div");
-            var teacherContent = document.createTextNode("授課教師 : " + obj.data.Course_teacher);
-            teacherDiv.appendChild(teacherContent);
+            // var teacherContent = document.createTextNode("授課教師 : " + obj.data.Course_teacher);
+            // teacherDiv.appendChild(teacherContent);
             document.getElementById("course_teacher").appendChild(teacherDiv)
 
             //替換章節ID
             var number = obj.data.Course_detail.length
-                // console.log(number)
             for (var i = 0; i < obj.data.Course_detail.length; i++) {
 
                 var chapterDiv = document.createElement("div");
@@ -232,7 +253,7 @@
                 var chapterContent = document.createTextNode(obj.data.Course_detail[i].Chapter_id);
                 chapterDiv.className = "row clearfix"
 
-
+                //TODO:應該要註冊過後才可以看影片
                 accessToken = localStorage.getItem("accessToken")
                 if (accessToken) {
                     var chapterDiv_a = document.createElement("a");
@@ -264,7 +285,8 @@
                 // chapterDiv.appendChild(chapterDiv_a);
                 // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
-                // console.log(obj.data.Course_detail[i].Chapter_detail.length)
+                console.log(obj.data.Course_detail[i].Chapter_detail.length)
+
                 for (var k = 0; k < obj.data.Course_detail[i].Chapter_detail.length; k++) {
                     //替換節的內容
                     var section_title_Div = document.createElement("p");
@@ -274,6 +296,7 @@
                     chapterDiv_a.appendChild(section_title_Div);
                     chapterDiv.appendChild(chapterDiv_a);
                     document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
+                    console.log("testttttttt")
 
                 }
 
@@ -354,6 +377,7 @@
             }
         }
     }
+
     // user_icon
     accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)

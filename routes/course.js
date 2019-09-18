@@ -63,7 +63,7 @@ router.post('/user/button', function(req, res) {
 
 router.post('/user/addcourse', function(req, res) {
     var course_title = req.body.course_title;
-    // console.log(course_title);
+    console.log(course_title);
     //先判斷有是否是會員(有token)，
     var Bearer_token = req.headers.authorization;
 
@@ -82,7 +82,7 @@ router.post('/user/addcourse', function(req, res) {
             //如果沒有token，就傳失敗訊息
             console.log('"error": "Invalid token."')
         } else { //有token是會員，將此課程加入status資訊
-            var video_id = `SELECT video_id FROM new_section JOIN course ON course.course_id=new_section.course_id where course.title="${course_title}";`
+            var video_id = `SELECT video_id FROM final_section JOIN new_course ON new_course.course_id=final_section.course_id where new_course.course_title="${course_title}";`
             con.query(video_id, function(err, video_id_result) {
                 console.log(video_id_result)
                 for (var i = 0; i < video_id_result.length; i++) {

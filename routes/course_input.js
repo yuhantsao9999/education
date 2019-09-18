@@ -24,7 +24,7 @@ var multer = require('multer');
 // 從根目錄使用router
 app.use('/', router);
 router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.urlencoded({ extended: true }));
 
 // GET intro.html
 router.get('/', (req, res) => {
@@ -44,7 +44,7 @@ var storage = multer.diskStorage({
         cb(null, 'assets')
     },
     filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + '.mp4')
+        cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
     },
 })
 var upload = multer({ storage: storage })
@@ -65,76 +65,113 @@ router.use(express.static(path.join(__dirname, 'public')))
 //     })
 // })
 
-var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'main_video', maxCount: 1 }]);
-router.post("/education/class_input", upload.array("class_video"), function(req, res) {
+var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
+router.post("/education/class_input", mixupload, function(req, res) {
 
-    console.log(JSON.stringify(req.body).section_title)
-        // var course_title = req.body.course_title;
-        // var course_teacher = req.body.course_teacher;
-        // var course_intro = req.body.course_intro;
-        // var count = parseInt(req.body.count);
 
-    // async.waterfall([
-    //     (next) => {
-    //         var mysql_course_input = `INSERT INTO course (title,intro,teacher) Values('${course_title}','${course_intro}','${course_teacher}')`;
-    //         con.query(mysql_course_input, function(err1, result_course_input) {
-    //             // console.log('successful_course_input')
-    //             next(err1)
-    //         });
-    //     },
-    //     (next) => {
-    //         var mysql_course = `select course_id from course where title = '${course_title}'`;
-    //         con.query(mysql_course, function(err2, result_course) {
-    //             var course_id = result_course[0].course_id
-    //             next(err2, course_id)
-    //         });
-    //     },
-    //     (course_id, next) => {
-    //         var chapter_number = req.body.chapter_id.length //計算chapter的數量
-    //         var chapter_real_number = req.body.chapter_id[chapter_number - 1]
-    //         var chapter_id_arr = []
-    //         for (i = 0; i < chapter_number; i++) {
-    //             // console.log("for loop " + i)
-    //             if ((i > 0) && (req.body.chapter_id[i] == req.body.chapter_id[i - 1])) {
-    //                 continue;
-    //             }
-    //             var chapter_id = req.body.chapter_id[i]
-    //             var chapter_title = req.body.chapter_title[i]
-    //             chapter_id_arr.push(chapter_id)
-    //                 // console.log("course id : " + course_id)
-    //                 // console.log("chapter id : " + chapter_id)
-    //                 // console.log("chapter title : " + chapter_title)
-    //             var mysql_chapter_input = `INSERT INTO chapter (course_id,chapter_id,chapter_title) 
-    //             Values('${course_id}','${chapter_id}','${chapter_title}')`;
-    //             con.query(mysql_chapter_input, function(err3, result_chapter_input) {
-    //                 // console.log('successful_chapter_input')
-    //             });
-    //         }
-    //         // console.log("chapter_id_arr: " + chapter_id_arr)
-    //         next(null, course_id)
-    //     },
-    //     (course_id, next) => {
-    //         for (var i = 0; i < count; i++) {
-    //             var chapter_id = req.body.chapter_id[i]
-    //             var section_id = req.body.section_id[i]
-    //             var section_title = req.body.section_title[i]
-    //             var section_intro = req.body.section_intro[i]
-    //             console.log("section_intro : " + section_intro)
-    //             var video = req.files[i].filename
-    //             console.log("req.files : " + video)
-    //             var mysql_section_input = `insert into new_section (course_id,chapter_id,section_id,section_title,section_intro,video)
-    //             values('${course_id}','${chapter_id}','${section_id}','${section_title}','${section_intro}','${video}');`
-    //             con.query(mysql_section_input, function(err4, result_section_input) {
-    //                 if (err4) throw err4
-    //                     // console.log("input section successful")
-    //             });
-    //         }
-    //         next(null)
-    res.send("successful")
-        //     },
-        // ], (err, rst) => {
-        //     if (err) return err;
-        // });
+    console.log(JSON.stringify(req.body))
+
+    var course_title = req.body.course_title;
+    var course_teacher = req.body.course_teacher;
+    var course_intro = req.body.course_intro;
+    var course_field = req.body.field;
+    var for_who = req.body.for_who;
+    var main_image = req.files.main_image[0].filename;
+    var chapter_num = Number(req.body.chapter_num);
+
+
+    async.waterfall([
+        (next) => {
+            var mysql_course_input = `INSERT INTO new_course (course_title,course_teacher,course_intro,course_field,for_who,main_image) 
+                        Values('${course_title}','${course_teacher}','${course_intro}','${course_field}','${for_who}','${main_image}')`;
+            con.query(mysql_course_input, function(err1, result_course_input) {
+                if (err1) throw err1
+                console.log('successful_course_input')
+            });
+            next(null)
+        },
+        (next) => {
+            var mysql_course_id = `select course_id from new_course where course_title = '${course_title}' and course_teacher='${course_teacher}'`;
+            con.query(mysql_course_id, function(err2, result_course) {
+                var course_id = result_course[0].course_id
+                    // console.log(course_id)
+                next(null, course_id)
+            });
+
+        },
+        (course_id, next) => {
+            var chapter_id_arr = []
+            for (var i = 0; i < chapter_num; i++) {
+                // console.log("for loop " + i)
+                // if ((i > 0) && (req.body.chapter_id[i] == req.body.chapter_id[i - 1])) {
+                //     continue;
+                // }
+                // chapter_id_arr.push(i)
+                var chapter_title = req.body.chapter_title[i]
+                var mysql_chapter_input = `INSERT INTO new_chapter (course_id,chapter_id,chapter_title) 
+                            Values('${course_id}','${i+1}','${chapter_title}')`;
+                con.query(mysql_chapter_input, function(err3, result_chapter_input) {});
+            }
+            next(null, course_id)
+        },
+        (course_id, next) => {
+            var mysql_chapter_auto_id = `select chapter_auto_id from new_chapter where course_id = '${course_id}'`;
+            con.query(mysql_chapter_auto_id, function(err2, result_chapter_auto_id) {
+                var chapter_auto_id_arr = [];
+                for (i = 0; i < result_chapter_auto_id.length; i++) {
+                    chapter_auto_id_arr.push(result_chapter_auto_id[i].chapter_auto_id)
+                }
+                // console.log(result_chapter_auto_id)
+                // console.log(chapter_auto_id_arr)
+                next(null, course_id, chapter_auto_id_arr)
+            });
+        },
+        (course_id, chapter_auto_id_arr, next) => {
+            //  計算section數量
+            var each_chapter_section_num = (req.body.each_chapter_section_num)
+            var each_chapter_section_num_arr = each_chapter_section_num.split(",")
+            var section_num = 0
+            for (var i = 0; i < each_chapter_section_num_arr.length; i++) {
+                section_num += Number(each_chapter_section_num_arr[i])
+            }
+            console.log("各個chapter的section數量 : " + each_chapter_section_num_arr) //1,2
+            console.log("section總數目 : " + section_num) //3
+            console.log("auto_id arr : " + chapter_auto_id_arr) //7,8
+
+
+            var each_video_chapter_auto_id_arr = []
+            for (var i = 0; i < each_chapter_section_num_arr.length; i++) {
+                for (var j = 0; j < each_chapter_section_num_arr[i]; j++) {
+                    each_video_chapter_auto_id_arr.push(chapter_auto_id_arr[i]);
+                }
+            }
+
+            // for (var i = 0, k = 0; i < section_num; i++) {
+            //     each_video_chapter_auto_id_arr.push(chapter_auto_id_arr[k])
+            //     if (each_video_chapter_auto_id_arr.length == each_chapter_section_num_arr[i] + each_chapter_section_num_arr[i - 1]) {
+            //         //TODO:會少計算到前面已經push的數量
+            //         k++;
+            //     }
+            // }
+            for (var i = 0; i < section_num; i++) {
+                console.log(each_video_chapter_auto_id_arr)
+                var section_title = req.body.section_title[i]
+                var section_intro = req.body.section_intro[i]
+
+                var video = req.files.class_video[i].filename;
+                var mysql_section_input = `insert into final_section (course_id,chapter_auto_id,section_id,section_title,section_intro,video)
+                                    values('${course_id}','${each_video_chapter_auto_id_arr[i]}','${i+1}','${section_title}','${section_intro}','${video}');`
+                con.query(mysql_section_input, function(err4, result_section_input) {
+                    if (err4) throw err4
+                        // console.log("input section successful")
+                });
+            }
+            next(null)
+            res.redirect("/index.html")
+        },
+    ], (err, rst) => {
+        if (err) return err;
+    });
 })
 
 
