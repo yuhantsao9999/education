@@ -18,7 +18,7 @@
                     <div id="nav" class="col-8">
                         <ul id="clearfix" class="clearfix">
                             <li class="active"><a href="＃">> 返回學生頁面</a></li>
-                            <li class="boundary"><a href="＃">我的課程</a></li>
+                            <li class="boundary"><a href="./profile_teacher.html">我的課程</a></li>
                             <!-- <li class="boundary"><a href="./sign_in.html">登入</a></li>
                                     <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
                         </ul>
@@ -46,7 +46,7 @@
                                         哪個類別最適合您所分享的知識？</b></p><input type='text' name='field'></div>
                         <div class="row-maininfo">
                             <p><b>來張課程的封面照片吧！</b></p>
-                            <input class="image" type='file' name='main_image' src="./img/picture.png">
+                            <input style="border:none;width: 300px;padding: 0 0" class="image" type='file' name='main_image' src="./img/picture.png">
                             <!-- <img class="picture" src="./img/picture.png" alt=""> -->
 
                             <p>檔案格式僅支援 jpg, png, gif</p>
@@ -57,7 +57,7 @@
                     </div>
                     <div id="subinfo">
                         <div class="row-maininfo">
-                            <p><b>關於講師</b></p><textarea style="width:246px;height:100px;" type='text' name='course_teacher'></textarea>
+                            <p><b>關於講師</b></p><textarea style="width:246px;height:100px;" type='text' name='course_teacher_intro'></textarea>
                             <p>讓學生更近一步了解授課老師的背景增吧！</p>
 
                         </div>
@@ -114,6 +114,7 @@
                         <input type="hidden" id="chapter_num" name="chapter_num">
                         <!-- <input type="hidden" id="video_count" name="video_count"> -->
                         <input type="hidden" id="each_chapter_section_num" name="each_chapter_section_num">
+                        <input type="hidden" id="user_token" name="user_token">
                         <input type='submit' value='Submit' id="sumbit">
                     </div>
                 </form>
@@ -129,7 +130,7 @@
 
     function add_section(obj) {
         video_count++;
-        // document.getElementById('video_count').value = video_count;
+
         var section_titleDiv = document.createElement("div");
         section_titleDiv.className = "row-video";
         var section_titleContent = document.createTextNode("section title:");
@@ -223,31 +224,28 @@
         delete_chapyerImg.setAttribute("onClick", "delete_chapter(" + count + ")");
         delete_chapyerSpan.appendChild(delete_chapyerImg);
 
-
-
         chaptermainDiv.appendChild(chapter_titleDiv);
         chaptermainDiv.appendChild(add_sectionDiv);
         chaptermainDiv.appendChild(delete_chapyerSpan);
-
 
         var chapter_video_Div = document.createElement("div");
         chapter_video_Div.id = parseInt(count);
 
         chapter_video_Div.appendChild(chaptermainDiv);
 
-
         document.getElementById("videoinfo").appendChild(chapter_video_Div);
     }
 
     var delete_count = 0
-        //delete_video()
+
+    //delete_chapter()
     function delete_chapter(obj) {
         delete_count++;
         // document.getElementById('count').value = count;
         var delete_chapter = document.getElementById(obj);
         delete_chapter.parentNode.removeChild(delete_chapter);
     }
-    //delete_video()
+    //delete_section()
     function delete_section(obj) {
         video_count--;
         // document.getElementById('video_count').value = video_count;
@@ -336,11 +334,14 @@
     //     }
     // }
     // });
+
+
+
     // user_icon
     accessToken = localStorage.getItem("accessToken")
-    console.log("accessToken" + accessToken)
+    document.getElementById("user_token").value = accessToken
     var xml_icon = new XMLHttpRequest();
-    xml_icon.open("get", "/user/profile", true);
+    xml_icon.open("get", "/profile/getinfo", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml_icon.send(null);
     xml_icon.onreadystatechange = function() {

@@ -1,3 +1,8 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
+* {
+    font-family: 'Noto Sans Kannada', sans-serif!important;
+}
+
 #header {
     /* border: 1px solid black; */
     box-shadow: 3px 3px 5px 6px #cccccc;

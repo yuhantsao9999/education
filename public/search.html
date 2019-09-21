@@ -234,7 +234,7 @@
                 contentDiv.appendChild(noclassContent)
                 document.getElementById("class_container").appendChild(contentDiv)
             } else {
-                for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < obj.length; i++) {
                     //替換課程圖片
                     var classImg = document.createElement("img");
                     var colDiv = document.createElement("div");
@@ -246,7 +246,7 @@
                     rowA.className = "row clearfix"
 
 
-                    rowA.href = ("/course.html?title=" + obj[i].title);
+                    rowA.href = ("/course.html?title=" + obj[i].course_title);
                     console.log("TITLE IS" + obj[i].title)
 
                     colDiv.appendChild(classImg)
@@ -260,9 +260,9 @@
 
                     col_8Div.className = "col-8"
 
-                    var titleContent = document.createTextNode(obj[i].title);
+                    var titleContent = document.createTextNode(obj[i].course_title);
                     console.log(titleContent)
-                    var introContent = document.createTextNode(obj[i].intro);
+                    var introContent = document.createTextNode(obj[i].course_intro);
                     titleh3.appendChild(titleContent)
                     introP.appendChild(introContent)
                     col_8Div.appendChild(titleh3)

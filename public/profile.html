@@ -15,7 +15,7 @@
                     <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
                     <input id="search" style="font-size:20px">
-                    <button onclick="search_course()" type="submit"></button>
+                    <button class="search-button" onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
                         <ul id="clearfix" class="clearfix">
                             <li class="active"><a href="./course_input.html">我要開課</a></li>
@@ -36,45 +36,73 @@
         <!------- 內容 ------->
 
         <div class="total_container">
-            <div class="container">
+            <div class="content_container">
                 <div class="col-4" id="table">
-                    <a href="./profile.html">
+                    <a href="./profile_student.html">
                         <div class="profile_class">
-                            所有課程
+                            我修的課
                         </div>
                     </a>
-                    <a href="">
-                        <div class="profile_love">
-                            收藏
+                    <a href="./profile.html">
+                        <div class="user_info">
+                            編輯我的公開資訊
                         </div>
                     </a>
                     <a href="./profile_done.html">
                         <div class="profile_finish">
-                            已完成
+                            已完成的課程
+                        </div>
+                    </a>
+                    <a href="./profile_teacher.html">
+                        <div class="teacher_class">
+                            我開的課
                         </div>
                     </a>
                 </div>
 
+                <div class="col-12" id="profile_add_info">
+                    <div class="teacher">
 
-                <div class="col-6" id="profile_add_info">
-                    <h3>所有課程</h3>
-                    <!-- <div class="profile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
-                    <!-- <div class="porfile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
-                    <!-- <div class="profile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
-                    <!-- <div class="porfile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
+                        <!-- <div class="teacher_name"><b>關於老師 XXXX</b></div> -->
+                        <div class="teacher_detail">
+                            <div class="picture">
+                                <div class="picture_circle">
+                                    <img src="./img/golang.png" alt="">
+                                    <div id="name">
+                                        <!-- <input type="text" class="name" placeholder="名字" required> -->
+                                    </div>
+                                    <!-- <div class="about_me"> -->
+                                    <textarea type="text" class="about_me" rows="1" placeholder="簡單介紹一下自己吧!" onpropertychange="setHeight(this);" onpaste="setHeight(this);" oninput="setHeight(this);"></textarea>
+                                </div>
 
+                            </div>
+
+                        </div>
+                        <div class="link_content">
+                            <div class="user_link">我的網站連結</div>
+                            <div class="form-group" id="urlPersonalWebsite">
+                                <div class="control-label">網站</div>
+                                <!-- <input type="text" class="form-control" name="urlPersonalWebsite" placeholder="網址"> -->
+                            </div>
+                            <div class="form-group" id="facebookProfile">
+                                <div class="control-label">Facebook</div>
+                                <span class="input-group" id="input-group-facebook">
+                                <span class="input-group-addon">http://www.facebook.com/</span>
+                                <!-- <input type="text" class="form-control" name="facebookProfile" placeholder="使用者名稱"> -->
+                                </span>
+                            </div>
+                            <div class="form-group" id="youtubeProfile">
+                                <div class="control-label">YouTube</div>
+                                <span class="input-group" id="input-group-youtube">
+                                    <span class="input-group-addon">http://www.youtube.com/</span>
+                                <!-- <input type="text" class="form-control" name="youtubeProfile" placeholder="使用者名稱"> -->
+                                </span>
+                            </div>
+                            <div class="upload_button">
+                                <button type="submit" class="btn-primary" onclick="add_user_info()"><b>儲存</b></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -133,95 +161,113 @@
 
 </body>
 <script>
-    //所有課程
-    const accessToken = localStorage.getItem("accessToken")
+    var accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
 
-    var js = document.getElementById('content')
-    var xml = new XMLHttpRequest;
-    xml.open('get', '/user/profile?tab=current', true);
-    xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
-    xml.send(null);
-    xml.onreadystatechange = function() {
-        if (xml.readyState == 4) {
-            if (xml.responseText == "error") {
-                alert("please sign in first!")
-                window.location.assign('./sign_in.html');
-                //user icon
-                var sign_li = document.createElement("li");
-                var signContent = document.createTextNode("登入");
-                var sign_a = document.createElement("a");
-                sign_a.href = "./sign_in.html"
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
+    //公開資料獲取目前資料
+    var xml_profileInfo = new XMLHttpRequest;
+    xml_profileInfo.open('get', '/profile/getinfo', true);
+    xml_profileInfo.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
+    xml_profileInfo.send(null);
+    xml_profileInfo.onreadystatechange = function() {
+        if (xml_profileInfo.readyState == 4) {
+            var profile_info_obj = JSON.parse(xml_profileInfo.responseText);
+            console.log(profile_info_obj)
+                //user名稱
+            var nameInput = document.createElement("input")
+            nameInput.type = "text";
+            nameInput.className = "name";
+            nameInput.value = (profile_info_obj.info[0].name);
+            document.getElementById("name").appendChild(nameInput);
+            //about_me
+            var about_meContent = document.createTextNode(profile_info_obj.info[0].about_me);
+            document.getElementsByClassName("about_me")[0].appendChild(about_meContent);
+            //PersonalWebsite
+            // <input type="text" class="form-control" name="urlPersonalWebsite" placeholder="網址">
+            var PersonalWebsiteInput = document.createElement("input")
+            PersonalWebsiteInput.type = "text";
+            PersonalWebsiteInput.className = "form-control";
+            PersonalWebsiteInput.placeholder = "網址";
+            PersonalWebsiteInput.name = "urlPersonalWebsite";
+            var PersonalWebsiteContent = profile_info_obj.info[0].PersonalWebsite;
+            PersonalWebsiteInput.value = PersonalWebsiteContent;
+            document.getElementById("urlPersonalWebsite").appendChild(PersonalWebsiteInput);
 
-            } else if (xml.responseText == "no class") {
-                var noclassContent = document.createTextNode("尚未註冊任何課程哦!");
-                document.getElementById("profile_add_info").appendChild(noclassContent)
-                var sign_li = document.createElement("li");
-                //user icon
-                var signContent = document.createTextNode("登出");
-                var sign_a = document.createElement("a");
-                sign_a.setAttribute("onClick", "log_out()");
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
-
-            } else {
-                var obj = JSON.parse(xml.responseText);
-                console.log(obj)
-                var count = obj.length;
-                console.log(count)
-
-                for (var i = 0; i < count; i++) {
-                    //替換課程圖片
-                    var classImg = document.createElement("img");
-                    var classDiv = document.createElement("div");
-                    var profileDiv = document.createElement("div");
-                    var titleContent = document.createTextNode(obj[i].title);
-                    classDiv.className = "profile_class_info";
-                    profileDiv.className = "profile_info"
+            //facebookProfile
+            // <input type="text" class="form-control" name="facebookProfile" placeholder="使用者名稱">
+            var facebookProfileInput = document.createElement("input")
+            facebookProfileInput.type = "text";
+            facebookProfileInput.className = "form-control";
+            facebookProfileInput.placeholder = "使用者名稱";
+            facebookProfileInput.name = "facebookProfile";
+            facebookProfileInput.value = profile_info_obj.info[0].facebookProfile;
+            document.getElementById("input-group-facebook").appendChild(facebookProfileInput);
 
 
-                    var classDiv_a = document.createElement("a");
-                    classDiv_a.href = ("/video.html?title=" + obj[i].title + "&chapter=1&section=1");
-                    // profileDiv.href = ("/course.html?title=" + obj[i].title);
+            //youtubeProfile
+            // <!-- <input type="text" class="form-control" name="youtubeProfile" placeholder="使用者名稱"> -->
+            var youtubeProfileInput = document.createElement("input")
+            youtubeProfileInput.type = "text";
+            youtubeProfileInput.className = "form-control";
+            youtubeProfileInput.placeholder = "使用者名稱";
+            youtubeProfileInput.name = "youtubeProfile";
+            youtubeProfileInput.value = profile_info_obj.info[0].youtubeProfile;
+            document.getElementById("input-group-youtube").appendChild(youtubeProfileInput);
+        }
+    }
 
-                    classImg.src = "./img/go.jpg"
 
-                    classDiv_a.appendChild(classDiv)
-                    classDiv.appendChild(titleContent)
-                    profileDiv.appendChild(classImg)
-                    profileDiv.appendChild(classDiv_a)
-                    document.getElementById("profile_add_info").appendChild(profileDiv)
+    //公開資料確認登入以及修改
+    function add_user_info() {
+        var xml = new XMLHttpRequest;
+        xml.open('post', '/profile/info', true);
+        xml.setRequestHeader('content-type', 'application/json')
+        xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
+        var user_name = document.getElementsByClassName("name")[0].value;
+        var about_me = document.getElementsByClassName("about_me")[0].value;
+        var urlPersonalWebsite = document.getElementsByName("urlPersonalWebsite")[0].value;
+        var facebookProfile = document.getElementsByName("facebookProfile")[0].value;
+        var youtubeProfile = document.getElementsByName("youtubeProfile")[0].value;
+
+        var profile_detail = {
+            user_name: user_name,
+            about_me: about_me,
+            PersonalWebsite: urlPersonalWebsite,
+            facebookProfile: facebookProfile,
+            youtubeProfile: youtubeProfile,
+        }
+        xml.send(JSON.stringify(profile_detail));
+        alert("修改成功！")
+        xml.onreadystatechange = function() {
+            if (xml.readyState == 4) {
+                if (xml.responseText == "error") {
+                    //尚未登入會員
+                    alert("please sign in first!")
+                    window.location.assign('./sign_in.html');
+                    //user icon
+                    var sign_li = document.createElement("li");
+                    var signContent = document.createTextNode("登入");
+                    var sign_a = document.createElement("a");
+                    sign_a.href = "./sign_in.html"
+                    sign_a.appendChild(signContent)
+                    sign_li.appendChild(sign_a)
+                    document.getElementById("clearfix").appendChild(sign_li)
+                } else {
+                    //已登入會員
+                    console.log("already sign in")
 
                 }
-
             }
         }
     }
 
 
 
-    //done api
-    // function done_course() {
-    //     window.location.replace("./profile_done.html");
-    // }
+    //讓介紹文字自動增大
+    function setHeight(obj) {
+        obj.style.height = obj.scrollHeight + 'px';
+    }
 
-
-    // //want api
-    // function want_course() {
-    //     document.getElementById("profile_add_info").innerHTML = '';
-    //     var xmlhttp = new XMLHttpRequest();
-    //     xmlhttp.open("get", "?tab=want", true)
-    //     xmlhttp.send(null);
-    //     xmlhttp.onreadystatechange = function() {
-    //         if (this.readyState == 4 && this.status == 200) {
-
-    //         }
-    //     }
-    // }
 
 
     //user icon

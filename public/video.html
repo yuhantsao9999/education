@@ -20,7 +20,7 @@
                     <div id="nav" class="col-8">
                         <ul class="clearfix" id="clearfix">
                             <li class="active"><a href="./course_input.html">我要開課</a></li>
-                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
+                            <li class="boundary"><a href="./profile_student.html">我的課表</a></li>
                             <!-- <li class="boundary"><a href="./sign_in.html">登入</a></li>
                             <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
                         </ul>
@@ -55,23 +55,15 @@
                 <div class="videoDiv" id="videoDiv">
                     <!-- <video id="video" src="https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/video/sample.mp4" controls></video> -->
                 </div>
-                <div class="class_intro">
-                    <h3>關於此課程</h3>
-                    <p>
-                        課程intro
-                    </p>
-                    <p>
+                <div id="class_intro">
+                    <h3 class="about_class">關於此課程</h3>
+                    <h4 id="section_intro">
+                        本節介紹
+                    </h4>
+                    <!-- <h4 id="for_who">
                         適合那些人?
-                    </p>
-                    <p>
-                        課程intro
-                    </p>
-                    <p>
-                        課程intro
-                    </p>
-                    <p>
-                        課程intro
-                    </p>
+                    </h4> -->
+
                 </div>
             </div>
         </div>
@@ -84,16 +76,24 @@
     const title = urlParams.get('title');
     const chapter = urlParams.get('chapter');
     const section = urlParams.get('section');
+    const section_id = urlParams.get('section_id');
+
+
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("get", "/education/classinfo?title=" + title, true)
     xmlhttp.send(null);
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
+            console.log(obj)
                 // 課程名稱
             document.getElementsByClassName("level")[0].innerHTML = title + " > " + chapter + " > " + section;
-
-            //左側列表
+            //下方介紹
+            var about_classP = document.createElement("p");
+            var about_classContent = document.createTextNode(obj.data.Course_detail[Number(chapter) - 1].Chapter_detail[Number(section) - 1].Section_intro)
+            about_classP.appendChild(about_classContent)
+            document.getElementById("section_intro").appendChild(about_classP)
+                //左側列表
             var chapter_number = obj.data.Course_detail.length
             for (i = 0; i < chapter_number; i++) {
                 var section_number = obj.data.Course_detail[i].Chapter_detail.length
@@ -108,7 +108,7 @@
                     sectionLi.className = "scroll_section"
                     var chapter_id = obj.data.Course_detail[i].Chapter_id
                     var section_id = obj.data.Course_detail[i].Chapter_detail[k].Section_id
-                    section_a.href = `http://localhost:3000/video.html?title=${title}&chapter=${chapter_id}&section=${section_id}`
+                    section_a.href = `http://localhost:3000/video.html?title=${title}&chapter=${chapter_id}&section=${k+1}&section_id=${section_id}`
                     section_a.appendChild(sectionLi)
                     chapterUl.appendChild(section_a)
                 }
@@ -126,17 +126,20 @@
     }
 
     var xmlhttp_video = new XMLHttpRequest();
-    xmlhttp_video.open("get", "/education/videoinfo?title=" + title + "&chapter=" + chapter + "&section=" + section, true)
+    xmlhttp_video.open("get", "/education/videoinfo?title=" + title + "&chapter=" + chapter + "&section=" + section + "&section_id=" + section_id, true)
+    console.log(title)
     xmlhttp_video.send(null);
     xmlhttp_video.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp_video.responseText)
+
+            console.log("obj" + JSON.stringify(obj.data))
             var video_name = obj.data[0].video
             var video = document.createElement("video");
             // console.log(video_name)
             video.id = "video"
             video.controls = "controls"
-            video.src = "https://stylish-test-1.s3-ap-northeast-1.amazonaws.com/education_video/" + video_name
+            video.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + video_name
                 // console.log(video.src)
             document.getElementById("videoDiv").appendChild(video)
         }
@@ -144,9 +147,9 @@
 
     // user_icon
     accessToken = localStorage.getItem("accessToken")
-    console.log("accessToken" + accessToken)
+        // console.log("accessToken" + accessToken)
     var xml_icon = new XMLHttpRequest();
-    xml_icon.open("get", "/user/profile", true);
+    xml_icon.open("get", "/profile/student/class", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml_icon.send(null);
     xml_icon.onreadystatechange = function() {
@@ -197,29 +200,25 @@
     //     }
     // }
 
+
+
+
     function send_ajax() {
         var video = document.getElementById("video")
         var currentTime = document.getElementById("video").currentTime;
         var totalTime = document.getElementById("video").duration;
-        console.log("Timeeeeeeeeeeeeeeeeeeee" + currentTime);
         var js = {
             currentTime: currentTime,
             totalTime: totalTime,
             accessToken: localStorage.getItem("accessToken")
         }
         var xmlhttp_videotime = new XMLHttpRequest();
-        xmlhttp_videotime.open("post", "/videoupdate?title=" + title + "&chapter=" + chapter + "&section=" + section, true)
+        xmlhttp_videotime.open("post", "/videoupdate?title=" + title + "&chapter=" + chapter + "&section_id=" + section_id, true)
         xmlhttp_videotime.setRequestHeader('Content-Type', 'application/json');
         xmlhttp_videotime.send(JSON.stringify(js));
-        // xmlhttp_videotime.onreadystatechange = function() {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         // alert("successful")
-        //     }
-        // }
     }
 
     setInterval("send_ajax()", 3000);
-    // video.addEventListener("timeupdate")
 </script>
 
 </html>

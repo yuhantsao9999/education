@@ -5,6 +5,9 @@
     <meta charset="UTF-8" />
     <title>class</title>
     <link rel="stylesheet" href="./css/index.css" />
+    <style>
+        @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
+    </style>
 </head>
 
 <body class="about">
@@ -19,7 +22,7 @@
                     <div id="nav" class="col-8">
                         <ul class="clearfix" id="clearfix">
                             <li class="active"><a href="./course_input.html">我要開課</a></li>
-                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
+                            <li class="boundary"><a href="./profile_student.html">我的課表</a></li>
                             <!-- <li><a href="./sign_in.html">登入</a></li>
                             <li><a href="./profile.html">hi yuhan!</a></li> -->
                             <!-- <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
@@ -211,7 +214,7 @@
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
             console.log(obj.data[0])
-            for (var i = 0; i < 6; i++) {
+            for (var i = 0; i < obj.data.length; i++) {
                 //替換課程圖片
                 var classImg = document.createElement("img");
                 var colDiv = document.createElement("div");
@@ -221,7 +224,6 @@
                 classImg.src = "./img/golang.png"
                 colDiv.className = "col-4"
                 rowA.className = "row clearfix"
-
 
                 rowA.href = ("/course.html?title=" + obj.data[i].course_title);
 
@@ -289,7 +291,7 @@
     accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
     var xml_icon = new XMLHttpRequest();
-    xml_icon.open("get", "/user/profile", true);
+    xml_icon.open("get", "/profile/getinfo", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml_icon.send(null);
     xml_icon.onreadystatechange = function() {

@@ -17,11 +17,16 @@ router.get('/', (req, res) => {
     res.send('video');
 });
 
+// GET video.html
+router.get('/', (req, res) => {
+    res.send('profile');
+});
+
 
 //course detail api
 router.get("/education/classinfo", function(req, res) {
-    console.log(req.query)
     var title = req.query.title;
+    console.log(title)
     var mysql_course = `select * from new_course where course_title='${title}'`;
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
@@ -76,21 +81,22 @@ router.get("/education/classinfo", function(req, res) {
 router.get("/education/videoinfo", function(req, res) {
     var title = req.query.title;
     var chapter_id = req.query.chapter;
-    var section_id = req.query.section;
+    var section = req.query.section;
+    var section_id = req.query.section_id;
+    console.log("title : " + title)
     async.waterfall([
         (next) => {
-
-            var mysql_course = `select * from new_course where course_title='${title}'`;
+            var mysql_course = `select * from new_course where course_title='${title}';`;
             con.query(mysql_course, function(err1, result_course) {
                 var course_id = result_course[0].course_id;
-                next(null, course_id)
+                next(null, course_id);
             });
-        }, //TODO:之後可以新增使用者再次回到課程時，直接回到上次觀看的時候
+        },
+        //TODO:之後可以新增使用者再次回到課程時，直接回到上次觀看的時候
         (course_id, next) => {
-            var mysql_video = `select video from final_section where course_id='${course_id}' and chapter_id='${chapter_id}'and section_id='${section_id}'`;
+            var mysql_video = `select final_section.video from final_section join new_chapter 
+            on  final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id='${course_id}' and new_chapter.chapter_id='${chapter_id}'and final_section.section_id='${section_id}'`;
             con.query(mysql_video, function(err, result_video) {
-                var video = result_video;
-
                 var video = result_video;
                 var data = {};
                 data["data"] = video;
@@ -108,7 +114,8 @@ router.get("/education/videoinfo", function(req, res) {
 router.post("/videoupdate", function(req, res) {
     var title = req.query.title;
     var chapter_id = req.query.chapter;
-    var section_id = req.query.section;
+    var section_id = req.query.section_id;
+
     var currentTime = req.body.currentTime;
     var totalTime = req.body.totalTime;
     var Token = req.body.accessToken;
@@ -121,9 +128,11 @@ router.post("/videoupdate", function(req, res) {
             });
         },
         (user_id, next) => {
-            var video_id_sql = `SELECT video_id FROM final_section JOIN course on course.course_id=new_section.course_id 
-            WHERE course_title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id}'`
-                //TODO:新的表單final_section裡沒有chapter_id
+            var video_id_sql =
+                `SELECT final_section.video_id FROM final_section join new_chapter join new_course 
+            on final_section.chapter_auto_id=new_chapter.chapter_auto_id 
+            and new_course.course_id=new_chapter.course_id
+            and course_title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id}'`
             con.query(video_id_sql, function(err1, video_id_result) {
                 if (err1)
                     throw err1;

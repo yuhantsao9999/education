@@ -11,15 +11,15 @@ var multerS3 = require('multer-s3');
 var multer = require('multer');
 
 //s3的帳號密碼
-// const BUCKET_NAME = 'my-first-education-project';
-// const IAM_USER_KEY = '';
-// const IAM_USER_SECRET = '';
+const BUCKET_NAME = 'cad-education-project';
+const IAM_USER_KEY = 'AKIAWUNAWR5DUULICIEH';
+const IAM_USER_SECRET = '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';
 
-// aws.config.update({
-//     accessKeyId: IAM_USER_KEY,
-//     secretAccessKey: IAM_USER_SECRET
-// });
-// const s3 = new aws.S3();
+aws.config.update({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET
+});
+const s3 = new aws.S3();
 
 // 從根目錄使用router
 app.use('/', router);
@@ -37,67 +37,72 @@ router.get('/', (req, res) => {
 });
 
 
-
 //使用multer將影片傳到assets並幫影片命名
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'assets')
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
-    },
-})
-var upload = multer({ storage: storage })
+// var storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, 'assets')
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
+//     },
+// })
+// var upload = multer({ storage: storage })
 
-router.use(express.static(path.join(__dirname, 'public')))
+// router.use(express.static(path.join(__dirname, 'public')))
 
 //s3取代multer
-// var upload = multer({
-//     storage: multerS3({
-//         s3: s3,
-//         bucket: 'my-first-education-project',
-//         metadata: function(req, file, cb) {
-//             cb(null, { fieldName: file.fieldname });
-//         },
-//         key: function(req, file, cb) {
-//             cb(null, 'video/' + file.fieldname + '-' + Date.now() + ".mp4")
-//         }
-//     })
-// })
+var upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'cad-education-project/class-video-picture',
+        metadata: function(req, file, cb) {
+            cb(null, { fieldName: file.fieldname });
+        },
+        key: function(req, file, cb) {
+            cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
+        }
+    })
+})
 
 var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
 router.post("/education/class_input", mixupload, function(req, res) {
 
-
-    console.log(JSON.stringify(req.body))
-
+    // console.log(JSON.stringify(req.body))
+    var access_token = req.body.user_token;
     var course_title = req.body.course_title;
-    var course_teacher = req.body.course_teacher;
+    var course_teacher_intro = req.body.course_teacher_intro;
+    console.log(course_teacher_intro)
     var course_intro = req.body.course_intro;
     var course_field = req.body.field;
     var for_who = req.body.for_who;
-    var main_image = req.files.main_image[0].filename;
+    var main_image = req.files.main_image[0].key;
     var chapter_num = Number(req.body.chapter_num);
 
 
     async.waterfall([
         (next) => {
-            var mysql_course_input = `INSERT INTO new_course (course_title,course_teacher,course_intro,course_field,for_who,main_image) 
-                        Values('${course_title}','${course_teacher}','${course_intro}','${course_field}','${for_who}','${main_image}')`;
+            var mysql_user_name = `select name from user where access_token = '${access_token}'`;
+            con.query(mysql_user_name, function(err1, result_user_name) {
+                var user_name = result_user_name[0].name;
+                if (err1) throw err1;
+                next(null, user_name)
+            });
+        },
+        (user_name, next) => {
+            var mysql_course_input = `INSERT INTO new_course (course_title,course_teacher,course_teacher_intro,course_intro,course_field,for_who,main_image) 
+                        Values('${course_title}','${user_name}','${course_teacher_intro}','${course_intro}','${course_field}','${for_who}','${main_image}')`;
             con.query(mysql_course_input, function(err1, result_course_input) {
                 if (err1) throw err1
-                console.log('successful_course_input')
             });
-            next(null)
+            next(null, user_name)
         },
-        (next) => {
-            var mysql_course_id = `select course_id from new_course where course_title = '${course_title}' and course_teacher='${course_teacher}'`;
+        (user_name, next) => {
+            var mysql_course_id = `select course_id from new_course where course_title = '${course_title}' and course_teacher='${user_name}'`;
             con.query(mysql_course_id, function(err2, result_course) {
                 var course_id = result_course[0].course_id
                     // console.log(course_id)
                 next(null, course_id)
             });
-
         },
         (course_id, next) => {
             var chapter_id_arr = []
@@ -134,9 +139,9 @@ router.post("/education/class_input", mixupload, function(req, res) {
             for (var i = 0; i < each_chapter_section_num_arr.length; i++) {
                 section_num += Number(each_chapter_section_num_arr[i])
             }
-            console.log("各個chapter的section數量 : " + each_chapter_section_num_arr) //1,2
-            console.log("section總數目 : " + section_num) //3
-            console.log("auto_id arr : " + chapter_auto_id_arr) //7,8
+            // console.log("各個chapter的section數量 : " + each_chapter_section_num_arr) //1,2
+            // console.log("section總數目 : " + section_num) //3
+            // console.log("auto_id arr : " + chapter_auto_id_arr) //7,8
 
 
             var each_video_chapter_auto_id_arr = []
@@ -154,11 +159,12 @@ router.post("/education/class_input", mixupload, function(req, res) {
             //     }
             // }
             for (var i = 0; i < section_num; i++) {
-                console.log(each_video_chapter_auto_id_arr)
+
                 var section_title = req.body.section_title[i]
                 var section_intro = req.body.section_intro[i]
+                    // console.log(req.files)
+                var video = req.files.class_video[i].key;
 
-                var video = req.files.class_video[i].filename;
                 var mysql_section_input = `insert into final_section (course_id,chapter_auto_id,section_id,section_title,section_intro,video)
                                     values('${course_id}','${each_video_chapter_auto_id_arr[i]}','${i+1}','${section_title}','${section_intro}','${video}');`
                 con.query(mysql_section_input, function(err4, result_section_input) {
