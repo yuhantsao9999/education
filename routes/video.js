@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
 //course detail api
 router.get("/education/classinfo", function(req, res) {
     var title = req.query.title;
-    console.log(title)
+    // console.log(title)
     var mysql_course = `select * from new_course where course_title='${title}'`;
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
@@ -78,12 +78,13 @@ router.get("/education/classinfo", function(req, res) {
 
 //video.html
 //course video api
-router.get("/education/videoinfo", function(req, res) {
+router.post("/education/videoinfo", function(req, res) {
     var title = req.query.title;
     var chapter_id = req.query.chapter;
     var section = req.query.section;
     var section_id = req.query.section_id;
-    console.log("title : " + title)
+    var user_token = req.body.user_token;
+    console.log("tokennnnnn : " + user_token)
     async.waterfall([
         (next) => {
             var mysql_course = `select * from new_course where course_title='${title}';`;
@@ -94,17 +95,32 @@ router.get("/education/videoinfo", function(req, res) {
         },
         //TODO:之後可以新增使用者再次回到課程時，直接回到上次觀看的時候
         (course_id, next) => {
-            var mysql_video = `select final_section.video from final_section join new_chapter 
+            var mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter 
             on  final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id='${course_id}' and new_chapter.chapter_id='${chapter_id}'and final_section.section_id='${section_id}'`;
             con.query(mysql_video, function(err, result_video) {
-                var video = result_video;
+                var video = result_video[0].video;
+                var video_id = result_video[0].video_id;
+                // data["data"] = result_video;
+                next(null, course_id, video, video_id)
+                console.log(result_video)
+            });
+        },
+        (course_id, video, video_id, next) => {
+            console.log("tokennnnnn : " + user_token)
+            var mysql_video_current_time = `SELECT video_time FROM status JOIN user  on status.user_id=user.user_id 
+            WHERE status.video_id='${video_id}' and user.access_token='${user_token}';`;
+            con.query(mysql_video_current_time, function(err1, result_video_current_time) {
+                // console.log(result_video_current_time)
+                var user_vider_currentTime = result_video_current_time[0].video_time;
+                var video_detail_array = []
+                video_detail_array.push({ video: video, user_currentTime: user_vider_currentTime })
                 var data = {};
-                data["data"] = video;
-                next(null)
+                data["data"] = video_detail_array;
+                // console.log(data)
+                next(null);
                 res.send(data)
             });
-
-        }
+        },
     ], (err, rst) => {
         if (err) return err;
     });

@@ -65,7 +65,6 @@ router.post('/user/addcourse', function(req, res) {
     var course_title = req.body.course_title;
     //先判斷有是否是會員(有token)，
     var Bearer_token = req.headers.authorization;
-
     var Bearer = Bearer_token.substr(0, 6);
     var Token = Bearer_token.substr(7);
     // console.log("token : " + Token)

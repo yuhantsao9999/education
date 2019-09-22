@@ -85,7 +85,7 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-            console.log(obj)
+                // console.log(obj)
                 // 課程名稱
             document.getElementsByClassName("level")[0].innerHTML = title + " > " + chapter + " > " + section;
             //下方介紹
@@ -125,22 +125,34 @@
         }
     }
 
+
+    //新增使用者播放進度
+    accessToken = localStorage.getItem("accessToken")
+        // console.log("oppppppp : " + accessToken)
     var xmlhttp_video = new XMLHttpRequest();
-    xmlhttp_video.open("get", "/education/videoinfo?title=" + title + "&chapter=" + chapter + "&section=" + section + "&section_id=" + section_id, true)
-    console.log(title)
-    xmlhttp_video.send(null);
+    xmlhttp_video.open("POST", "/education/videoinfo?title=" + title + "&chapter=" + chapter + "&section=" + section + "&section_id=" + section_id, true)
+    var videoinfo_obj = {
+        title: title,
+        chapter: chapter,
+        section: section,
+        section_id: section_id,
+        user_token: accessToken
+    }
+    xmlhttp_video.setRequestHeader('Content-Type', 'application/json');
+    xmlhttp_video.send(JSON.stringify(videoinfo_obj));
     xmlhttp_video.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp_video.responseText)
-
-            console.log("obj" + JSON.stringify(obj.data))
-            var video_name = obj.data[0].video
+                // console.log("obj" + JSON.stringify(obj.data))
+            var video_name = obj.data[0].video;
+            var video_user_currentTime = obj.data[0].user_currentTime;
             var video = document.createElement("video");
             // console.log(video_name)
+            // console.log(video_user_currentTime)
             video.id = "video"
             video.controls = "controls"
             video.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + video_name
-                // console.log(video.src)
+            video.currentTime = video_user_currentTime;
             document.getElementById("videoDiv").appendChild(video)
         }
     }
