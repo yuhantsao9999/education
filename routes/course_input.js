@@ -12,8 +12,8 @@ var multer = require('multer');
 
 //s3的帳號密碼
 const BUCKET_NAME = 'cad-education-project';
-const IAM_USER_KEY = 'AKIAWUNAWR5DUULICIEH';
-const IAM_USER_SECRET = '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';
+const IAM_USER_KEY = '';
+const IAM_USER_SECRET = '';
 
 aws.config.update({
     accessKeyId: IAM_USER_KEY,

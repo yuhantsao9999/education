@@ -68,7 +68,11 @@
                             <div class="picture">
                                 <div class="picture_circle">
                                     <!-- TODO:使用者圖片更換 -->
-                                    <img src="./img/pen.png" alt="">
+                                    <div id="user_picture">
+                                        <!-- <img src="./img/pen.png" alt=""> -->
+                                        <!-- <input type="image" src="./img/pen.png" alt="send" name="user_picture" id="user_picture" onclick="send();" /> -->
+                                    </div>
+
                                     <div id="name">
                                         <!-- <span> <input type="text" class="name" placeholder="名字" required>
                                             <img src="./img/pen.png" alt="">
@@ -175,13 +179,33 @@
     xml_profileInfo.onreadystatechange = function() {
         if (xml_profileInfo.readyState == 4) {
             var profile_info_obj = JSON.parse(xml_profileInfo.responseText);
-            console.log(profile_info_obj)
+            console.log("profiletestttttt : " + JSON.stringify(profile_info_obj))
                 //user名稱
             var nameInput = document.createElement("input")
             nameInput.type = "text";
             nameInput.className = "name";
             nameInput.value = (profile_info_obj.info[0].name);
             document.getElementById("name").appendChild(nameInput);
+
+
+            //更換圖片
+            //TODO:換圖片
+            // <img src="./img/pen.png" alt="">
+            // <input type="image" src="" alt="send" name="user_picture" id="user_picture" onclick="send();" />
+            var userPictureInput = document.createElement("input");
+            userPictureInput.type = "image";
+            userPictureInput.className = "user_picture"
+            userPictureInput.name = "user_picture"
+            userPictureInput.setAttribute("onclick", "updateUserImage()");
+            var userPicturePath = profile_info_obj.info[0].user_image
+            if (userPicturePath !== null) {
+                userPictureInput.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + userPicturePath;
+            } else {
+                userPictureInput.src = "./img/pen.png"
+            }
+            document.getElementById("user_picture").appendChild(userPictureInput);
+
+
             //about_me
             var about_meContent = profile_info_obj.info[0].about_me
             if (about_meContent !== null) {
@@ -220,6 +244,14 @@
         }
     }
 
+
+
+    //圖片的更換
+    function updateUserImage() {
+
+
+
+    }
 
     //公開資料確認登入以及修改
     function add_user_info() {

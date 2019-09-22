@@ -108,11 +108,12 @@ router.get('/profile/getinfo', function(req, res) {
                 var profile_info_arr = []
                 var profile_info_obj = {};
                 var name = result_profile_info[0].name;
+                var user_image = result_profile_info[0].user_image;
                 var about_me = result_profile_info[0].about_me;
                 var PersonalWebsite = result_profile_info[0].PersonalWebsite;
                 var facebookProfile = result_profile_info[0].facebookProfile;
                 var youtubeProfile = result_profile_info[0].youtubeProfile;
-                profile_info_arr.push({ name: name, about_me: about_me, PersonalWebsite: PersonalWebsite, facebookProfile: facebookProfile, youtubeProfile: youtubeProfile });
+                profile_info_arr.push({ name: name, user_image: user_image, about_me: about_me, PersonalWebsite: PersonalWebsite, facebookProfile: facebookProfile, youtubeProfile: youtubeProfile });
                 profile_info_obj['info'] = profile_info_arr;
                 // console.log(profile_info_obj)
                 res.send(profile_info_obj)

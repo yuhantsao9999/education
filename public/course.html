@@ -426,7 +426,7 @@
 
             //更換老師資訊
             var teacher_name = obj[0].course_teacher
-            console.log("teacher : " + teacher_name)
+                // console.log("teacher : " + teacher_name)
                 // <div class="teacher_name"><b>關於老師 XXXX</b></div>
             var teacher_nameB = document.createElement("b");
             var teacher_nameContent = document.createTextNode("關於老師 " + teacher_name);
@@ -452,7 +452,7 @@
             var icon_homeA = document.createElement("a");
             var icon_homeHref = obj[0].PersonalWebsite;
             console.log(typeof(icon_homeHref))
-            if (icon_homeHref !== null || icon_homeHref !== undefined || icon_homeHref == 0) {
+            if (icon_homeHref !== null && icon_homeHref !== undefined && icon_homeHref !== '') {
                 icon_homeA.href = icon_homeHref;
                 var icon_homeImg = document.createElement("img");
                 icon_homeImg.src = "./img/home2.png"
@@ -463,7 +463,7 @@
 
             var icon_facebookA = document.createElement("a");
             var icon_facebookHref = obj[0].facebookProfile
-            if (icon_facebookHref !== null || icon_facebookHref !== undefined || icon_facebookHref.length !== 0) {
+            if (icon_facebookHref !== null && icon_facebookHref !== undefined && icon_facebookHref !== '') {
                 icon_facebookA.href = ("http://www.facebook.com/" + icon_facebookHref);
                 var icon_facebookImg = document.createElement("img");
                 icon_facebookImg.src = "./img/facebook2.png";
@@ -475,7 +475,7 @@
             var icon_youtuebeHref = obj[0].youtubeProfile;
             console.log(icon_youtuebeHref)
             console.log(typeof(icon_youtuebeHref))
-            if (icon_youtuebeHref !== null || icon_youtuebeHref !== undefined || icon_youtuebeHref !== '') {
+            if (icon_youtuebeHref !== null && icon_youtuebeHref !== undefined && icon_youtuebeHref !== '') {
                 icon_youtuebeA.href = ("http://www.youtube.com/" + icon_youtuebeHref);
                 var icon_youtuebeImg = document.createElement("img");
                 icon_youtuebeImg.src = "./img/youtube2.png"

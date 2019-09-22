@@ -348,7 +348,7 @@ textarea::placeholder {
     padding-top: 1.5em;
 }
 
-.picture img {
+.user_picture {
     border-radius: 50%;
     overflow: hidden;
     height: 170px;
