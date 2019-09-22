@@ -81,16 +81,17 @@ router.post("/education/class_input", mixupload, function(req, res) {
 
     async.waterfall([
         (next) => {
-            var mysql_user_name = `select name from user where access_token = '${access_token}'`;
+            var mysql_user_name = `select name,user_id from user where access_token = '${access_token}'`;
             con.query(mysql_user_name, function(err1, result_user_name) {
                 var user_name = result_user_name[0].name;
+                var user_id = result_user_name[0].user_id;
                 if (err1) throw err1;
-                next(null, user_name)
+                next(null, user_name, user_id)
             });
         },
-        (user_name, next) => {
-            var mysql_course_input = `INSERT INTO new_course (course_title,course_teacher,course_teacher_intro,course_intro,course_field,for_who,main_image) 
-                        Values('${course_title}','${user_name}','${course_teacher_intro}','${course_intro}','${course_field}','${for_who}','${main_image}')`;
+        (user_name, user_id, next) => {
+            var mysql_course_input = `INSERT INTO new_course (course_title,course_teacher,course_teacher_id,course_teacher_intro,course_intro,course_field,for_who,main_image) 
+                        Values('${course_title}','${user_name}','${user_id}','${course_teacher_intro}','${course_intro}','${course_field}','${for_who}','${main_image}')`;
             con.query(mysql_course_input, function(err1, result_course_input) {
                 if (err1) throw err1
             });

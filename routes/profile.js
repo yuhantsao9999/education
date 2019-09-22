@@ -18,6 +18,11 @@ router.get('/', (req, res) => {
     res.send('profile');
 });
 
+// GET profile_teacher.html
+router.get('/', (req, res) => {
+    res.send('profile_teacher');
+});
+
 
 //我修的課---profile頁面驗證會員api
 router.get('/profile/student/class', function(req, res) {
@@ -76,7 +81,7 @@ router.get('/profile/student/class', function(req, res) {
 })
 
 //我的公開資訊--獲取目前會員資料
-// TODO目前user_icon都用這個記得改
+// TODO:目前user_icon都用這個記得改
 router.get('/profile/getinfo', function(req, res) {
     var Bearer_token = req.headers.authorization;
     var Bearer = Bearer_token.substr(0, 6);
@@ -161,7 +166,7 @@ router.post('/profile/info', function(req, res) {
 
 //已完成課程
 router.get('/profile/done', function(req, res) {
-    //先判斷有是否是會員(有token)，
+    //先判斷有是否是會員(有token)
     var Bearer_token = req.headers.authorization;
     var Bearer = Bearer_token.substr(0, 6);
     var Token = Bearer_token.substr(7);
@@ -214,6 +219,46 @@ router.get('/profile/done', function(req, res) {
             });
         }
     })
+})
+
+//老師開的課
+router.get('/profile/teacher/class', function(req, res) {
+    //先透過有token，判斷user是誰
+    var Bearer_token = req.headers.authorization;
+    var Bearer = Bearer_token.substr(0, 6);
+    var Token = Bearer_token.substr(7);
+    console.log("token : " + Token)
+    async.waterfall([
+        (next) => {
+            var profile_checkmember = `SELECT user_id FROM user WHERE access_token='${Token}'`
+            con.query(profile_checkmember, function(err, result) {
+                if (err) throw err;
+                var user_id = result[0].user_id;
+                console.log(user_id)
+                next(null, user_id);
+            });
+        },
+        (user_id, next) => {
+            var teacher_class = `SELECT * FROM new_course WHERE course_teacher_id='${user_id}'`
+            con.query(teacher_class, function(err, result_teacher_class) {
+                if (err) throw err;
+                console.log(result_teacher_class)
+                if (result_teacher_class.length != 0) {
+                    console.log(result_teacher_class)
+                    res.send(result_teacher_class)
+                } else {
+                    //有token是會員，但沒有開設課程
+                    res.send("no set up class")
+                }
+
+            });
+
+
+
+        }
+    ], (err, rst) => {
+        if (err) return err;
+    });
 })
 
 

@@ -67,9 +67,13 @@
                         <div class="teacher_detail">
                             <div class="picture">
                                 <div class="picture_circle">
-                                    <img src="./img/golang.png" alt="">
+                                    <!-- TODO:使用者圖片更換 -->
+                                    <img src="./img/pen.png" alt="">
                                     <div id="name">
-                                        <!-- <input type="text" class="name" placeholder="名字" required> -->
+                                        <!-- <span> <input type="text" class="name" placeholder="名字" required>
+                                            <img src="./img/pen.png" alt="">
+                                        </span> -->
+
                                     </div>
                                     <!-- <div class="about_me"> -->
                                     <textarea type="text" class="about_me" rows="1" placeholder="簡單介紹一下自己吧!" onpropertychange="setHeight(this);" onpaste="setHeight(this);" oninput="setHeight(this);"></textarea>
@@ -162,7 +166,6 @@
 </body>
 <script>
     var accessToken = localStorage.getItem("accessToken")
-    console.log("accessToken" + accessToken)
 
     //公開資料獲取目前資料
     var xml_profileInfo = new XMLHttpRequest;
@@ -180,10 +183,13 @@
             nameInput.value = (profile_info_obj.info[0].name);
             document.getElementById("name").appendChild(nameInput);
             //about_me
-            var about_meContent = document.createTextNode(profile_info_obj.info[0].about_me);
-            document.getElementsByClassName("about_me")[0].appendChild(about_meContent);
+            var about_meContent = profile_info_obj.info[0].about_me
+            if (about_meContent !== null) {
+                var about_meContentNode = document.createTextNode(about_meContent);
+                document.getElementsByClassName("about_me")[0].appendChild(about_meContentNode);
+            }
+
             //PersonalWebsite
-            // <input type="text" class="form-control" name="urlPersonalWebsite" placeholder="網址">
             var PersonalWebsiteInput = document.createElement("input")
             PersonalWebsiteInput.type = "text";
             PersonalWebsiteInput.className = "form-control";
@@ -194,7 +200,6 @@
             document.getElementById("urlPersonalWebsite").appendChild(PersonalWebsiteInput);
 
             //facebookProfile
-            // <input type="text" class="form-control" name="facebookProfile" placeholder="使用者名稱">
             var facebookProfileInput = document.createElement("input")
             facebookProfileInput.type = "text";
             facebookProfileInput.className = "form-control";
@@ -205,7 +210,6 @@
 
 
             //youtubeProfile
-            // <!-- <input type="text" class="form-control" name="youtubeProfile" placeholder="使用者名稱"> -->
             var youtubeProfileInput = document.createElement("input")
             youtubeProfileInput.type = "text";
             youtubeProfileInput.className = "form-control";
