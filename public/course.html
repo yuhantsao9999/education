@@ -220,7 +220,7 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-                // console.log(obj)
+            console.log("OHHHHHHHHH: " + JSON.stringify(obj))
                 //替換課程名稱
             var titleDiv = document.createElement("div");
             var titleContent = document.createTextNode(obj.data.Course_title);
@@ -242,6 +242,7 @@
 
             //替換章節ID
             var number = obj.data.Course_detail.length
+            console.log("Course_detail的長度 ： " + number)
             for (var i = 0; i < obj.data.Course_detail.length; i++) {
 
                 var chapterDiv = document.createElement("div");
@@ -256,7 +257,9 @@
                 accessToken = localStorage.getItem("accessToken")
                 if (accessToken) {
                     var chapterDiv_a = document.createElement("a");
-                    chapterDiv_a.href = ("/video.html?title=" + obj.data.Course_title + "&chapter=" + obj.data.Course_detail[i].Chapter_id + "&section=1&section_id=1");
+                    // obj.data.Course_detail[i].Chapter_id
+                    //TODO:目前全部都會連到第一章第一個影片
+                    chapterDiv_a.href = ("/video.html?title=" + obj.data.Course_title + "&chapter=1&section=1&section_id=1");
                 } else {
                     var chapterDiv_a = document.createElement("a");
                 }
@@ -407,7 +410,7 @@
     }
 
     //加入老師資訊
-    console.log("課程標題 : " + course_title)
+    // console.log("課程標題 : " + course_title)
     var xml_teacher = new XMLHttpRequest();
     xml_teacher.open("post", "/course/teacher/info", true);
     //display none buttom已經宣告過了
@@ -416,7 +419,7 @@
     }
     xml_teacher.setRequestHeader('Content-Type', 'application/json');
     // xml_teacher.setRequestHeader("Authorization", "Bearer " + accessToken);
-    console.log("accessToken : " + accessToken)
+    // console.log("accessToken : " + accessToken)
     xml_teacher.send(JSON.stringify(course_title_obj));
     xml_teacher.onreadystatechange = function() {
         if (xml_teacher.readyState == 4) {
@@ -451,7 +454,7 @@
             // <a href="#"> <img src="./img/facebook2.png" alt=""></a>
             var icon_homeA = document.createElement("a");
             var icon_homeHref = obj[0].PersonalWebsite;
-            console.log(typeof(icon_homeHref))
+            // console.log(typeof(icon_homeHref))
             if (icon_homeHref !== null && icon_homeHref !== undefined && icon_homeHref !== '') {
                 icon_homeA.href = icon_homeHref;
                 var icon_homeImg = document.createElement("img");
@@ -473,8 +476,8 @@
 
             var icon_youtuebeA = document.createElement("a");
             var icon_youtuebeHref = obj[0].youtubeProfile;
-            console.log(icon_youtuebeHref)
-            console.log(typeof(icon_youtuebeHref))
+            // console.log(icon_youtuebeHref)
+            // console.log(typeof(icon_youtuebeHref))
             if (icon_youtuebeHref !== null && icon_youtuebeHref !== undefined && icon_youtuebeHref !== '') {
                 icon_youtuebeA.href = ("http://www.youtube.com/" + icon_youtuebeHref);
                 var icon_youtuebeImg = document.createElement("img");
@@ -491,4 +494,4 @@
 </script>
 
 
-</html>4
+</html>

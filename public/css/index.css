@@ -49,7 +49,7 @@ button {
 .about #content .gray-bg {
     padding: 100px 0;
     text-align: center;
-    /* background-color: #CEDADA; */
+    background-color: #CEDADA;
 }
 
 .about #content .gray-bg .count {
@@ -96,6 +96,7 @@ ul {
 
 img {
     display: block;
+    width: 20vh;
 }
 
 p {
@@ -153,10 +154,20 @@ a {
     margin: 0 -15px;
 }
 
+.ContentSubtitle {
+    border-bottom: 5px solid #209cc5;
+    /* border-bottom: 1px solid black; */
+}
+
+.text {
+    width: 50%;
+    float: right;
+    color: #7e7e7e;
+}
+
 .col-2,
 .col-3,
 .col-4,
-.col-6,
 .col-12 {
     float: left;
     padding: 0 30px;
@@ -175,7 +186,38 @@ a {
 }
 
 .col-6 {
+    float: left;
     width: 50%;
+}
+
+.col-6-right {
+    width: 48%;
+    height: 13em;
+    background-color: #ededed;
+    text-align: left;
+    padding: 20px;
+    font-family: "PingFang TC", "微軟正黑體", sans-serif;
+    line-height: 1.5em;
+    box-shadow: 0 2px 8px 0 #cccccc;
+    margin-left: 10px;
+    border-bottom: 3px solid #00bea4;
+    float: left;
+    padding: 0 30px;
+}
+
+.col-6-left {
+    width: 48%;
+    height: 13em;
+    background-color: #ededed;
+    text-align: left;
+    padding: 20px;
+    font-family: "PingFang TC", "微軟正黑體", sans-serif;
+    line-height: 1.5em;
+    box-shadow: 0 2px 8px 0 #cccccc;
+    margin-right: 1%;
+    border-bottom: 3px solid #00bea4;
+    float: left;
+    padding: 0 30px;
 }
 
 .col-12 {
@@ -189,8 +231,8 @@ a {
 }
 
 .class_picture {
-    width: 300px;
-    height: 300px
+    margin-top: 1.5em;
+    width: 15em;
 }
 
 .search {
@@ -256,17 +298,15 @@ a {
 }
 
 #content h3.title {
-    margin-top: 0;
-    text-transform: uppercase;
     font-weight: normal;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 #content div.header {
     margin: auto 0;
     padding: 200px 0;
     height: 580px;
-    background-image: url(../img/banner_2.jpg);
+    background-image: url(../img/banner.jpg);
     background-size: cover;
     /* background-position: 100%;
     background-repeat: no-repeat; */

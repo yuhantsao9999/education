@@ -183,13 +183,14 @@
                     document.getElementById("profile_add_info").appendChild(noclass_done_Content)
                 } else {
                     var obj = JSON.parse(xml.responseText);
+                    console.log(JSON.stringify(obj))
                     var count = obj.length;
                     for (var i = 0; i < count; i++) {
                         //替換課程圖片
                         var classImg = document.createElement("img");
                         var classDiv = document.createElement("div");
                         var profileDiv = document.createElement("div");
-                        var titleContent = document.createTextNode(obj[i].title);
+                        var titleContent = document.createTextNode(obj[i].course_title);
                         classDiv.className = "profile_class_info";
                         profileDiv.className = "profile_info"
 

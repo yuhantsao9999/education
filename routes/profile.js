@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 
 
 //我修的課---profile頁面驗證會員api
-router.get('/profile/student/class', function(req, res) {
+router.post('/profile/student/class', function(req, res) {
     //先判斷有是否是會員(有token)，
     var Bearer_token = req.headers.authorization;
     var Bearer = Bearer_token.substr(0, 6);
@@ -156,6 +156,11 @@ router.post('/profile/info', function(req, res) {
             facebookProfile = '${facebookProfile}', youtubeProfile = '${youtubeProfile}'
             WHERE user_id = '${user_id}' `
             con.query(mysql_insert_user, function(err, result_insert_user) {
+                next(null, user_name, user_id)
+            });
+        }, (user_name, user_id, next) => {
+            var mysql_update_teacher_name = `UPDATE new_course SET course_teacher = '${user_name}' WHERE course_teacher_id = '${user_id}' `
+            con.query(mysql_update_teacher_name, function(err, result_update_teacher_name) {
                 next(null)
             });
         }
@@ -183,8 +188,9 @@ router.get('/profile/done', function(req, res) {
             console.log('"error": "Invalid token."')
             res.send("error")
         } else { //有token是會員，且有註冊過課程，提取會員課程在頁面上
+            //TODO:已完成的課程會只完成一個就秀在頁面上(BUG)
             var user_id = result[0].user_id;
-            var profile_course_id = `SELECT course_id FROM new_section JOIN status ON new_section.video_id=status.video_id where status.user_id='${user_id}' and status.complete='1';`
+            var profile_course_id = `SELECT course_id FROM final_section JOIN status ON final_section.video_id=status.video_id where status.user_id='${user_id}' and status.complete='1';`
             con.query(profile_course_id, function(err, profile_course_id_result) {
                 if (err) throw err;
                 console.log(profile_course_id_result)
@@ -204,6 +210,7 @@ router.get('/profile/done', function(req, res) {
                     course_id = String(course_id).split();
                     // console.log(String(course_id).split())
                     // console.log("id : " + course_id)
+
                     var profile_courserInfo = `SELECT * FROM new_course where course_id in (${course_id});`
                     con.query(profile_courserInfo, function(err, result) {
                         if (err)

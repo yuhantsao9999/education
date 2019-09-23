@@ -11,7 +11,7 @@ var multerS3 = require('multer-s3');
 var multer = require('multer');
 
 //s3的帳號密碼
-const BUCKET_NAME = 'cad-education-project';
+const BUCKET_NAME = '';
 const IAM_USER_KEY = '';
 const IAM_USER_SECRET = '';
 

@@ -72,16 +72,16 @@
 
 </body>
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const title = urlParams.get('title');
-    const chapter = urlParams.get('chapter');
-    const section = urlParams.get('section');
-    const section_id = urlParams.get('section_id');
+    var urlParams = new URLSearchParams(window.location.search);
+    var title = urlParams.get('title');
+    var chapter = urlParams.get('chapter');
+    var section = urlParams.get('section');
+    var section_id = urlParams.get('section_id');
 
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("get", "/education/classinfo?title=" + title, true)
-    xmlhttp.send(null);
+    xmlhttp.send();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
@@ -106,6 +106,7 @@
                     var sectionContent = document.createTextNode(section_title);
                     sectionLi.appendChild(sectionContent)
                     sectionLi.className = "scroll_section"
+                        //chapter_id現在是chapter_auto_id
                     var chapter_id = obj.data.Course_detail[i].Chapter_id
                     var section_id = obj.data.Course_detail[i].Chapter_detail[k].Section_id
                     section_a.href = `http://localhost:3000/video.html?title=${title}&chapter=${chapter_id}&section=${k+1}&section_id=${section_id}`
@@ -128,9 +129,10 @@
 
     //新增使用者播放進度
     accessToken = localStorage.getItem("accessToken")
-        // console.log("oppppppp : " + accessToken)
+    var title = urlParams.get('title');
+    // console.log("oppppppp : " + accessToken)
     var xmlhttp_video = new XMLHttpRequest();
-    xmlhttp_video.open("POST", "/education/videoinfo?title=" + title + "&chapter=" + chapter + "&section=" + section + "&section_id=" + section_id, true)
+    xmlhttp_video.open("post", "/education/videoinfo", true)
     var videoinfo_obj = {
         title: title,
         chapter: chapter,
@@ -139,21 +141,31 @@
         user_token: accessToken
     }
     xmlhttp_video.setRequestHeader('Content-Type', 'application/json');
-    xmlhttp_video.send(JSON.stringify(videoinfo_obj));
+    console.log(JSON.stringify(videoinfo_obj))
+    xmlhttp_video.send(JSON.stringify({
+        videoinfo_obj
+    }));
     xmlhttp_video.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var obj = JSON.parse(xmlhttp_video.responseText)
-                // console.log("obj" + JSON.stringify(obj.data))
-            var video_name = obj.data[0].video;
-            var video_user_currentTime = obj.data[0].user_currentTime;
-            var video = document.createElement("video");
-            // console.log(video_name)
-            // console.log(video_user_currentTime)
-            video.id = "video"
-            video.controls = "controls"
-            video.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + video_name
-            video.currentTime = video_user_currentTime;
-            document.getElementById("videoDiv").appendChild(video)
+            console.log("oooooooooo : " + xmlhttp_video.responseText)
+            if (xmlhttp_video.responseText == "need to registered first") {
+                alert("請先註冊此課程才能觀看哦～")
+                window.location.assign("./course.html?title=" + title)
+            } else {
+                var obj = JSON.parse(xmlhttp_video.responseText)
+                    // console.log("obj" + JSON.stringify(obj.data))
+                var video_name = obj.data[0].video;
+                var video_user_currentTime = obj.data[0].user_currentTime;
+                var video = document.createElement("video");
+                // console.log(video_name)
+                // console.log(video_user_currentTime)
+                video.id = "video"
+                video.controls = "controls"
+                video.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + video_name
+                video.currentTime = video_user_currentTime;
+                document.getElementById("videoDiv").appendChild(video)
+            }
+
         }
     }
 
@@ -161,9 +173,9 @@
     accessToken = localStorage.getItem("accessToken")
         // console.log("accessToken" + accessToken)
     var xml_icon = new XMLHttpRequest();
-    xml_icon.open("get", "/profile/student/class", true);
+    xml_icon.open("post", "/profile/student/class", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
-    xml_icon.send(null);
+    xml_icon.send();
     xml_icon.onreadystatechange = function() {
         if (xml_icon.readyState == 4) {
             if (xml_icon.responseText == "error") {
@@ -220,12 +232,15 @@
         var currentTime = document.getElementById("video").currentTime;
         var totalTime = document.getElementById("video").duration;
         var js = {
+            title: title,
+            chapter: chapter,
+            section_id: section_id,
             currentTime: currentTime,
             totalTime: totalTime,
             accessToken: localStorage.getItem("accessToken")
         }
         var xmlhttp_videotime = new XMLHttpRequest();
-        xmlhttp_videotime.open("post", "/videoupdate?title=" + title + "&chapter=" + chapter + "&section_id=" + section_id, true)
+        xmlhttp_videotime.open("post", "/videoupdate", true)
         xmlhttp_videotime.setRequestHeader('Content-Type', 'application/json');
         xmlhttp_videotime.send(JSON.stringify(js));
     }
