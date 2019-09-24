@@ -109,7 +109,7 @@
                         //chapter_id現在是chapter_auto_id
                     var chapter_id = obj.data.Course_detail[i].Chapter_id
                     var section_id = obj.data.Course_detail[i].Chapter_detail[k].Section_id
-                    section_a.href = `http://localhost:3000/video.html?title=${title}&chapter=${chapter_id}&section=${k+1}&section_id=${section_id}`
+                    section_a.href = `./video.html?title=${title}&chapter=${chapter_id}&section=${k+1}&section_id=${section_id}`
                     section_a.appendChild(sectionLi)
                     chapterUl.appendChild(section_a)
                 }
