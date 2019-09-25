@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>class</title>
-    <link rel="stylesheet" href="./css/profile_student.css" />
+    <link rel="stylesheet" href="./css/profile_done.css" />
 </head>
 
 <body class="about">
@@ -63,32 +63,44 @@
                 <div class="col-6" id="profile_add_info">
                     <!-- <h3>所有課程</h3> -->
                     <!-- <div class="profile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
-                    <!-- <div class="porfile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
-                    <!-- <div class="profile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
-                    <!-- <div class="porfile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
-                    </div> -->
+
+                        <a href="#">
+                            <img src="./img/2.png" alt="">
+                        </a>
+                        <div class="profile_class_info">
+                            <form action="/profile/done/comment" method='POST'>
+                                <a href="#">
+                                        Golang 入門教學課程
+                                        <input type="hidden" name="class_name" value="Golang 入門教學課程">
+                                    </a>
+                                <div class="star">
+                                    <input type="radio" name="rdStar" value="1" onclick="star_num(1)" />
+                                    <input type="radio" name="rdStar" value="2" onclick="star_num(2)" />
+                                    <input type="radio" name="rdStar" value="3" onclick="star_num(3)" />
+                                    <input type="radio" name="rdStar" value="4" onclick="star_num(4)" />
+                                    <input type="radio" name="rdStar" value="5" onclick="star_num(5)" />
+                                </div>
+                                <textarea type='text' name="comment"></textarea>
+                                <input type='hidden' id="star_number" name="star_number" value="5">
+                                <input type="hidden" id="user_token" name="user_token">
+                                <input type='submit' value='送出評論' id="sumbit">
+                            </form>
+
+                        </div> -->
 
                 </div>
-
-
+                <!-- <div class="porfile_info">
+                        <img src="./img/go.jpg" alt="">
+                        <div class="profile_class_info">Golang 程式設計入門</div>
+                    </div> -->
             </div>
         </div>
+    </div>
     </div>
 
 
     <!------- footer ------->
-    <div id="footer" class="dark">
+    <!-- <div id="footer" class="dark">
 
         <div class="info">
             <div class="container">
@@ -131,14 +143,14 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
 
     <a href="#header" id="go-top"><i class="icon-up-open"></i></a>
 
 </body>
 <script>
     //已完成的課程
-    const accessToken = localStorage.getItem("accessToken")
+    var accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
 
     var js = document.getElementById('content')
@@ -160,17 +172,17 @@
                 sign_li.appendChild(sign_a)
                 document.getElementById("clearfix").appendChild(sign_li)
 
-            } else if (xml.responseText == "no class") {
-                var noclassContent = document.createTextNode("尚未註冊任何課程哦!");
-                document.getElementById("profile_add_info").appendChild(noclassContent)
-                var sign_li = document.createElement("li");
-                //user icon
-                var signContent = document.createTextNode("登出");
-                var sign_a = document.createElement("a");
-                sign_a.setAttribute("onClick", "log_out()");
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
+                // } else if (xml.responseText == "no class") {
+                //     var noclassContent = document.createTextNode("尚未註冊任何課程哦!");
+                //     document.getElementById("profile_add_info").appendChild(noclassContent)
+                //     var sign_li = document.createElement("li");
+                //     //user icon
+                //     var signContent = document.createTextNode("登出");
+                //     var sign_a = document.createElement("a");
+                //     sign_a.setAttribute("onClick", "log_out()");
+                //     sign_a.appendChild(signContent)
+                //     sign_li.appendChild(sign_a)
+                //     document.getElementById("clearfix").appendChild(sign_li)
 
             } else {
                 var my_class_h3 = document.createElement("h3");
@@ -186,21 +198,131 @@
                     console.log(JSON.stringify(obj))
                     var count = obj.length;
                     for (var i = 0; i < count; i++) {
-                        //替換課程圖片
-                        var classImg = document.createElement("img");
-                        var classDiv = document.createElement("div");
-                        var profileDiv = document.createElement("div");
+                        //替換課程
+                        var starDiv = document.createElement("div");
+                        starDiv.className = "star"
+                        var start1_Input = document.createElement("input");
+                        var start2_Input = document.createElement("input");
+                        var start3_Input = document.createElement("input");
+                        var start4_Input = document.createElement("input");
+                        var start5_Input = document.createElement("input");
+
+                        start1_Input.type = "radio";
+                        start1_Input.name = "rdStar";
+                        start1_Input.value = "1";
+                        start1_Input.setAttribute("onClick", "star_num(1)");
+
+                        start2_Input.type = "radio";
+                        start2_Input.name = "rdStar";
+                        start2_Input.value = "2";
+                        start2_Input.setAttribute("onClick", "star_num(2)");
+
+                        start3_Input.type = "radio";
+                        start3_Input.name = "rdStar";
+                        start3_Input.value = "3";
+                        start3_Input.setAttribute("onClick", "star_num(3)");
+
+                        start4_Input.type = "radio";
+                        start4_Input.name = "rdStar";
+                        start4_Input.value = "4";
+                        start4_Input.setAttribute("onClick", "star_num(4)");
+
+                        start5_Input.type = "radio";
+                        start5_Input.name = "rdStar";
+                        start5_Input.value = "5";
+                        start5_Input.setAttribute("onClick", "star_num(5)");
+
+                        starDiv.appendChild(start1_Input)
+                        starDiv.appendChild(start2_Input)
+                        starDiv.appendChild(start3_Input)
+                        starDiv.appendChild(start4_Input)
+                        starDiv.appendChild(start5_Input)
+
+
+
+                        var titleInput = document.createElement("input");
+                        titleInput.type = "hidden";
+                        titleInput.name = "class_name";
+                        titleInput.value = obj[i].course_title
                         var titleContent = document.createTextNode(obj[i].course_title);
+                        var classDiv_a = document.createElement("a");
+                        classDiv_a.href = ("/course.html?title=" + obj[i].course_title);
+                        classDiv_a.appendChild(titleContent)
+                        classDiv_a.appendChild(titleInput)
+
+
+                        var title_comment_form = document.createElement("form");
+                        title_comment_form.action = "/profile/done/comment"
+                        title_comment_form.method = "post"
+
+                        var comment_textarea = document.createElement("textarea");
+                        comment_textarea.className = "comment_textarea"
+                        comment_textarea.type = "text";
+                        comment_textarea.name = "comment";
+
+                        var starInput = document.createElement("input");
+                        starInput.type = "hidden";
+                        starInput.id = "star_number";
+                        starInput.name = "star_number";
+                        starInput.value = "5";
+
+                        var tokenInput = document.createElement("input");
+                        tokenInput.type = "hidden";
+                        tokenInput.id = "user_token";
+                        tokenInput.name = "user_token";
+                        tokenInput.value = accessToken;
+
+                        var submitInput = document.createElement("input");
+                        submitInput.type = "submit";
+                        submitInput.id = "submit"
+                        submitInput.value = "送出評論";
+
+                        title_comment_form.appendChild(classDiv_a)
+
+                        var star_number = obj[i].star
+                        console.log("star_number :  " + star_number)
+                        if (star_number == null || star_number == undefined || star_number == '') {
+                            title_comment_form.appendChild(starDiv)
+                            title_comment_form.appendChild(starInput)
+                            title_comment_form.appendChild(comment_textarea)
+                            title_comment_form.appendChild(submitInput)
+                        } else {
+                            var commentContent = document.createTextNode("感謝評論課程！");
+                            var commentDiv = document.createElement("div");
+                            commentDiv.className = "thank_text"
+                            commentDiv.appendChild(commentContent)
+                            title_comment_form.appendChild(commentDiv)
+                        }
+                        title_comment_form.appendChild(tokenInput)
+
+
+                        var classImg = document.createElement("img");
+                        var classImg_a = document.createElement("a");
+                        classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
+                        classImg_a.href = "./course.html?title=" + obj[i].course_title
+                            // classDiv_a.appendChild(classImg)
+
+                        var classDiv = document.createElement("div");
                         classDiv.className = "profile_class_info";
+                        classDiv.appendChild(title_comment_form)
+
+
+                        var imgDiv_a = document.createElement("a");
+                        imgDiv_a.href = ("/course.html?title=" + obj[i].course_title);
+
+                        var imgDiv_img = document.createElement("img");
+                        imgDiv_img.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
+
+                        imgDiv_a.appendChild(imgDiv_img)
+
+                        var profileDiv = document.createElement("div");
                         profileDiv.className = "profile_info"
 
-                        var classDiv_a = document.createElement("a");
-                        classDiv_a.href = ("/video.html?title=" + obj[i].title + "&chapter=1&section=1");
-                        classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
-                        classDiv_a.appendChild(classDiv)
-                        classDiv.appendChild(titleContent)
-                        profileDiv.appendChild(classImg)
-                        profileDiv.appendChild(classDiv_a)
+
+                        profileDiv.appendChild(imgDiv_a)
+                        profileDiv.appendChild(classDiv)
+
+
                         document.getElementById("profile_add_info").appendChild(profileDiv)
 
                     }
@@ -225,6 +347,15 @@
         alert("帳號登出囉!")
         window.location.replace("./sign_in.html");
     }
+
+    //star number
+    function star_num(obj) {
+        document.getElementById("star_number").value = Number(obj)
+        console.log(Number(obj))
+    }
+
+    //user_token
+    document.getElementById("user_token").value = accessToken
 </script>
 
 </html>

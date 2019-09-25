@@ -103,6 +103,17 @@ a {
     color: black;
 }
 
+.profile_info a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+}
+
+.profile_info img {
+    display: block;
+    width: 15em;
+}
+
 .container {
     display: block;
     width: 1170px;
@@ -157,7 +168,19 @@ a {
 
 .profile_info {
     display: flex;
-    margin-top: 50px;
+    /* width: 48%; */
+    /* height: 15em; */
+    background-color: #ededed;
+    text-align: left;
+    padding: 20px;
+    font-family: "PingFang TC", "微軟正黑體", sans-serif;
+    line-height: 1.5em;
+    box-shadow: 0 2px 8px 0 #cccccc;
+    margin-right: 1%;
+    /* border-bottom: 3px solid #00bea4; */
+    /* float: left; */
+    /* /* padding: 0 30px; */
+    margin-top: 2em;
 }
 
 .profile_class_info {

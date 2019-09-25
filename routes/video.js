@@ -30,7 +30,7 @@ router.get("/education/classinfo", function(req, res) {
     var mysql_course = `select * from new_course where course_title='${title}'`;
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
-            // console.log(result_course) //所有課程資訊
+            // console.log("heyyyyyyyyy : " + result_course) //所有課程資訊
         var course_id = result_course[0].course_id;
         var title = result_course[0].course_title;
         var intro = result_course[0].course_intro;
@@ -49,6 +49,9 @@ router.get("/education/classinfo", function(req, res) {
                 obj['Course_title'] = result_course[0].course_title;
                 obj['Course_intro'] = result_course[0].course_intro;
                 obj['Course_teacher'] = result_course[0].course_teacher;
+                obj['star_number'] = result_course[0].star_number;
+                obj['average_star'] = result_course[0].average_star;
+                obj['comment_number'] = result_course[0].comment_number;
                 obj["Course_detail"] = []
                 for (var i = 0; i < result_chapter.length; i++) {
                     var chp_obj = {}
@@ -70,7 +73,7 @@ router.get("/education/classinfo", function(req, res) {
                 }
                 var test = {};
                 test["data"] = obj
-                    // console.log("testtttttt : " + JSON.stringify(test))
+                console.log("testtttttt : " + JSON.stringify(test))
                 res.send(test)
             });
         });

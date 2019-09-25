@@ -32,6 +32,9 @@ app.use('/', course);
 const profile = require('./routes/profile');
 app.use('/', profile);
 
+const comment = require('./routes/comment');
+app.use('/', comment);
+
 
 
 

@@ -30,7 +30,7 @@ router.post('/profile/student/class', function(req, res) {
     var Bearer_token = req.headers.authorization;
     var Bearer = Bearer_token.substr(0, 6);
     var Token = Bearer_token.substr(7);
-    console.log("token : " + Token)
+    // console.log("token : " + Token)
     var profile_checkmember = `SELECT user_id FROM user WHERE access_token='${Token}'`
     con.query(profile_checkmember, function(err, result) {
         if (err) throw err;
@@ -145,7 +145,7 @@ router.post('/profile/info', function(req, res) {
                     res.send("error")
                 } else {
                     var user_id = result[0].user_id;
-                    console.log("error : " + user_id)
+                    // console.log("error : " + user_id)
                     next(null, user_id);
                 }
             });
@@ -176,7 +176,7 @@ router.get('/profile/done', function(req, res) {
     var Bearer_token = req.headers.authorization;
     var Bearer = Bearer_token.substr(0, 6);
     var Token = Bearer_token.substr(7);
-    console.log("token : " + Token)
+    // console.log("token : " + Token)
     var profile_checkmember = `SELECT user_id FROM user WHERE access_token='${Token}'`
     con.query(profile_checkmember, function(err, result) {
         if (err) throw err;
@@ -190,10 +190,11 @@ router.get('/profile/done', function(req, res) {
         } else { //有token是會員，且有註冊過課程，提取會員課程在頁面上
             //TODO:已完成的課程會只完成一個就秀在頁面上(BUG)
             var user_id = result[0].user_id;
+            // console.log("user_id : " + user_id)
             var profile_course_id = `SELECT course_id FROM final_section JOIN status ON final_section.video_id=status.video_id where status.user_id='${user_id}' and status.complete='1';`
             con.query(profile_course_id, function(err, profile_course_id_result) {
                 if (err) throw err;
-                console.log(profile_course_id_result)
+                // console.log(profile_course_id_result)
                 if (profile_course_id_result.length != 0) {
                     for (var i = 0; i < profile_course_id_result.length; i++) {
                         course_id_arr.push(profile_course_id_result[i].course_id)
@@ -210,15 +211,25 @@ router.get('/profile/done', function(req, res) {
                     course_id = String(course_id).split();
                     // console.log(String(course_id).split())
                     // console.log("id : " + course_id)
-
-                    var profile_courserInfo = `SELECT * FROM new_course where course_id in (${course_id});`
-                    con.query(profile_courserInfo, function(err, result) {
-                        if (err)
-                            throw err;
-                        // console.log(result);
-                        res.send(result)
-
+                    // console.log("course_id : " + course_id)
+                    //取出完成課程的評論，有評論過的就讓前端直接顯示comment，沒評論過的留空位null
+                    var course_comment = `SELECT comment.star,comment.comment,new_course.course_title ,new_course.main_image
+                    from comment RIGHT join new_course  
+                    on comment.course_id=new_course.course_id and comment.user_id='${user_id}' where new_course.course_id in (${course_id}) ;`
+                    con.query(course_comment, function(err, result_course_comment) {
+                        if (err) throw err;
+                        // console.log(JSON.stringify(result_course_comment));
+                        res.send(result_course_comment)
                     });
+                    //取出完成課程的資訊
+                    // var profile_courserInfo = `SELECT * FROM new_course where course_id in (${course_id});`
+                    // con.query(profile_courserInfo, function(err, result) {
+                    //     if (err)
+                    //         throw err;
+                    //     // console.log(result);
+                    //     res.send(result)
+
+                    // });
                 } else {
                     //有token是會員，但沒有完成的課程
                     res.send("no done class")
@@ -260,9 +271,6 @@ router.get('/profile/teacher/class', function(req, res) {
                 }
 
             });
-
-
-
         }
     ], (err, rst) => {
         if (err) return err;

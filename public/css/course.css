@@ -1,6 +1,48 @@
 .one {
-    height: 200px;
+    /* height: 200px; */
     font-size: 4em;
+}
+
+
+/* 星星 */
+
+.ratings {
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    color: #b1b1b1;
+    overflow: hidden;
+}
+
+.full-stars {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #fde16d;
+}
+
+.empty-stars:before,
+.full-stars:before {
+    content: "\2605\2605\2605\2605\2605";
+    font-size: 14pt;
+}
+
+.empty-stars:before {
+    -webkit-text-stroke: 1px #848484;
+}
+
+.full-stars:before {
+    -webkit-text-stroke: 1px orange;
+}
+
+.star {
+    display: flex
+}
+
+#comment_numebr {
+    padding-left: 10px;
 }
 
 
@@ -116,7 +158,7 @@ img {
 p {
     color: #7e7e7e;
     line-height: 30px;
-    font-size: 25px;
+    font-size: 20px;
     font-family: "黑體";
     /* Arial”, ” */
     /* Microsoft YaHei */
@@ -230,8 +272,12 @@ a {
     clear: both;
 }
 
+.chapter_section_detail {
+    float: left;
+}
+
 .row {
-    padding-bottom: 50px;
+    padding-bottom: 20px;
     margin: 0 -15px;
 }
 
@@ -265,7 +311,7 @@ a {
 }
 
 .col-10 {
-    font-size: 25px;
+    font-size: 20px;
 }
 
 #logo {
@@ -387,6 +433,10 @@ a {
     letter-spacing: 2px;
     color: #333;
     font-weight: normal;
+}
+
+.ContentSubtitle {
+    border-bottom: 5px solid #209cc5;
 }
 
 #footer {

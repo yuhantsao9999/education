@@ -63,8 +63,10 @@
                 <div class="col-6" id="profile_add_info">
                     <!-- <h3>所有課程</h3> -->
                     <!-- <div class="profile_info">
-                        <img src="./img/go.jpg" alt="">
-                        <div class="profile_class_info">Golang 程式設計入門</div>
+                        <a href="#">
+                            <img src="./img/go.jpg" alt="">
+                            <div class="profile_class_info">testtest</div>
+                        </a>
                     </div> -->
                     <!-- <div class="porfile_info">
                         <img src="./img/go.jpg" alt="">
@@ -88,7 +90,7 @@
 
 
     <!------- footer ------->
-    <div id="footer" class="dark">
+    <!-- <div id="footer" class="dark">
 
         <div class="info">
             <div class="container">
@@ -131,7 +133,7 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
 
     <a href="#header" id="go-top"><i class="icon-up-open"></i></a>
 
@@ -170,11 +172,10 @@
                     // classDiv_a.href = ("/video.html?title=" + obj[i].course_title + " &chapter=1&section=1&section_id=1");
                     classDiv_a.href = ("course.html?title=" + obj[i].course_title)
                     classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
+                    classDiv_a.appendChild(classImg)
                     classDiv_a.appendChild(classDiv)
                     classDiv.appendChild(titleContent)
-                    profileDiv.appendChild(classImg)
                     profileDiv.appendChild(classDiv_a)
-
                     document.getElementById("profile_add_info").appendChild(profileDiv)
 
                 }

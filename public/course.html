@@ -40,15 +40,24 @@
                         <h1 class="title" id="title"></h1>
                         <h3 class="subtitle" id="course_content"></h3>
                         <h3 class="subtitle" id="course_teacher"></h3>
-                        <!-- <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱"> -->
+                        <div class="star">
+                            <div class="ratings">
+                                <div class="empty-stars"></div>
+                                <!-- <div class="full-stars" style="width:80%"> -->
+                            </div>
+                            <h3 class="subtitle" id="comment_numebr"></h3>
+                        </div>
+
                     </div>
+                    <!-- <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱"> -->
                 </div>
             </div>
         </div>
-        <!-- ---------內容 ------->
-        <div id="class_chapter_section" class="container">
-            <div class="class_chapter_section_container" id="class_chapter_section_container">
-                <!-- <div class="row clearfix">
+    </div>
+    <!-- ---------內容 ------->
+    <div id="class_chapter_section" class="container">
+        <div class="class_chapter_section_container" id="class_chapter_section_container">
+            <!-- <div class="row clearfix">
 
                     <div class="col-2">
                         <div class="one" id="test"></div>
@@ -65,30 +74,34 @@
                         </div>
                     </div>
                 </div> -->
-            </div>
-            <div class="teacher">
-                <div class="teacher_name"></div>
-                <div class="teacher_detail">
-                    <div class="picture">
-                        <div class="picture_circle">
-                            <img src="./img/golang.png" alt="">
-                        </div>
-                    </div>
-                    <div class="small_icon">
-                        <!-- <a href="#"> <img src=" ./img/home2.png" alt=""></a> -->
-                        <!-- <a href="#"> <img src="./img/youtube2.png" alt=""></a>
-                        <a href="#"> <img src="./img/facebook2.png" alt=""></a> -->
-                    </div>
-
-                    <div class="teacher_intro">
-                        <!-- 大家好，我是彭兆蔚，彭彭老師： -->
+        </div>
+        <div class="teacher">
+            <div class="teacher_name"></div>
+            <div class="teacher_detail">
+                <div class="picture">
+                    <div class="picture_circle">
+                        <img src="./img/golang.png" alt="">
                     </div>
                 </div>
-            </div>
+                <div class="small_icon">
+                    <!-- <a href="#"> <img src=" ./img/home2.png" alt=""></a> -->
+                    <!-- <a href="#"> <img src="./img/youtube2.png" alt=""></a>
+                        <a href="#"> <img src="./img/facebook2.png" alt=""></a> -->
+                </div>
 
+                <div class="teacher_intro">
+                    <!-- 大家好，我是彭兆蔚，彭彭老師： -->
+                </div>
+            </div>
         </div>
 
-        <div class="summary gray-bg">
+    </div>
+
+    <div class="container">
+        <!-- <div class="class_container" id="class_container"> -->
+        <div class="row clearfix">
+            <h2> <b class="ContentSubtitle">評論</b> </h2>
+            <!-- <div class="summary gray-bg">
             <div class="container">
 
                 <div class="row">
@@ -115,39 +128,41 @@
                 </div>
 
             </div>
+        </div> -->
         </div>
+    </div>
 
-        <div class="clients">
-            <div class="container">
+    <div class="clients">
+        <div class="container">
 
-                <div class="intro big">
-                    <h2 class="title">對這門課感興趣的人也看了</h2>
-                    <p></p>
-                </div>
-
-                <div class="row">
-                    <div class="col-2">
-                        <img src="#" alt="logo" />
-                    </div>
-                    <div class="col-2">
-                        <img src="#" alt="logo" />
-                    </div>
-                    <div class="col-2">
-                        <img src="#" alt="logo" />
-                    </div>
-                    <div class="col-2">
-                        <img src="#" alt="logo" />
-                    </div>
-                    <div class="col-2">
-                        <img src="#" alt="logo" />
-                    </div>
-                    <div class="col-2">
-                        <img src="#" alt="logo" />
-                    </div>
-                </div>
-
+            <div class="intro big">
+                <h2 class="title">對這門課感興趣的人也看了</h2>
+                <p></p>
             </div>
+
+            <div class="row">
+                <div class="col-2">
+                    <img src="#" alt="logo" />
+                </div>
+                <div class="col-2">
+                    <img src="#" alt="logo" />
+                </div>
+                <div class="col-2">
+                    <img src="#" alt="logo" />
+                </div>
+                <div class="col-2">
+                    <img src="#" alt="logo" />
+                </div>
+                <div class="col-2">
+                    <img src="#" alt="logo" />
+                </div>
+                <div class="col-2">
+                    <img src="#" alt="logo" />
+                </div>
+            </div>
+
         </div>
+    </div>
 
     </div>
 
@@ -220,7 +235,7 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-            console.log("OHHHHHHHHH: " + JSON.stringify(obj))
+                // console.log("OHHHHHHHHH: " + JSON.stringify(obj))
                 //替換課程名稱
             var titleDiv = document.createElement("div");
             var titleContent = document.createTextNode(obj.data.Course_title);
@@ -236,13 +251,32 @@
 
             //替換課程老師
             var teacherDiv = document.createElement("div");
-            // var teacherContent = document.createTextNode("授課教師 : " + obj.data.Course_teacher);
-            // teacherDiv.appendChild(teacherContent);
+            var teacherContent = document.createTextNode("授課教師 : " + obj.data.Course_teacher);
+            teacherDiv.appendChild(teacherContent);
             document.getElementById("course_teacher").appendChild(teacherDiv)
+
+            //替換星數
+            // <div class="ratings">
+            //                     <div class="empty-stars"></div>
+            //                     <div class="full-stars" style="width:80%">
+            //                   </div>
+            //                 </div>
+            //                 <h3 class="subtitle" id="comment_numebr">4.5 (37則評論）</h3>
+            var starDiv = document.createElement("div");
+            starDiv.className = "full-stars";
+            starDiv.style = "width:" + (obj.data.average_star / 5 * 100) + "%"
+            console.log(starDiv.style)
+            document.getElementsByClassName("ratings")[0].appendChild(starDiv)
+            var average_star = String(obj.data.average_star)
+            if (average_star.length < 3) {
+                average_star = average_star + ".0"
+            }
+            var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.comment_number + "則評論)");
+            document.getElementById("comment_numebr").appendChild(comment_numebrContent)
 
             //替換章節ID
             var number = obj.data.Course_detail.length
-            console.log("Course_detail的長度 ： " + number)
+                // console.log("Course_detail的長度 ： " + number)
             for (var i = 0; i < obj.data.Course_detail.length; i++) {
 
                 var chapterDiv = document.createElement("div");
@@ -283,25 +317,30 @@
 
                 chapter_row_Div.appendChild(chapter_title_Content)
                 chapter_section_detail_div.appendChild(chapter_row_Div)
-                chapterDiv_a.appendChild(chapter_section_detail_div);
+
                 // chapterDiv.appendChild(chapterDiv_a);
                 // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
                 // console.log(obj.data.Course_detail[i].Chapter_detail.length)
-
+                var section_div = document.createElement("div");
                 for (var k = 0; k < obj.data.Course_detail[i].Chapter_detail.length; k++) {
                     //替換節的內容
                     var section_title_Div = document.createElement("p");
                     var section_title_Content = document.createTextNode(obj.data.Course_detail[i].Chapter_detail[k].Section_title);
                     // console.log(section_title_Content)
-                    section_title_Div.appendChild(section_title_Content);
-                    chapterDiv_a.appendChild(section_title_Div);
-                    chapterDiv.appendChild(chapterDiv_a);
-                    document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
-                        // console.log("testttttttt")
 
+                    section_title_Div.appendChild(section_title_Content);
+
+                    section_div.appendChild(section_title_Div)
+                    chapter_section_detail_div.appendChild(section_div)
+                        // console.log("testttttttt")
                 }
 
+                chapterDiv_a.appendChild(chapter_section_detail_div);
+                chapterDiv.appendChild(chapterDiv_a);
+
+                chapterDiv_a.appendChild(chapter_section_detail_div);
+                document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
             }
 
         }
@@ -424,10 +463,8 @@
     xml_teacher.onreadystatechange = function() {
         if (xml_teacher.readyState == 4) {
             var obj = JSON.parse(xml_teacher.responseText)
-            console.log("obj : " + JSON.stringify(obj))
-
-
-            //更換老師資訊
+                // console.log("obj : " + JSON.stringify(obj))
+                //更換老師資訊
             var teacher_name = obj[0].course_teacher
                 // console.log("teacher : " + teacher_name)
                 // <div class="teacher_name"><b>關於老師 XXXX</b></div>
