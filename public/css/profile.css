@@ -99,6 +99,10 @@ a {
     color: black;
 }
 
+input:focus {
+    outline: none;
+}
+
 .container {
     display: block;
     width: 1170px;
@@ -279,6 +283,7 @@ a {
     text-align: left;
     line-height: 1.75em;
     background-color: transparent;
+    outline: none !important;
 }
 
 .about_me::placeholder {

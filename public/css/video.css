@@ -178,7 +178,7 @@ a {
 
 .theDiv {
     float: left;
-    width: 15%;
+    width: 240px;
     height: 100vh;
     /* overflow-x: hidden;
     overflow-y: auto; */
@@ -205,6 +205,14 @@ a {
     margin-top: 20px;
     font-family: Microsoft JhengHei;
     letter-spacing: 3px;
+}
+
+.section_a {
+    display: flex;
+}
+
+.all_done {
+    width: 30px;
 }
 
 
@@ -236,7 +244,7 @@ a {
 }
 
 .video_intro_Div {
-    width: 85%;
+    /* width: 85%; */
     height: 100vh;
     overflow-y: scroll;
 }

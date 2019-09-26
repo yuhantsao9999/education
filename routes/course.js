@@ -79,15 +79,14 @@ router.post('/user/addcourse', function(req, res) {
         if (String(result).length == 0) {
             //如果沒有token，就傳失敗訊息
             // console.log('"error": "Invalid token."')
-        } else { //有token是會員，將此課程加入status資訊
+        } else {
+            //有token是會員，將此課程加入status資訊
             var video_id = `SELECT video_id FROM final_section JOIN new_course ON new_course.course_id=final_section.course_id where new_course.course_title="${course_title}";`
             con.query(video_id, function(err, video_id_result) {
                 // console.log(video_id_result)
                 for (var i = 0; i < video_id_result.length; i++) {
                     video_id_arr.push(video_id_result[i].video_id)
                 }
-
-                // console.log(video_id_arr)
                 for (var i = 0; i < video_id_arr.length; i++) {
                     var course_input_status = `INSERT INTO status (user_id,video_id,course_title) VALUES('${user_id}','${video_id_arr[i]}','${course_title}')`
                     con.query(course_input_status, function(err, result) {

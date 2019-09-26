@@ -34,9 +34,9 @@
             <div class="container clearfix">
                 <div class="row">
                     <div class="col-12">
-                        <h1 class="title" id="title">我是大標題</h1>
-                        <h3 class="subtitle" id="course_content">我是副標題</h3>
-                        <h3 class="subtitle" id="course_teacher">我是小標題</h3>
+                        <h1 class="title" id="title">依據您的時間表學習</h1>
+                        <h3 class="subtitle" id="course_content">隨時隨地學習任何主題</h3>
+                        <h3 class="subtitle" id="course_teacher">探索數以千計的課程</h3>
                     </div>
                 </div>
             </div>
@@ -228,6 +228,7 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
+            console.log(JSON.stringify(obj))
             if (obj.length == 0) {
                 var contentDiv = document.createElement("div");
                 var noclassContent = document.createTextNode("沒有任何相關課程哦~");
@@ -241,7 +242,7 @@
                     var rowA = document.createElement("a");
                     // var titleContent = document.createTeLINExtNode(obj.Course_title);
                     classImg.className = "class_picture";
-                    classImg.src = "./img/golang.png"
+                    classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
                     colDiv.className = "col-4"
                     rowA.className = "row clearfix"
 

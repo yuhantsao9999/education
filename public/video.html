@@ -78,14 +78,13 @@
     var section = urlParams.get('section');
     var section_id = urlParams.get('section_id');
 
-
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("get", "/education/classinfo?title=" + title, true)
     xmlhttp.send();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-                // console.log(obj)
+            console.log(JSON.stringify(obj))
                 // 課程名稱
             document.getElementsByClassName("level")[0].innerHTML = title + " > " + chapter + " > " + section;
             //下方介紹
@@ -100,8 +99,10 @@
                 var chapterDiv = document.createElement("div");
                 var chapterUl = document.createElement("ul");
                 for (k = 0; k < section_number; k++) {
+
                     var sectionLi = document.createElement("li");
                     var section_a = document.createElement("a");
+                    // section_a.className = "section_a"
                     var section_title = obj.data.Course_detail[i].Chapter_detail[k].Section_title
                     var sectionContent = document.createTextNode(section_title);
                     sectionLi.appendChild(sectionContent)
@@ -110,6 +111,7 @@
                     var chapter_id = obj.data.Course_detail[i].Chapter_id
                     var section_id = obj.data.Course_detail[i].Chapter_detail[k].Section_id
                     section_a.href = `./video.html?title=${title}&chapter=${chapter_id}&section=${k+1}&section_id=${section_id}`
+
                     section_a.appendChild(sectionLi)
                     chapterUl.appendChild(section_a)
                 }
@@ -125,6 +127,53 @@
             }
         }
     }
+
+    //新增使用者播放進度％
+    window.addEventListener("load", function() {
+        var accessToken = localStorage.getItem("accessToken")
+        var xml_percent = new XMLHttpRequest();
+        xml_percent.open("post", "/video_percent", true)
+        xml_percent.setRequestHeader('Content-Type', 'application/json');
+        console.log(accessToken)
+            //傳送
+        var videopercent_obj = {
+            title: title,
+            // test: "test",
+            // chapter: chapter,
+            // section: section,
+            // section_id: section_id,
+            accessToken: accessToken
+        }
+        xml_percent.send(JSON.stringify(videopercent_obj));
+        xml_percent.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var obj = JSON.parse(xml_percent.responseText)
+                console.log("wowwwwwwww : " + JSON.stringify(obj))
+                for (var i = 0; i < obj.length; i++) {
+
+                    //TODO:補上顯示看到％的功能
+                    var section_percent = Number(obj[i])
+
+                    console.log(typeof(section_percent))
+                    if (section_percent == 100) {
+                        var video_pecentImg = document.createElement("img");
+                        video_pecentImg.src = "./img/check.png"
+                        video_pecentImg.className = "all_done"
+                        document.getElementsByClassName("scroll_section")[i].appendChild(video_pecentImg)
+                    } else {
+                        var video_pecentDiv = document.createElement("div");
+                        var video_pecentContent = document.createTextNode(obj[i] + "%");
+                        video_pecentDiv.appendChild(video_pecentContent)
+                        document.getElementsByClassName("scroll_section")[i].appendChild(video_pecentDiv)
+
+                    }
+
+                }
+            }
+        }
+
+    })
+
 
 
     //新增使用者播放進度

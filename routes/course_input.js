@@ -178,6 +178,11 @@ router.post("/education/class_input", mixupload, function(req, res) {
         },
     ], (err, rst) => {
         if (err) return err;
+        process.stdout.on('error', function(err) {
+            if (err.code == "EPIPE") {
+                process.exit(0);
+            }
+        });
     });
 })
 

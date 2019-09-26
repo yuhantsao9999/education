@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     res.send('video');
 });
 
-// GET video.html
+// GET profile.html
 router.get('/', (req, res) => {
     res.send('profile');
 });
@@ -73,7 +73,7 @@ router.get("/education/classinfo", function(req, res) {
                 }
                 var test = {};
                 test["data"] = obj
-                console.log("testtttttt : " + JSON.stringify(test))
+                    // console.log("testtttttt : " + JSON.stringify(test))
                 res.send(test)
             });
         });
@@ -113,13 +113,13 @@ router.post("/education/videoinfo", function(req, res) {
             WHERE status.video_id='${video_id}' and user.access_token='${user_token}';`;
             con.query(mysql_video_current_time, function(err1, result_video_current_time) {
                 // console.log(result_video_current_time)
-                console.log("oooooooooooooooh")
-                console.log(JSON.stringify(result_video_current_time))
+                // console.log("oooooooooooooooh")
+                // console.log(JSON.stringify(result_video_current_time))
                 if (result_video_current_time.length == 0) {
-                    console.log("111111")
+                    // console.log("111111")
                     res.send("need to registered first")
                 } else {
-                    console.log("2222222")
+                    // console.log("2222222")
                     var user_vider_currentTime = result_video_current_time[0].video_time;
                     var video_detail_array = []
                     video_detail_array.push({ video: video, user_currentTime: user_vider_currentTime })
@@ -135,6 +135,53 @@ router.post("/education/videoinfo", function(req, res) {
         if (err) return err;
     });
 })
+
+//vidoe_percent
+router.post("/video_percent", function(req, res) {
+    var title = req.body.title;
+    var accessToken = req.body.accessToken;
+    // console.log(req.body)
+    // console.log("tokennnnnnn : " + accessToken)
+    async.waterfall([
+        (next) => {
+            var profile_checkmember = `SELECT user_id FROM user WHERE access_token='${accessToken}'`
+            con.query(profile_checkmember, function(err1, result_course) {
+                var user_id = result_course[0].user_id;
+                console.log(user_id)
+                next(null, user_id)
+            });
+        },
+        (user_id, next) => {
+            var video_time_sql =
+                `SELECT video_time,video_duration FROM status
+            where course_title ='${title}' and user_id ='${user_id}'`
+            con.query(video_time_sql, function(err1, video_time__result) {
+                if (err1) throw err1;
+                console.log(JSON.stringify(video_time__result))
+                var progress_arr = []
+                for (i = 0; i < video_time__result.length; i++) {
+                    console.log(video_time__result[i].video_time)
+                    console.log(video_time__result[i].video_duration)
+                    var progress = (video_time__result[i].video_time / video_time__result[i].video_duration)
+                    console.log("progress : " + progress)
+                    if (isFinite(progress)) {
+                        // isNaN(progress) ||
+                        var progress = progress * 100
+                        progress_arr.push(Math.round(progress));
+                    } else {
+                        progress_arr.push("0");
+                    }
+                }
+                console.log("progress_arr : " + progress_arr)
+                next(null, user_id)
+                res.send(progress_arr)
+            });
+        },
+    ], (err, rst) => {
+        if (err) return err;
+    });
+});
+
 
 //update video length api
 router.post("/videoupdate", function(req, res) {
@@ -174,7 +221,7 @@ router.post("/videoupdate", function(req, res) {
         (user_id, video_id, next) => {
             var complete = Math.floor(currentTime / totalTime);
             var update_videotime =
-                `UPDATE status SET video_time = '${currentTime}', complete = '${complete}'
+                `UPDATE status SET video_time = '${currentTime}',video_duration='${totalTime}', complete = '${complete}'
             WHERE user_id = '${user_id}'
             and video_id = '${video_id}';`
             con.query(update_videotime, function(err1, update_videotime_result) {

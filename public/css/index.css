@@ -1,4 +1,5 @@
-@import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
+/* @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css); */
+
 * {
     font-family: 'Noto Sans Kannada', sans-serif!important;
 }
@@ -159,6 +160,21 @@ a {
     /* border-bottom: 1px solid black; */
 }
 
+.star_detail {
+    display: flex;
+}
+
+.average_star {
+    font-size: 15px;
+    padding-top: 0.7em;
+}
+
+.star {
+    width: 30px;
+    height: auto;
+    margin-right: 6px;
+}
+
 .text {
     width: 50%;
     float: right;
@@ -193,7 +209,7 @@ a {
 .col-6-right {
     width: 48%;
     height: 13em;
-    background-color: #ededed;
+    /* background-color: #ededed; */
     text-align: left;
     padding: 20px;
     font-family: "PingFang TC", "微軟正黑體", sans-serif;
@@ -208,7 +224,7 @@ a {
 .col-6-left {
     width: 48%;
     height: 13em;
-    background-color: #ededed;
+    /* background-color: #ededed; */
     text-align: left;
     padding: 20px;
     font-family: "PingFang TC", "微軟正黑體", sans-serif;
@@ -300,6 +316,19 @@ a {
 #content h3.title {
     font-weight: normal;
     font-size: 20px;
+}
+
+.title_another {
+    margin: 0 auto;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+.course_teacher {
+    padding-top: 0.5em;
+    margin-left: 2em;
+    font-size: 15px;
+    color: #686f7a;
 }
 
 #content div.header {

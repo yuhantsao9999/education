@@ -439,6 +439,36 @@ a {
     border-bottom: 5px solid #209cc5;
 }
 
+
+/* 評價 */
+
+.each_comment {
+    border-top: 1px solid #dedfe0;
+    display: flex;
+}
+
+.comment_by {
+    width: 15%;
+    margin: 10px
+}
+
+.comment_by p {
+    color: #7e7e7e;
+    line-height: 30px;
+    font-size: 15px;
+    font-family: "黑體";
+}
+
+.comment_content {
+    width: 70%;
+    margin: 30px;
+}
+
+.row>img {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 #footer {
     background: #f5f5f5;
     position: relative;

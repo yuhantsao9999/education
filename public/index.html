@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <title>class</title>
     <link rel="stylesheet" href="./css/index.css" />
-    <style>
+    <!-- <style>
         @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
-    </style>
+    </style> -->
 </head>
 
 <body class="about">
@@ -59,6 +59,7 @@
                         <div class="text">
                             Master WordPress with this Complete WordPress Course, without learning how to code and without any programming!</div>
                     </div>
+
                 </div>
                 <div class="col-6-right">
                     <div class="col-6">
@@ -239,6 +240,7 @@
 
 </body>
 <script>
+    //course_list.js
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", "/education/classinfo/all", true);
     xmlhttp.send(null);
@@ -260,22 +262,49 @@
 
                 rowA.href = ("/course.html?title=" + obj.data[i].course_title);
 
-
                 colDiv.appendChild(classImg)
                     // document.getElementById("class_container").appendChild(rowDiv)
                     //替換課程標題
 
                 var titleh3 = document.createElement("h3");
+
+                var star_detail_div = document.createElement("div");
+                star_detail_div.className = "star_detail"
+
+                var star_img = document.createElement("img");
+                star_img.src = "./img/star2.png"
+                star_img.className = "star"
+
+                var average_star_div = document.createElement("div");
+                var average_star = document.createTextNode(obj.data[i].average_star);
+                average_star_div.className = "average_star"
+                average_star_div.appendChild(average_star)
+
+
+                var course_teacher_div = document.createElement("div");
+                course_teacher_div.className = "course_teacher"
+                var course_teacher = document.createTextNode(obj.data[i].course_teacher);
+                course_teacher_div.appendChild(course_teacher)
+
+
                 var introP = document.createElement("p");
                 var col_8Div = document.createElement("div");
-                titleh3.className = "title"
+                titleh3.className = "title_another"
 
                 col_8Div.className = "col-8"
 
                 var titleContent = document.createTextNode(obj.data[i].course_title);
                 console.log(titleContent)
                 var introContent = document.createTextNode(obj.data[i].course_intro);
+
+
                 titleh3.appendChild(titleContent)
+
+                star_detail_div.appendChild(star_img)
+                star_detail_div.appendChild(average_star_div)
+                star_detail_div.appendChild(course_teacher_div)
+
+                titleh3.appendChild(star_detail_div)
                 introP.appendChild(introContent)
                 col_8Div.appendChild(titleh3)
                 col_8Div.appendChild(introP)
