@@ -35,11 +35,12 @@ router.get("/education/classinfo", function(req, res) {
         var title = result_course[0].course_title;
         var intro = result_course[0].course_intro;
         var teacher = result_course[0].course_teacher;
-        var mysql_chapter = `select * from new_chapter where course_id='${course_id}'`;
+        //TODO:以chapter id做排序大到小
+        var mysql_chapter = `select * from new_chapter where course_id='${course_id} ORDER BY chapter_id DESC'`;
         con.query(mysql_chapter, function(err, result_chapter) {
             if (err) throw err
                 // console.log(result_chapter) //所有章節資訊
-            var mysql_section = `select * from final_section where course_id='${course_id}'`;
+            var mysql_section = `select * from final_section where course_id='${course_id} ORDER BY section_id DESC'`;
             con.query(mysql_section, function(err, result_section) {
                 // console.log("result_section : " + JSON.stringify(result_section))
                 if (err) throw err
@@ -210,7 +211,7 @@ router.post("/videoupdate", function(req, res) {
                 `SELECT final_section.video_id FROM final_section join new_chapter join new_course 
             on final_section.chapter_auto_id=new_chapter.chapter_auto_id 
             and new_course.course_id=new_chapter.course_id
-            and course_title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id}'`
+            and course_title ='${title}' and chapter_id ='${chapter_id}' and section_id='${section_id};'`
             con.query(video_id_sql, function(err1, video_id_result) {
                 if (err1)
                     throw err1;

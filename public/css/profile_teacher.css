@@ -183,6 +183,23 @@ a {
     margin-top: 2em;
 }
 
+.profile_info_button {
+    margin-left: 30px;
+    font-size: 20px;
+}
+
+.profile_info_button:focus {
+    outline: none;
+}
+
+
+/* 
+.profile_class_title_and_button {
+    resize: none;
+    border: none;
+    margin: 20%;
+} */
+
 .profile_class_info {
     margin-left: 30px;
     font-size: 20px;
@@ -256,12 +273,15 @@ a {
 
 #content input {
     padding: 10px 60px;
-    background: #ccc;
-    border: 0 none;
+    border-radius: 3px;
+    background-color: #00bea4;
+    color: white;
+    /* background: #ccc; */
+    /* border: 0 none; */
     cursor: pointer;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    margin-top: 10px
+    margin-top: 30px
 }
 
 #content div.header {

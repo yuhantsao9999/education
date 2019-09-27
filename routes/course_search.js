@@ -9,6 +9,8 @@ const router = express.Router();
 app.use('/', router);
 
 
+
+
 // search api 
 router.get("/education/classinfo/search", function(req, res) {
     var keyword = req.query.keyword;
@@ -20,4 +22,7 @@ router.get("/education/classinfo/search", function(req, res) {
         res.send(result_search);
     });
 });
+
+
+
 module.exports = router;

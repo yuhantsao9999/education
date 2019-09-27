@@ -71,7 +71,6 @@ router.post("/education/class_input", mixupload, function(req, res) {
     var access_token = req.body.user_token;
     var course_title = req.body.course_title;
     var course_teacher_intro = req.body.course_teacher_intro;
-    console.log(course_teacher_intro)
     var course_intro = req.body.course_intro;
     var course_field = req.body.field;
     var for_who = req.body.for_who;

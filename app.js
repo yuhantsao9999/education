@@ -35,6 +35,9 @@ app.use('/', profile);
 const comment = require('./routes/comment');
 app.use('/', comment);
 
+const course_update = require('./routes/course_update');
+app.use('/', course_update);
+
 
 
 

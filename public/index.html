@@ -318,35 +318,26 @@
 
     }
 
-
+    //search
     function search_course_enter() {
         if (event.keyCode == 13)
             search_course();
     }
-    // get search course data 原本的@@
+
+    // get search course data 
     function search_course() {
-        var keyword = document.getElementById("search").value;
-        window.location.replace("./search.html?keyword=" + keyword);
+        var client_keyword = document.getElementById("search").value;
+
+        // function ucfirst(str) {
+        var lowcase_keyword = client_keyword.toLowerCase();
+        var keyword_arr = lowcase_keyword.split(' ');
+        for (var i = 0; i < keyword_arr.length; i++) {
+            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
+        }
+        // console.log(result)
+        window.location.replace("./search.html?keyword=" + result);
     }
 
-    //按下enter鍵，直接執行搜尋功能
-    //document.getElementById("search").addEventListener("click", function search_course(event) {
-    //    if (event.keyCode == 13) {
-    //        var keyword = document.getElementById("search").value;
-    //        console.log(keyword)
-    //        window.location.replace("./search.html?keyword=" + keyword);
-    //   }
-    //
-    //   });
-
-    //search(w3的應用範例))
-    // var input = document.getElementById("myInput");
-    // input.addEventListener("keyup", function(event) {
-    //     if (event.keyCode === 13) {
-    //         event.preventDefault();
-    //         document.getElementById("myBtn").click();
-    //     }
-    // });
 
 
     // user_icon

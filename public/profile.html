@@ -14,14 +14,15 @@
                 <div class="nav_item_bar">
                     <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
-                    <input id="search" style="font-size:20px">
-                    <button class="search-button" onclick="search_course()" type="submit"></button>
+                    <input id="search" style="font-size:20px" onkeyup="search_course_enter()">
+                    <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
-                        <ul id="clearfix" class="clearfix">
+                        <ul class="clearfix" id="clearfix">
                             <li class="active"><a href="./course_input.html">我要開課</a></li>
-                            <li class="boundary"><a href="./profile.html">我的課表</a></li>
-                            <!-- <li class="boundary"><a href="./sign_in.html">登入</a></li>
-                            <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
+                            <li class="boundary"><a href="./profile_student.html">我的課表</a></li>
+                            <!-- <li><a href="./sign_in.html">登入</a></li>
+                                <li><a href="./profile.html">hi yuhan!</a></li> -->
+                            <!-- <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
                         </ul>
                     </div>
                 </div>
@@ -169,9 +170,28 @@
 
 </body>
 <script>
-    var accessToken = localStorage.getItem("accessToken")
+    //search
+    function search_course_enter() {
+        if (event.keyCode == 13)
+            search_course();
+    }
 
-    //公開資料獲取目前資料
+    // get search course data 
+    function search_course() {
+        var client_keyword = document.getElementById("search").value;
+
+        // function ucfirst(str) {
+        var lowcase_keyword = client_keyword.toLowerCase();
+        var keyword_arr = lowcase_keyword.split(' ');
+        for (var i = 0; i < keyword_arr.length; i++) {
+            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
+        }
+        // console.log(result)
+        window.location.replace("./search.html?keyword=" + result);
+    }
+
+    var accessToken = localStorage.getItem("accessToken")
+        //公開資料獲取目前資料
     var xml_profileInfo = new XMLHttpRequest;
     xml_profileInfo.open('get', '/profile/getinfo', true);
     xml_profileInfo.setRequestHeader("Authorization", "Bearer" + " " + accessToken);

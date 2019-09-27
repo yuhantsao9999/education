@@ -17,11 +17,12 @@
                     <input id="search" style="font-size:20px" onkeyup="search_course_enter()">
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
-                        <ul class="clearfix">
-                            <li class="active"><a href="#">我要開課</a></li>
-                            <li class=""><a href="#">我的課表</a></li>
-                            <li class="boundary"><a href="#">登入</a></li>
-                            <li><a href="#"><i class="icon-search"></i> 註冊</a></li>
+                        <ul class="clearfix" id="clearfix">
+                            <li class="active"><a href="./course_input.html">我要開課</a></li>
+                            <li class="boundary"><a href="./profile_student.html">我的課表</a></li>
+                            <!-- <li><a href="./sign_in.html">登入</a></li>
+                                <li><a href="./profile.html">hi yuhan!</a></li> -->
+                            <!-- <li><a href="./sign_up.html"><i class="icon-search"></i> 註冊</a></li> -->
                         </ul>
                     </div>
                 </div>
@@ -203,15 +204,28 @@
 
 </body>
 <script>
+    //search
     function search_course_enter() {
         if (event.keyCode == 13)
             search_course();
     }
-    // get search course data 原本的
+
+    // get search course data 
     function search_course() {
-        var keyword = document.getElementById("search").value;
-        window.location.replace("./search.html?keyword=" + keyword);
+        var client_keyword = document.getElementById("search").value;
+
+        // function ucfirst(str) {
+        var lowcase_keyword = client_keyword.toLowerCase();
+        var keyword_arr = lowcase_keyword.split(' ');
+        for (var i = 0; i < keyword_arr.length; i++) {
+            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
+        }
+        // console.log(result)
+        window.location.replace("./search.html?keyword=" + result);
     }
+
+
+
 
 
     let currentUrl = window.location.href;
@@ -272,6 +286,37 @@
                     rowA.appendChild(col_8Div)
                     document.getElementById("class_container").appendChild(rowA)
                 }
+            }
+        }
+    }
+
+    // user_sign_icon
+    accessToken = localStorage.getItem("accessToken")
+    console.log("accessToken" + accessToken)
+    var xml_icon = new XMLHttpRequest();
+    xml_icon.open("get", "/profile/getinfo", true);
+    xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
+    xml_icon.send(null);
+    xml_icon.onreadystatechange = function() {
+        if (xml_icon.readyState == 4) {
+            if (xml_icon.responseText == "error") {
+                //還沒登入
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("登入");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./sign_in.html"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
+            } else {
+                //已登入
+                var sign_li = document.createElement("li");
+                var signContent = document.createTextNode("Hello!");
+                var sign_a = document.createElement("a");
+                sign_a.href = "./profile.html?tab=current"
+                sign_a.appendChild(signContent)
+                sign_li.appendChild(sign_a)
+                document.getElementById("clearfix").appendChild(sign_li)
             }
         }
     }

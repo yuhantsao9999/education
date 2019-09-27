@@ -72,25 +72,20 @@
 
                     <div id="videoinfo">
                         <!-- <div id="1">
-
                             <div class="chapter">
-
                                 <div id="chapter_title" class="row-video">
                                     <p><b>chapter title:</b></p>
                                     <input type='text' name='chapter_title' required><br><br>
                                 </div>
-
                                 <div class="button">
                                     <input type="button" value="Add section" onclick="add_section()">
                                 </div>
                                 <span><img src="../img/delete.png" alt="delete" onclick="delete_chapter()"></span>
                             </div>
-
                             <div class="section">
                                 <div id="section_title" class="row-video">
                                     <p><b>section title:</b></p><input type='text' name='section_title' required>
                                 </div>
-
                                 <div id="section_intro" class="row-video">
                                     <p><b>section introduction:</b></p><input type='text' name='section_intro' required>
                                 </div>
@@ -100,12 +95,10 @@
                                                 video:
                                                 </b>
                                     </p>
-
                                     <input type='file' name='class_video' required>
                                 </div>
                                 <span><img src="../img/delete3.png" alt="delete" onclick="delete_video()"></span>
                             </div>
-
                         </div> -->
                     </div>
 
@@ -115,7 +108,7 @@
                         <!-- <input type="hidden" id="video_count" name="video_count"> -->
                         <input type="hidden" id="each_chapter_section_num" name="each_chapter_section_num">
                         <input type="hidden" id="user_token" name="user_token">
-                        <input type='submit' value='Submit' id="sumbit">
+                        <input type='submit' value='Submit' id="submit">
                     </div>
                 </form>
 
@@ -127,10 +120,8 @@
 <script>
     var count = 0;
     var video_count = 0; //vidoe的編號 非個數
-
     function add_section(obj) {
         video_count++;
-
         var section_titleDiv = document.createElement("div");
         section_titleDiv.className = "row-video";
         var section_titleContent = document.createTextNode("section title:");
@@ -142,7 +133,6 @@
         section_title_input.type = "text";
         section_title_input.name = "section_title";
         section_titleDiv.appendChild(section_title_input)
-
         var section_introDiv = document.createElement("div");
         section_introDiv.className = "row-video";
         var section_introContent = document.createTextNode("section introduction:");
@@ -155,37 +145,29 @@
         section_intro_textarea.type = "text";
         section_intro_textarea.name = "section_intro";
         section_introDiv.appendChild(section_intro_textarea)
-
-
         var deleteSpan = document.createElement("span");
         var deleteImg = document.createElement("img");
         deleteImg.src = "../img/delete3.png"
         deleteImg.className = count
         deleteImg.setAttribute("onClick", "delete_section(" + video_count + ")");
         deleteSpan.appendChild(deleteImg);
-
-
         var videoDiv = document.createElement("div");
         videoDiv.className = "row-video"
         var videomainp = document.createElement("p");
         var videoContent = document.createTextNode("video:");
         videomainp.appendChild(videoContent);
         videoDiv.appendChild(videomainp);
-
         var videoinput = document.createElement("input");
         videoinput.type = "file";
         videoinput.name = "class_video";
         videoDiv.appendChild(videoinput);
-
         var sectionmainDiv = document.createElement("div");
         sectionmainDiv.className = "section";
         sectionmainDiv.id = "section" + video_count;
-
         sectionmainDiv.appendChild(section_titleDiv);
         sectionmainDiv.appendChild(section_introDiv);
         sectionmainDiv.appendChild(videoDiv);
         sectionmainDiv.appendChild(deleteSpan);
-
         document.getElementById(obj).appendChild(sectionmainDiv);
         console.log(video_count)
     }
@@ -195,7 +177,6 @@
         // document.getElementById('count').value = count;
         var chaptermainDiv = document.createElement("div");
         chaptermainDiv.className = "chapter"
-
         var chapter_titleDiv = document.createElement("div");
         chapter_titleDiv.className = "row-video";
         var chapter_titleP = document.createElement("p");
@@ -206,9 +187,7 @@
         chapter_title_input.id = "chapter_title"
         chapter_title_input.type = "text";
         chapter_title_input.name = "chapter_title";
-
         chapter_titleDiv.appendChild(chapter_title_input)
-
         var add_sectionDiv = document.createElement("div");
         add_sectionDiv.className = "button"
         var add_sectioninput = document.createElement("input");
@@ -216,29 +195,22 @@
         add_sectioninput.type = "button"
         add_sectioninput.setAttribute("onClick", "add_section(" + count + ")");
         add_sectionDiv.appendChild(add_sectioninput)
-
         var delete_chapyerSpan = document.createElement("span");
         var delete_chapyerImg = document.createElement("img");
         delete_chapyerImg.src = "../img/delete.png"
         delete_chapyerImg.className = count
         delete_chapyerImg.setAttribute("onClick", "delete_chapter(" + count + ")");
         delete_chapyerSpan.appendChild(delete_chapyerImg);
-
         chaptermainDiv.appendChild(chapter_titleDiv);
         chaptermainDiv.appendChild(add_sectionDiv);
         chaptermainDiv.appendChild(delete_chapyerSpan);
-
         var chapter_video_Div = document.createElement("div");
         chapter_video_Div.id = parseInt(count);
-
         chapter_video_Div.appendChild(chaptermainDiv);
-
         document.getElementById("videoinfo").appendChild(chapter_video_Div);
     }
-
     var delete_count = 0
-
-    //delete_chapter()
+        //delete_chapter()
     function delete_chapter(obj) {
         delete_count++;
         // document.getElementById('count').value = count;
@@ -255,7 +227,7 @@
     }
 
 
-    document.getElementById("sumbit").addEventListener("click", function() {
+    document.getElementById("submit").addEventListener("click", function() {
         var each_chapter_section_num_arr = [];
         // var chapter_num = Number(document.getElementById('count').value);
         var chapter_num = count - delete_count //chapter的個數
@@ -265,77 +237,6 @@
         }
         document.getElementById('each_chapter_section_num').value = each_chapter_section_num_arr;
     });
-
-    // function ajax() {
-    //     console.log(count)
-    //     var xml = new XMLHttpRequest;
-    //     xml.open('post', '/education/class_input', true);
-    //     xml.setRequestHeader('content-type', 'application/json')
-    //     var chapter_id = [];
-    //     var chapter_title = [];
-    //     var section_id = [];
-    //     var section_title = [];
-    //     var section_intro = [];
-
-
-    //     for (var i = 1; i < count + 1; i++) {
-    //         chapter_id.push(document.getElementById("chapter_id" + i).value);
-    //         chapter_title.push(document.getElementById("chapter_title" + i).value);
-    //         section_id.push(document.getElementById("section_id" + i).value);
-    //         section_title.push(document.getElementById("section_title" + i).value);
-    //         section_intro.push(document.getElementById("section_intro" + i).value);
-    //     }
-
-
-    //     var course = {
-    //         chapter_id: chapter_id,
-    //         chapter_title: chapter_title,
-    //         section_id: section_id,
-    //         section_title: section_title,
-    //         section_intro: section_intro,
-    //     }
-    //     console.log(course)
-    //     xml.send(JSON.stringify(course))
-
-    // }
-    // document.getElementById("sumbit").addEventListener("click", function() {
-    //     var xml = new XMLHttpRequest;
-    //     xml.open('post', '/education/class_input', true);
-    //     xml.setRequestHeader('content-type', 'application/json')
-
-    //     var chapter_id = document.getElementById("chapter_id" + count).value;
-    //     var chapter_title = document.getElementById("chapter_title" + count).value;
-    //     var section_id = document.getElementById("section_id" + count).value;
-    //     var section_title = document.getElementById("section_title" + count).value;
-    //     var section_intro = document.getElementById("section_intro" + count).value;
-
-
-
-    //     var course = {
-    //         chapter_id: chapter_id,
-    //         chapter_title: chapter_title,
-    //         section_id: section_id,
-    //         section_title: section_title,
-    //         section_intro: section_intro,
-    //     }
-
-    // xml.send(JSON.stringify(profile));
-    // xml.onload = function() {
-
-    //     if (xml.responseText == "error") {
-    //         alert("please sign up first!")
-    //         window.location.assign('./sign_up.html')
-    //     } else {
-    //         var accessToken = JSON.parse(xml.responseText).data.access_token;
-
-    //         localStorage.setItem("accessToken", accessToken);
-    //         alert("sign in successful")
-    //         window.location.assign('./profile.html')
-    //     }
-    // }
-    // });
-
-
 
     // user_icon
     accessToken = localStorage.getItem("accessToken")

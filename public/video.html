@@ -6,7 +6,6 @@
     <title>class</title>
     <link rel="stylesheet" href="./css/video.css" />
 </head>
-<!-- onbeforeunload="return goodbye()" -->
 
 <body class="about">
     <div id="header">
@@ -15,7 +14,7 @@
                 <div class="nav_item_bar">
                     <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
-                    <input id="search" style="font-size:20px">
+                    <input id="search" style="font-size:20px" onkeyup="search_course_enter()">
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
                         <ul class="clearfix" id="clearfix">
@@ -72,6 +71,26 @@
 
 </body>
 <script>
+    //search
+    function search_course_enter() {
+        if (event.keyCode == 13)
+            search_course();
+    }
+
+    // get search course data 
+    function search_course() {
+        var client_keyword = document.getElementById("search").value;
+        // function ucfirst(str) {
+        var lowcase_keyword = client_keyword.toLowerCase();
+        var keyword_arr = lowcase_keyword.split(' ');
+        for (var i = 0; i < keyword_arr.length; i++) {
+            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
+        }
+        // console.log(result)
+        window.location.replace("./search.html?keyword=" + result);
+    }
+
+    //版面內容
     var urlParams = new URLSearchParams(window.location.search);
     var title = urlParams.get('title');
     var chapter = urlParams.get('chapter');
@@ -135,13 +154,8 @@
         xml_percent.open("post", "/video_percent", true)
         xml_percent.setRequestHeader('Content-Type', 'application/json');
         console.log(accessToken)
-            //傳送
         var videopercent_obj = {
             title: title,
-            // test: "test",
-            // chapter: chapter,
-            // section: section,
-            // section_id: section_id,
             accessToken: accessToken
         }
         xml_percent.send(JSON.stringify(videopercent_obj));
@@ -150,8 +164,7 @@
                 var obj = JSON.parse(xml_percent.responseText)
                 console.log("wowwwwwwww : " + JSON.stringify(obj))
                 for (var i = 0; i < obj.length; i++) {
-
-                    //TODO:補上顯示看到％的功能
+                    //顯示看到％的功能
                     var section_percent = Number(obj[i])
 
                     console.log(typeof(section_percent))
@@ -250,29 +263,6 @@
             }
         }
     }
-
-
-    //離開時記下影片看到的時間
-    // window.onbeforeunload = function() {
-    //     var video = document.getElementById("video")
-    //     var currentTime = document.getElementById("video").currentTime;
-    //     var totalTime = document.getElementById("video").duration;
-
-    //     var js = {
-    //         course_title: currentTime,
-    //         totalTime: totalTime
-    //     }
-    //     var xmlhttp_videotime = new XMLHttpRequest();
-    //     xmlhttp_videotime.setRequestHeader('Content-Type', 'application/json');
-    //     xmlhttp_videotime.send(JSON.stringify(js));
-    //     xmlhttp_videotime.open("post", "/videoupdate?title=" + title + "&chapter=" + chapter + "&section=" + section, true)
-    //     xmlhttp_videotime.onreadystatechange = function() {
-    //         if (this.readyState == 4 && this.status == 200) {
-    //             // alert("successful")
-    //         }
-    //     }
-    // }
-
 
 
 
