@@ -143,13 +143,14 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-            console.log(JSON.stringify(obj))
+                // console.log(JSON.stringify(obj))
 
             // var video_id_arr = [];
             //替換課程名稱
             var courseTitleDiv = document.createElement("div");
             var courseTitleContent = document.createTextNode(obj.data.Course_title);
             courseTitleDiv.appendChild(courseTitleContent);
+            courseTitleDiv.id = "course_title"
             document.getElementsByClassName("row-maininfo")[0].appendChild(courseTitleDiv);
             //替換課程領域
             var courseFieldDiv = document.createElement("div");
@@ -191,6 +192,7 @@
                 var add_sectionDiv = document.createElement("div");
                 add_sectionDiv.className = "button"
                 var add_sectioninput = document.createElement("input");
+
                 add_sectioninput.value = "Add section"
                 add_sectioninput.type = "button"
                 add_sectioninput.setAttribute("onClick", "add_section(" + count + ")");
@@ -303,7 +305,7 @@
 
     function add_section(obj) {
         video_count = Number(document.getElementById('video_count').value) + 1
-        console.log("section 代號: " + video_count)
+            // console.log("section 代號: " + video_count)
         video_count++;
 
         var section_titleDiv = document.createElement("div");
@@ -316,6 +318,7 @@
         section_title_input.id = "section_title"
         section_title_input.type = "text";
         section_title_input.name = "section_title";
+        section_title_input.required = true;
         section_titleDiv.appendChild(section_title_input)
 
         var section_introDiv = document.createElement("div");
@@ -329,6 +332,7 @@
         section_intro_textarea.style = "width:246px;height:100px;"
         section_intro_textarea.type = "text";
         section_intro_textarea.name = "section_intro";
+        section_intro_textarea.required = true;
         section_introDiv.appendChild(section_intro_textarea)
 
 
@@ -340,6 +344,11 @@
         deleteImg.setAttribute("onClick", "delete_section(" + video_count + ")");
         deleteSpan.appendChild(deleteImg);
 
+        // <input type="hidden" id="course_id" name="course_id">
+        var origin_videoInput = document.createElement("input");
+        origin_videoInput.type = "hidden"
+        origin_videoInput.className = "videoNow"
+        origin_videoInput.id = "";
 
         var videoDiv = document.createElement("div");
         videoDiv.className = "row-video"
@@ -351,6 +360,7 @@
         var videoinput = document.createElement("input");
         videoinput.type = "file";
         videoinput.name = "class_video";
+        videoinput.required = true;
         videoDiv.appendChild(videoinput);
 
         var sectionmainDiv = document.createElement("div");
@@ -360,7 +370,7 @@
         sectionmainDiv.appendChild(section_titleDiv);
         sectionmainDiv.appendChild(section_introDiv);
         sectionmainDiv.appendChild(section_introDiv);
-        // sectionmainDiv.appendChild(videoNowDiv);
+        sectionmainDiv.appendChild(origin_videoInput);
         sectionmainDiv.appendChild(videoDiv);
         sectionmainDiv.appendChild(deleteSpan);
 
@@ -387,6 +397,7 @@
         chapter_title_input.id = "chapter_title"
         chapter_title_input.type = "text";
         chapter_title_input.name = "chapter_title";
+        chapter_title_input.required = true;
 
         chapter_titleDiv.appendChild(chapter_title_input)
 
@@ -462,7 +473,7 @@
         document.getElementById('course_id').value = course_id;
 
         var chapter_num = (Number(count) - delete_count) //chapter的個數
-        document.getElementById('chapter_num').value = chapter_num;
+        document.getElementById('chapter_num').value = chapter_num; //5
         //計算chapter_auto_id
         var chapter_auto_id_arr = [];
         for (var i = 0; i < chapter_num; i++) {
@@ -470,10 +481,10 @@
             var chapter_auto_id = document.getElementsByClassName('chapter')[i].id
             if (chapter_auto_id.length == 0) {
                 chapter_auto_id_arr.push(null);
+                console.log("rrrrrrr")
             } else {
                 chapter_auto_id_arr.push(document.getElementsByClassName('chapter')[i].id);
             }
-
             each_chapter_section_num_arr.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
         }
         // alert("each_chapter_section_num_arr : " + each_chapter_section_num_arr)
@@ -485,35 +496,46 @@
 
         var class_video_arr = [];
         var video_id_array = [];
-        var j = 0;
+
+        // alert("section num : " + section_num)
         for (var i = 0; i < section_num; i++) {
             //影片更新
-
+            // alert("loop : " + i)
             var class_video = document.getElementsByName('class_video')[i].value;
             if (class_video.length == 0) { //沒有更新
-                // var j = 0;
-                var oldVideo_src = document.getElementsByClassName('videoNow')[j].src;
+                // alert("no update")
+
+                var oldVideo_src = document.getElementsByClassName('videoNow')[i].src;
                 var oldVideo_src_filename = oldVideo_src.substr(-29)
                 class_video_arr.push(oldVideo_src_filename)
-                var video_id = document.getElementsByClassName('videoNow')[j].id;
+                var video_id = document.getElementsByClassName('videoNow')[i].id;
                 video_id_array.push(video_id)
-                j++;
-            } else { //更新
-                class_video_arr.push(null);
-                video_id_array.push(null)
+                    // alert("QQQ")
+
+            } else {
+                //新增
+                alert("Add");
+                class_video_arr.push(null)
+                if (document.getElementsByClassName('videoNow')[i].id.length != 0) {
+                    // alert("舊有的")
+                    video_id_array.push(document.getElementsByClassName('videoNow')[i].id)
+                } else {
+                    // alert("新增新章節")
+                    video_id_array.push(null)
+                }
             }
 
-            //video_id array
-            // var video_id = document.getElementById('chapter')[i].id
-            // if (chapter_auto_id.length == 0) {
-            //     chapter_auto_id_arr.push(0);
-            // } else {
-            //     chapter_auto_id_arr.push(document.getElementsByClassName('chapter')[i].id);
-            // }
 
+            //video_id array
+            // if (chapter_auto_id.length == 0) {
+            //     video_id_array.push(0);
+            // } else {
+            //     video_id_array.push(document.getElementsByClassName('chapter')[i].id);
+            // }
+            // alert("video_id_array : " + video_id_array)
         }
-        console.log(count)
-            // alert("class_video_arr : " + class_video_arr)
+        // console.log(count)
+        alert("class_video_arr : " + class_video_arr)
         document.getElementById('each_video_src').value = class_video_arr;
         document.getElementById('chapter_auto_id_arr').value = chapter_auto_id_arr;
         document.getElementById('video_id_arr').value = video_id_array;

@@ -88,49 +88,49 @@ router.get("/course_update/", function(req, res) {
 
 
 //使用multer將影片傳到assets並幫影片命名
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'assets')
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
-    },
-})
-var upload = multer({ storage: storage })
+// var storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, 'assets')
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
+//     },
+// })
+// var upload = multer({ storage: storage })
 
 
 
 
 
 //s3取代multer
-// var upload = multer({
-//     storage: multerS3({
-//         s3: s3,
-//         bucket: 'cad-education-project/class-video-picture',
-//         metadata: function(req, file, cb) {
-//             cb(null, { fieldName: file.fieldname });
-//         },
-//         key: function(req, file, cb) {
-//             cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
-//         }
-//     })
-// })
+var upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'cad-education-project/class-video-picture',
+        metadata: function(req, file, cb) {
+            cb(null, { fieldName: file.fieldname });
+        },
+        key: function(req, file, cb) {
+            cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
+        }
+    })
+})
 
 var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
 router.post("/course_update/insertMysql", mixupload, function(req, res) {
     var access_token = req.body.user_token;
     var course_id = req.body.course_id;
+    var chapter_title = req.body.chapter_title;
     // console.log("course_id : " + course_id)
-    console.log(JSON.stringify(req.body))
+    console.log(JSON.stringify(req.files))
     var old_image_path_arr = req.body.old_image_path_arr;
     // var main_image = req.files.main_image[0].key;
     var chapter_num = Number(req.body.chapter_num);
-    // var each_chapter_section_num_arr = req.body.each_chapter_section_num_arr;
-
-
+    // console.log("s3---------------->   :    " + JSON.stringify(req))
 
     async.waterfall([
         (next) => {
+            //圖片更新
             if (old_image_path_arr.length == 28) {
                 //沒更新
                 console.log("11111111  沒更新");
@@ -139,7 +139,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
             } else {
                 //更新
                 console.log("22222222  更新")
-                var new_image_path = req.files.main_image[0].filename
+                var new_image_path = req.files.main_image[0].key
                 var new_image_path_sql = `update new_course set main_image='${new_image_path}' where course_id='${course_id}'`;
                 con.query(new_image_path_sql, function(err1, new_image_path_result) {
                     if (err1) throw err1;
@@ -149,37 +149,199 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
             }
         },
         (next) => {
-            var chapter_auto_id = req.body.chapter_auto_id_arr
-            for (i = 0; i < chapter_auto_id.length; i++) {
-                var chapter_sql = `update new_course set chapter_auto_id='${new_image_path}' where course_id='${course_id} and chapter_auto_id='${chapter_auto_id}';`
-                    //     con.query(video_time_sql, function(err1, video_time__result) {
-                    //         if (err1) throw err1;
-                    //         console.log(JSON.stringify(video_time__result))
-                    //         var progress_arr = []
-                    //         for (i = 0; i < video_time__result.length; i++) {
-                    //             console.log(video_time__result[i].video_time)
-                    //             console.log(video_time__result[i].video_duration)
-                    //             var progress = (video_time__result[i].video_time / video_time__result[i].video_duration)
-                    //             console.log("progress : " + progress)
-                    //             if (isFinite(progress)) {
-                    //                 // isNaN(progress) ||
-                    //                 var progress = progress * 100
-                    //                 progress_arr.push(Math.round(progress));
-                    //             } else {
-                    //                 progress_arr.push("0");
-                    //             }
-                    //         }
-                    //         console.log("progress_arr : " + progress_arr)
-                    //         next(null, user_id)
+            var origin_chapter_id_mysql = `SELECT chapter_auto_id FROM new_chapter where course_id='${course_id}'`
+            con.query(origin_chapter_id_mysql, function(err2, origin_chapter_id) {
+                if (err2) throw err2;
+                var origin_chapter_id_arr = [];
+                for (i = 0; i < origin_chapter_id.length; i++) {
+                    origin_chapter_id_arr.push(origin_chapter_id[i].chapter_auto_id)
+                }
+                // console.log("origin_chapter_id_arr: " + origin_chapter_id_arr)
+                next(null, origin_chapter_id_arr)
+            })
+        },
+        (origin_chapter_id_arr, next) => {
+            //進行chapter的更新
+            var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
+            var auto_id_different = diff(origin_chapter_id_arr, chapter_auto_id);
 
-                //     });
+
+            console.log("origin_chapter_id_arr : " + origin_chapter_id_arr);
+            console.log("chapter_auto_id : " + chapter_auto_id);
+            console.log("auto_id_different : " + auto_id_different)
+            if (auto_id_different.length != 0) {
+                var delete_chapter_sql = `DELETE FROM new_chapter   
+                WHERE course_id='${course_id}' AND chapter_auto_id='${auto_id_different[0]}' ;`
+                con.query(delete_chapter_sql, function(err4, delete_chapter_result) {
+                    if (err4) throw err4;
+                    console.log("delete")
+                })
             }
-            res.send("A___________A")
+
+
+            for (i = 0; i < chapter_auto_id.length; i++) {
+                console.log("內容 : " + chapter_auto_id[i] + "  haha型態 : " + typeof(chapter_auto_id[i]))
+                if (chapter_auto_id[i] == "") {
+                    var insert_chapter_sql = `INSERT INTO new_chapter (chapter_title,chapter_id,course_id)
+                    VALUES ('${chapter_title[i]}','${i+1}','${course_id}') ;`
+                    con.query(insert_chapter_sql, function(err2, insert_chapter_result) {
+                        if (err2) throw err2;
+                        console.log("inserttttttt")
+                    })
+                } else {
+                    var update_chapter_sql = `UPDATE new_chapter
+                     SET 
+                     chapter_title='${chapter_title[i]}',
+                     chapter_id='${i+1}' 
+                    WHERE course_id='${course_id}' AND chapter_auto_id='${chapter_auto_id[i]}';`
+                    con.query(update_chapter_sql, function(err3, update_chapter_result) {
+                        if (err3) throw err3;
+                        console.log("updateeeeeee")
+                    })
+                }
+            }
+            next(null)
+        },
+        (next) => {
+            var updte_chapter_id_mysql = `SELECT chapter_auto_id FROM new_chapter where course_id='${course_id}'`
+            con.query(updte_chapter_id_mysql, function(err2, update_chapter_id) {
+                if (err2) throw err2;
+                var update_chapter_id_arr = [];
+                for (i = 0; i < update_chapter_id.length; i++) {
+                    update_chapter_id_arr.push(update_chapter_id[i].chapter_auto_id)
+                }
+                console.log("update_chapter_id_arr: " + update_chapter_id_arr)
+                next(null, update_chapter_id_arr)
+            })
+        },
+        (update_chapter_id_arr, next) => {
+            var origin_vidoe_id_mysql = `SELECT video_id FROM final_section where course_id='${course_id}' ORDER BY section_id ASC`
+            con.query(origin_vidoe_id_mysql, function(err7, origin_vidoe_id) {
+                if (err7) throw err7;
+                var origin_video_id_arr = [];
+                for (i = 0; i < origin_vidoe_id.length; i++) {
+                    origin_video_id_arr.push(origin_vidoe_id[i].video_id)
+                }
+                // console.log("origin_chapter_id_arr: " + origin_chapter_id_arr)
+                next(null, update_chapter_id_arr, origin_video_id_arr)
+            })
+        },
+        (update_chapter_id_arr, origin_video_id_arr, next) => {
+
+            console.log("update_chapter_id_arr: " + update_chapter_id_arr)
+                // var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
+            var each_chapter_section_num = (req.body.each_chapter_section_num).split(",");
+            var each_video_src = (req.body.each_video_src).split(",");
+
+            var section_title = req.body.section_title;
+            var section_intro = req.body.section_intro;
+            var video_id_arr = (req.body.video_id_arr).split(",");
+
+            var video_id_different = diff(origin_video_id_arr, video_id_arr);
+            console.log("origin_video_id_arr: " + origin_video_id_arr)
+            console.log("video_id_arr: " + video_id_arr)
+            console.log("video_id_different: " + video_id_different)
+            if (video_id_different.length != 0) {
+                var delete_video_id_sql = `DELETE FROM final_section   
+                WHERE course_id='${course_id}' AND video_id='${video_id_different[0]}' ;`
+                con.query(delete_video_id_sql, function(err8, delete_video_result) {
+                    if (err8) throw err8;
+                    console.log("------------delete video id : " + video_id_different[0] + "------------")
+                })
+            }
+
+            var m = 0;
+            var new_video_name = req.files.class_video[m].key
+            for (var i = 0, k = 0; i < update_chapter_id_arr.length; i++) {
+                for (var j = 0; j < each_chapter_section_num[i]; j++) {
+                    if (video_id_arr[k] == "") {
+                        console.log("-----------------------insert--------------------------")
+                        console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
+                        console.log("new_video_name " + req.files.class_video[m].key);
+                        var insert_section_id_mysql = `INSERT INTO final_section (course_id,chapter_auto_id,section_id,section_title,section_intro,video)
+                        VALUES ('${course_id}','${update_chapter_id_arr[i]}','${k+1}','${section_title[k]}','${section_intro[k++]}','${new_video_name}') ;`
+                        con.query(insert_section_id_mysql, function(err5, insert_section_id) {
+                            if (err5) throw err5;
+                        })
+                        m++;
+                    } else {
+                        if (each_video_src[k].length == "") {
+                            console.log("-----------------------upadte111111111--------------------------")
+                            console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
+                            console.log("video_name " + each_video_src[k]);
+                            console.log("new_video_name " + req.files.class_video[m].key);
+                            var update_section_sql = `UPDATE final_section
+                            SET 
+                            course_id='${course_id}',
+                            chapter_auto_id='${update_chapter_id_arr[i]}',
+                            section_id='${k+1}',
+                            section_title='${section_title[k]}',
+                            section_intro='${section_intro[k]}',
+                            video='${new_video_name}' 
+                           WHERE  video_id='${video_id_arr[k]}';`
+                            k++;
+                            m++;
+                            con.query(update_section_sql, function(err3, update_section_result) {
+                                if (err3) throw err3;
+                                console.log("updateeeeeee video")
+                            })
+                        } else {
+                            console.log("-----------------------upadte22222222--------------------------")
+                            console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
+                            console.log("video_name " + each_video_src[k]);
+                            var update_section_sql = `UPDATE final_section
+                            SET 
+                            course_id='${course_id}',
+                            chapter_auto_id='${update_chapter_id_arr[i]}',
+                            section_id='${k+1}',
+                            section_title='${section_title[k]}',
+                            section_intro='${section_intro[k]}',
+                            video='${each_video_src[k]}' 
+                           WHERE  video_id='${video_id_arr[k]}';`
+                            k++;
+                            con.query(update_section_sql, function(err3, update_section_result) {
+                                if (err3) throw err3;
+                                console.log("updateeeeeee")
+                            })
+                        }
+
+                    }
+                }
+            }
+            next(null)
+        },
+        (next) => {
+            var course_title_sql = `SELECT course_title FROM new_course where course_id='${course_id}'`
+            con.query(course_title_sql, function(err2, course_title_result) {
+                if (err2) throw err2;
+                var course_title = course_title_result[0].course_title;
+                console.log(course_title)
+                res.redirect("/course.html?title=" + course_title)
+            })
         },
     ], (err, rst) => {
         if (err) return err;
     });
 })
 
+
+//取差集
+function diff(array1, array2) {
+    var tmp = [];
+    var flag;
+    for (var i = 0; i < array1.length; i++) {
+        flag = true
+        for (var j = 0; j < array2.length; j++) {
+            if (array1[i] == array2[j]) {
+                flag = false;
+            }
+        }
+        if (flag) {
+            tmp.push(array1[i]);
+        }
+    }
+
+    return tmp;
+}
 
 module.exports = router;
