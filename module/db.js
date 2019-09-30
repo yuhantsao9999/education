@@ -1,5 +1,5 @@
 var mysql = require("mysql");
-
+require('dotenv').config();
 // connect mysql
 // var con = mysql.createPool({
 //     connectionLimit: 10,
@@ -13,11 +13,13 @@ var mysql = require("mysql");
 //     queueLimit: 0,
 // });
 
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
+
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "12345678",
-    database: "education",
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_DATABASE,
 });
 
 con.connect(function(err) {

@@ -143,7 +143,7 @@
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-                // console.log(JSON.stringify(obj))
+            console.log(JSON.stringify(obj))
 
             // var video_id_arr = [];
             //替換課程名稱
@@ -210,14 +210,15 @@
                 chaptermainDiv.appendChild(delete_chapyerSpan);
 
                 var chapter_video_Div = document.createElement("div");
-                chapter_video_Div.id = parseInt(count);
+                chapter_video_Div.id = "chapter" + parseInt(count);
                 chapter_video_Div.appendChild(chaptermainDiv);
 
                 document.getElementById("videoinfo").appendChild(chapter_video_Div);
 
-
+                console.log("圈數: " + i + " 長度" + obj.data.Course_detail[i].Chapter_detail.length)
                 for (j = 0; j < obj.data.Course_detail[i].Chapter_detail.length; j++) {
                     //節section名稱替換
+                    console.log("oooooo")
                     document.getElementById('video_count').value = video_count;
                     video_count++;
                     document.getElementById('count').value = count;
@@ -231,7 +232,8 @@
                     section_title_input.id = "section_title"
                     section_title_input.type = "text";
                     section_title_input.name = "section_title";
-                    section_title_input.value = obj.data.Course_detail[i].Chapter_detail[j].Section_title
+                    section_title_input.value = obj.data.Course_detail[i].Chapter_detail[j].Section_title;
+                    console.log(obj.data.Course_detail[i].Chapter_detail[j].Section_title)
                     section_titleDiv.appendChild(section_title_input)
 
                     var section_introDiv = document.createElement("div");
@@ -294,8 +296,8 @@
                     sectionmainDiv.appendChild(videoNowDiv);
                     sectionmainDiv.appendChild(videoDiv);
                     sectionmainDiv.appendChild(deleteSpan);
-
-                    document.getElementById(i + 1).appendChild(sectionmainDiv);
+                    console.log("i " + i)
+                    document.getElementById("chapter" + (i + 1)).appendChild(sectionmainDiv);
                 }
             }
 
@@ -374,7 +376,7 @@
         sectionmainDiv.appendChild(videoDiv);
         sectionmainDiv.appendChild(deleteSpan);
 
-        document.getElementById(obj).appendChild(sectionmainDiv);
+        document.getElementById("chapter" + obj).appendChild(sectionmainDiv);
         document.getElementById('video_count').value = video_count;
         // console.log(video_count)
     }
@@ -421,7 +423,7 @@
         chaptermainDiv.appendChild(delete_chapyerSpan);
 
         var chapter_video_Div = document.createElement("div");
-        chapter_video_Div.id = parseInt(count);
+        chapter_video_Div.id = "chapter" + parseInt(count);
 
         chapter_video_Div.appendChild(chaptermainDiv);
 
@@ -435,7 +437,7 @@
     function delete_chapter(obj) {
         delete_count++;
         // document.getElementById('count').value = count;
-        var delete_chapter = document.getElementById(obj);
+        var delete_chapter = document.getElementById("chapter" + obj);
         delete_chapter.parentNode.removeChild(delete_chapter);
 
         var count = document.getElementById('count').value;

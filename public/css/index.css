@@ -179,6 +179,16 @@ a {
     width: 50%;
     float: right;
     color: #7e7e7e;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 24px;
+    height: 72px;
+}
+
+.text a {
+    color: #7e7e7e;
 }
 
 .col-2,
@@ -206,7 +216,7 @@ a {
     width: 50%;
 }
 
-.col-6-right {
+.col-6-hot {
     width: 48%;
     height: 13em;
     /* background-color: #ededed; */
@@ -215,16 +225,22 @@ a {
     font-family: "PingFang TC", "微軟正黑體", sans-serif;
     line-height: 1.5em;
     box-shadow: 0 2px 8px 0 #cccccc;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     border-bottom: 3px solid #00bea4;
     float: left;
     padding: 0 30px;
 }
 
+.col-6-hot:hover {
+    background-color: #ededed;
+}
+
+
+/* 
 .col-6-left {
     width: 48%;
     height: 13em;
-    /* background-color: #ededed; */
+    
     text-align: left;
     padding: 20px;
     font-family: "PingFang TC", "微軟正黑體", sans-serif;
@@ -234,7 +250,7 @@ a {
     border-bottom: 3px solid #00bea4;
     float: left;
     padding: 0 30px;
-}
+} */
 
 .col-12 {
     width: 100%;

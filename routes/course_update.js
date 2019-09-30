@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 var bodyParser = require('body-parser')
 var con = require('../module/db');
@@ -9,9 +10,8 @@ var multerS3 = require('multer-s3');
 var multer = require('multer');
 
 //s3的帳號密碼
-const BUCKET_NAME = '';
-const IAM_USER_KEY = '';
-const IAM_USER_SECRET = '';
+
+const { BUCKET_NAME, IAM_USER_KEY, IAM_USER_SECRET } = process.env;
 
 aws.config.update({
     accessKeyId: IAM_USER_KEY,
@@ -106,7 +106,7 @@ router.get("/course_update/", function(req, res) {
 var upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'cad-education-project/class-video-picture',
+        bucket: BUCKET_NAME,
         metadata: function(req, file, cb) {
             cb(null, { fieldName: file.fieldname });
         },
@@ -251,11 +251,12 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
             }
 
             var m = 0;
-            var new_video_name = req.files.class_video[m].key
+
             for (var i = 0, k = 0; i < update_chapter_id_arr.length; i++) {
                 for (var j = 0; j < each_chapter_section_num[i]; j++) {
                     if (video_id_arr[k] == "") {
-                        console.log("-----------------------insert--------------------------")
+                        var new_video_name = req.files.class_video[m].key
+                        console.log("-----------------------insert new video--------------------------")
                         console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
                         console.log("new_video_name " + req.files.class_video[m].key);
                         var insert_section_id_mysql = `INSERT INTO final_section (course_id,chapter_auto_id,section_id,section_title,section_intro,video)
@@ -266,7 +267,8 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         m++;
                     } else {
                         if (each_video_src[k].length == "") {
-                            console.log("-----------------------upadte111111111--------------------------")
+                            var new_video_name = req.files.class_video[m].key
+                            console.log("-----------------------upadte video--------------------------")
                             console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
                             console.log("video_name " + each_video_src[k]);
                             console.log("new_video_name " + req.files.class_video[m].key);
@@ -286,7 +288,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                 console.log("updateeeeeee video")
                             })
                         } else {
-                            console.log("-----------------------upadte22222222--------------------------")
+                            console.log("-----------------------update but not video--------------------------")
                             console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
                             console.log("video_name " + each_video_src[k]);
                             var update_section_sql = `UPDATE final_section

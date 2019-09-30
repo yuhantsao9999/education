@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 var bodyParser = require('body-parser')
 var con = require('../module/db');
@@ -10,10 +11,8 @@ var aws = require('aws-sdk');
 var multerS3 = require('multer-s3');
 var multer = require('multer');
 
-//s3的帳號密碼
-const BUCKET_NAME = '';
-const IAM_USER_KEY = '';
-const IAM_USER_SECRET = '';
+//s3的帳號密碼於.env
+const { BUCKET_NAME, IAM_USER_KEY, IAM_USER_SECRET } = process.env;
 
 aws.config.update({
     accessKeyId: IAM_USER_KEY,
@@ -54,7 +53,7 @@ router.get('/', (req, res) => {
 var upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'cad-education-project/class-video-picture',
+        bucket: BUCKET_NAME,
         metadata: function(req, file, cb) {
             cb(null, { fieldName: file.fieldname });
         },
@@ -67,7 +66,7 @@ var upload = multer({
 var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
 router.post("/education/class_input", mixupload, function(req, res) {
 
-    // console.log(JSON.stringify(req.body))
+    console.log(JSON.stringify(req.body))
     var access_token = req.body.user_token;
     var course_title = req.body.course_title;
     var course_teacher_intro = req.body.course_teacher_intro;

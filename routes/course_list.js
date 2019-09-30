@@ -18,9 +18,23 @@ router.get('/', (req, res) => {
 });
 
 
+//course api for hot
+router.get("/education/classinfo/hot", function(req, res) {
+    var sql_hot_course = 'select * from new_course ORDER BY average_star DESC';
+    con.query(sql_hot_course, function(err, result_hot_course) {
+        if (err) throw err
+        var test = {};
+        test['data'] = result_hot_course
+        res.send(test)
+    });
+
+})
+
+
+
 //course api for all
 router.get("/education/classinfo/all", function(req, res) {
-    var mysql_course = 'select * from new_course';
+    var mysql_course = 'select * from new_course ORDER BY average_star DESC';
     con.query(mysql_course, function(err, result_course) {
         if (err) throw err
         var test = {};

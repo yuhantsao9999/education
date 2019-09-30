@@ -50,48 +50,59 @@
             <!-- <div class="class_container" id="class_container"> -->
             <div class="row clearfix">
                 <h2> <b class="ContentSubtitle">熱門課程</b> </h2>
-                <div class="col-6-left">
+                <div class="col-6-hot" style="margin-right: 1%;">
+                    <!-- <a href="/course.html?title=" +title> -->
                     <div class="col-6">
-                        <img class="class_picture" src="./img/1.png" alt="photo" />
+                        <!-- <img class="class_picture" src="./img/1.png" alt="photo" /> -->
+                        </a>
                     </div>
                     <div class="col-8">
-                        <h3 class="title">The Complete WordPress Website Business Course</h3>
+                        <h3 class="title"></h3>
                         <div class="text">
-                            Master WordPress with this Complete WordPress Course, without learning how to code and without any programming!</div>
+                        </div>
                     </div>
-
+                    <!-- </a> -->
                 </div>
-                <div class="col-6-right">
+                <div class="col-6-hot" style="margin-left: 10px;">
                     <div class="col-6">
-                        <img class="class_picture" src="./img/2.png" alt="photo" />
+                        <!-- <img class="class_picture" src="./img/2.png" alt="photo" /> -->
                     </div>
                     <div class="col-8">
-                        <h3 class="title">The Advanced Web Developer Bootcamp</h3>
+                        <h3 class="title">
+                            <!-- The Advanced Web Developer Bootcamp -->
+                        </h3>
                         <div class="text">
-                            Learn React 16, Redux, D3, ES2015, Testing, CSS Flexbox, Animations, SVG, AJAX, and more! </div>
-
+                            <!-- Learn React 16, Redux, D3, ES2015, Testing, CSS Flexbox, Animations, SVG, AJAX, and more! -->
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row clearfix">
-                <div class="col-6-left">
+                <div class="col-6-hot" style="margin-right: 1%;">
+
                     <div class="col-6">
-                        <img class="class_picture" src="./img/3.png" alt="photo" />
+                        <!-- <img class="class_picture" src="./img/3.png" alt="photo" /> -->
                     </div>
                     <div class="col-8">
-                        <h3 class="title">零基礎七天入門Linux</h3>
+                        <h3 class="title">
+                            <!-- 零基礎七天入門Linux -->
+                        </h3>
                         <div class="text">
-                            每天1小時，堅持7天，讓您輕鬆自如的使用Linux </div>
+                            <!-- 每天1小時，堅持7天，讓您輕鬆自如的使用Linux  -->
+                        </div>
                     </div>
                 </div>
-                <div class="col-6-right">
+                <div class="col-6-hot" style="margin-left: 10px;">
                     <div class="col-6">
-                        <img class="class_picture" src="./img/course5.png" alt="photo" />
+                        <!-- <img class="class_picture" src="./img/course5.png" alt="photo" /> -->
                     </div>
                     <div class="col-8">
-                        <h3 class="title">React 前端開發：從入門到進階</h3>
+                        <h3 class="title">
+                            <!-- React 前端開發：從入門到進階 -->
+                        </h3>
                         <div class="text">
-                            本堂課程講求實戰性與實作，除了教你在業界才懂的獨門心法，幫你加速建置網站。</div>
+                            <!-- 本堂課程講求實戰性與實作，除了教你在業界才懂的獨門心法，幫你加速建置網站。 -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -240,6 +251,52 @@
 
 </body>
 <script>
+    var xmlhttp_hot = new XMLHttpRequest();
+    xmlhttp_hot.open("GET", "/education/classinfo/hot", true);
+    xmlhttp_hot.send(null);
+    xmlhttp_hot.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var obj = JSON.parse(xmlhttp_hot.responseText)
+            console.log("hotttttt :  " + JSON.stringify(obj.data[0]))
+
+
+            for (var i = 0; i < 4; i++) {
+                var main_image = obj.data[i].main_image;
+
+                var hotCourse_title = document.createTextNode(obj.data[i].course_title);
+                console.log("hotCourse_title:" + JSON.stringify(hotCourse_title))
+                var hotClassTitle_a = document.createElement("a");
+                hotClassTitle_a.href = "/course.html?title=" + obj.data[i].course_title
+                hotClassTitle_a.appendChild(hotCourse_title)
+
+
+
+                var hotCourse_intro = document.createTextNode(obj.data[i].course_intro);
+                var hotClassIntro_a = document.createElement("a");
+                hotClassIntro_a.href = "/course.html?title=" + obj.data[i].course_title;
+                hotClassIntro_a.appendChild(hotCourse_intro)
+
+
+                var hotClassImg = document.createElement("img");
+                hotClassImg.className = "class_picture";
+                hotClassImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + main_image;
+                var hotClassImg_a = document.createElement("a");
+                hotClassImg_a.href = "/course.html?title=" + obj.data[i].course_title
+                hotClassImg_a.appendChild(hotClassImg)
+
+
+
+
+                document.getElementsByClassName("col-6")[i].appendChild(hotClassImg_a);
+                document.getElementsByClassName("title")[i + 1].appendChild(hotClassTitle_a);
+                document.getElementsByClassName("text")[i].appendChild(hotClassIntro_a);
+            }
+
+
+        }
+
+    }
+
     //course_list.js
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", "/education/classinfo/all", true);
@@ -248,7 +305,7 @@
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
             console.log(obj.data[0])
-            for (var i = 0; i < obj.data.length; i++) {
+            for (var i = 4; i < obj.data.length; i++) {
                 //替換課程圖片
                 var classImg = document.createElement("img");
                 var colDiv = document.createElement("div");
@@ -312,10 +369,7 @@
                 rowA.appendChild(col_8Div)
                 document.getElementById("class_container").appendChild(rowA)
             }
-
-
         }
-
     }
 
     //search

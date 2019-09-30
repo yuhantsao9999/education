@@ -1,5 +1,6 @@
-# ignore node_modules and it's contents
+# ignore node_modules , .env and it's contents
 node_modules/
+.env
 # ignore uploads' contents but not the folder
 assets/*
 # don't ignore .gitkeep inside uploads
