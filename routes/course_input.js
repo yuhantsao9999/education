@@ -53,7 +53,7 @@ router.get('/', (req, res) => {
 var upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: BUCKET_NAME,
+        bucket: 'cad-education-project/class-video-picture',
         metadata: function(req, file, cb) {
             cb(null, { fieldName: file.fieldname });
         },

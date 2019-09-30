@@ -383,7 +383,7 @@ a {
 
 #content h3.title {
     margin-top: 0;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     font-weight: normal;
     font-size: 24px;
 }
@@ -403,7 +403,7 @@ a {
     /* float: left; */
     margin: 0;
     color: white;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     font-weight: normal;
     letter-spacing: 2px;
     font-size: 50px;
@@ -414,7 +414,7 @@ a {
     /* float: left; */
     margin: 0;
     color: white;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     font-weight: normal;
     letter-spacing: 2px;
     font-size: 24px;
@@ -441,6 +441,10 @@ a {
 
 
 /* 評價 */
+
+.no_comment {
+    margin-bottom: 3em;
+}
 
 .each_comment {
     border-top: 1px solid #dedfe0;

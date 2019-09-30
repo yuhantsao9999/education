@@ -363,7 +363,7 @@ a {
     /* float: left; */
     margin: 0;
     color: black;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     font-weight: normal;
     letter-spacing: 2px;
     font-size: 50px;
@@ -395,6 +395,11 @@ a {
     font-weight: normal;
 }
 
+.gray_icon {
+    width: 100px;
+    margin: 0 auto
+}
+
 #footer {
     background: #f5f5f5;
     position: relative;
@@ -412,7 +417,7 @@ a {
 }
 
 #footer .copyright {
-    float: left;
+    /* float: left; */
     text-transform: uppercase;
     letter-spacing: 2px;
 }

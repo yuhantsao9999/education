@@ -39,6 +39,11 @@ const course_update = require('./routes/course_update');
 app.use('/', course_update);
 
 
+const gray_bar = require('./routes/gray_bar');
+app.use('/', gray_bar);
+
+
+
 
 
 
