@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>class</title>
     <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <!-- <style>
         @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
     </style> -->
@@ -17,7 +18,11 @@
                 <div class="nav_item_bar">
                     <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
-                    <input id="search" style="font-size:20px" onkeyup="search_course_enter()">
+                    <!-- <input id="search" style="font-size:20px" onkeyup="search_course_enter()"> -->
+
+                    <div class="search__container">
+                        <input class="search__input" type="text" placeholder="Search" onkeyup="search_course_enter()">
+                    </div>
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
                         <ul class="clearfix" id="clearfix">
@@ -391,7 +396,7 @@
 
     // get search course data 
     function search_course() {
-        var client_keyword = document.getElementById("search").value;
+        var client_keyword = document.getElementsByClassName("search__input")[0].value;
 
         // function ucfirst(str) {
         var lowcase_keyword = client_keyword.toLowerCase();

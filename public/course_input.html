@@ -13,7 +13,10 @@
                 <div class="nav_item_bar">
                     <a href="./index.html"> <img id="logo" src="./img/logo.png" alt="logo"></a>
                     <a class="search" href="">探索</a>
-                    <input id="search" style="font-size:20px">
+                    <!-- <input id="search" style="font-size:20px" onkeyup="search_course_enter()"> -->
+                    <div class="search__container">
+                        <input class="search__input" type="text" placeholder="Search" onkeyup="search_course_enter()">
+                    </div>
                     <button onclick="search_course()" type="submit"></button>
                     <div id="nav" class="col-8">
                         <ul id="clearfix" class="clearfix">
