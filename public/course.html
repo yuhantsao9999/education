@@ -452,12 +452,12 @@
         var registered = xml.responseText;
         // console.log(xml.responseText)
         if (registered == "registered") {
-            alert("課程已註冊過");
+            // alert("課程已註冊過");
             window.addEventListener("load", function() {
                 document.getElementById("add_class").setAttribute("style", "display:none");
             })
         } else { //error
-            alert("課程尚未註冊過");
+            // alert("課程尚未註冊過");
             // var buttomInput = document.createElement("input");
             // buttomInput.className = "add_class"
             // buttomInput.setAttribute("onClick", "add_course()");
