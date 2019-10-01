@@ -22,8 +22,8 @@ const s3 = new aws.S3();
 
 // 從根目錄使用router
 app.use('/', router);
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json({ limit: '50000mb' }));
+router.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
 
 // GET intro.html
 router.get('/', (req, res) => {

@@ -244,6 +244,7 @@ a {
 
 .teacher {
     width: 30%;
+    margin-top: -6em;
     /* border-radius: 0 2px 8px 0 rgba(0, 0, 0, 0.12) */
 }
 
@@ -268,6 +269,10 @@ a {
     font-family: "PingFang TC", "微軟正黑體", sans-serif;
     line-height: 1.5em;
     box-shadow: 0 2px 8px 0 #cccccc;
+}
+
+.teacher_intro {
+    margin-top: 1em;
 }
 
 .small_icon {
@@ -490,7 +495,13 @@ a {
     font-weight: normal;
 }
 
+.container h2 {
+    margin-top: 7vh;
+    margin-bottom: 7vh;
+}
+
 .ContentSubtitle {
+    margin-top: 5vh;
     border-bottom: 5px solid #209cc5;
 }
 

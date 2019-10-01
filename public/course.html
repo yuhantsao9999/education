@@ -62,7 +62,7 @@
     <div class="container">
         <h2> <b class="ContentSubtitle" style="margin: 0 -15px;">課程內容</b> </h2>
     </div>
-    <!-- <h2> <b class="ContentSubtitle">課程內容</b> </h2> -->
+
     <div id="class_chapter_section" class="container">
 
         <div class="class_chapter_section_container" id="class_chapter_section_container">
@@ -342,6 +342,19 @@
             var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.comment_number + "則評論)");
             document.getElementById("comment_numebr").appendChild(comment_numebrContent)
 
+            //按鈕
+            var buttomInput = document.createElement("input");
+            buttomInput.className = "add_class"
+            buttomInput.setAttribute("onClick", "add_course()");
+            buttomInput.type = "button"
+            buttomInput.id = "add_class"
+            buttomInput.value = "加入課程"
+                // buttomInput.setAttribute("style", "display:block");
+                // buttomInput.style.display = "block"
+            buttomInput.name = "按鈕名稱"
+            document.getElementById("classInfo").appendChild(buttomInput)
+
+
             //替換章節ID
             var number = obj.data.Course_detail.length
                 // console.log("Course_detail的長度 ： " + number)
@@ -425,7 +438,8 @@
 
     //display none buttom
     var xml = new XMLHttpRequest();
-    accessToken = localStorage.getItem("accessToken")
+    accessToken = localStorage.getItem("accessToken");
+
     xml.open("POST", "/user/button");
     const course_title = urlParams.get('title');
     var js = {
@@ -438,50 +452,54 @@
         var registered = xml.responseText;
         // console.log(xml.responseText)
         if (registered == "registered") {
-            // alert("課程已註冊過")
+            alert("課程已註冊過");
+            window.addEventListener("load", function() {
+                document.getElementById("add_class").setAttribute("style", "display:none");
+            })
         } else { //error
-            // alert("課程尚未註冊過");
-            var buttomInput = document.createElement("input");
-            buttomInput.className = "add_class"
-            buttomInput.setAttribute("onClick", "add_course()");
-            // buttomInput.onclick("onClick", "add_course()");
-            // buttomInput.onclick = function() {
-            //     add_course()
-            // };
-            // buttoninput.onclick = "add_course()"
-            buttomInput.type = "button"
-            buttomInput.value = "加入課程"
-            buttomInput.name = "按鈕名稱"
-            document.getElementById("classInfo").appendChild(buttomInput)
-                // <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱">
-
+            alert("課程尚未註冊過");
+            // var buttomInput = document.createElement("input");
+            // buttomInput.className = "add_class"
+            // buttomInput.setAttribute("onClick", "add_course()");
+            // buttomInput.type = "button"
+            // buttomInput.value = "加入課程"
+            // buttomInput.name = "按鈕名稱"
+            // document.getElementById("classInfo").appendChild(buttomInput)
+            // <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱">
         }
     }
 
     //add course in user table
     function add_course() {
-        var xmlhttp = new XMLHttpRequest();
         accessToken = localStorage.getItem("accessToken")
-        xmlhttp.open("POST", "/user/addcourse");
-        const urlParams = new URLSearchParams(window.location.search);
-        const course_title = urlParams.get('title');
-        var js = {
-            course_title: course_title
-        }
-        xmlhttp.setRequestHeader('Content-Type', 'application/json');
-        xmlhttp.setRequestHeader("Authorization", "Bearer " + accessToken);
-        xmlhttp.send(JSON.stringify(js));
-        xmlhttp.onload = function() {
-            // console.log(xmlhttp.responseText)
-            var email = xmlhttp.responseText;
-            if (!email) {
-                alert("請先登入會員");
-                var url = ("./sign_in.html")
-                window.location.assign(url)
-            } else {
-                alert("課程加入成功")
-                var url = ("./profile_student.html")
-                window.location.assign(url)
+        if (!accessToken) {
+            alert("請先登入會員");
+            var url = ("./sign_in.html")
+            window.location.assign(url)
+        } else {
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", "/user/addcourse");
+            const urlParams = new URLSearchParams(window.location.search);
+            const course_title = urlParams.get('title');
+            var js = {
+                course_title: course_title
+            }
+            xmlhttp.setRequestHeader('Content-Type', 'application/json');
+            xmlhttp.setRequestHeader("Authorization", "Bearer " + accessToken);
+            xmlhttp.send(JSON.stringify(js));
+            xmlhttp.onload = function() {
+                // console.log(xmlhttp.responseText)
+                var email = xmlhttp.responseText;
+                if (!email) {
+                    alert("請先登入會員");
+                    var url = ("./sign_in.html")
+                    window.location.assign(url)
+                } else {
+                    alert("課程加入成功")
+                    var url = ("./profile_student.html")
+                    window.location.assign(url)
+                }
             }
         }
     }
@@ -687,6 +705,27 @@
                 document.getElementById("clearfix").appendChild(sign_li)
             }
         }
+    }
+
+
+    //search
+    function search_course_enter() {
+        if (event.keyCode == 13)
+            search_course();
+    }
+
+    // get search course data 
+    function search_course() {
+        var client_keyword = document.getElementsByClassName("search__input")[0].value;
+
+        // function ucfirst(str) {
+        var lowcase_keyword = client_keyword.toLowerCase();
+        var keyword_arr = lowcase_keyword.split(' ');
+        for (var i = 0; i < keyword_arr.length; i++) {
+            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
+        }
+        // console.log(result)
+        window.location.replace("./search.html?keyword=" + result);
     }
 </script>
 

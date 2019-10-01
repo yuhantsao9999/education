@@ -39,18 +39,19 @@
         <!------- 內容 ------->
 
         <div class="total_container">
-            <div> <img src="./img/logo.png" alt="logo"></div>
-            <div class="title_container">登入系統</div>
+            <div class="input_bar">
+                <div> <img src="./img/logo.png" alt="logo"></div>
+                <div class="title_container">登入系統</div>
 
-            <div id="fb-root"></div>
-            <div class="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
-            <div> <input type="account" name="email" id='email' placeholder="Email"> </div>
-            <div><input type="password" name='password' id='password' placeholder="Password"> </div>
+                <div id="fb-root"></div>
+                <div class="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
+                <div> <input type="account" name="email" id='email' placeholder="Email"> </div>
+                <div><input type="password" name='password' id='password' placeholder="Password"> </div>
 
-            <p>Do not have an account? Please <a href="./sign_up.html">sign up</a> .</p>
-            <input type='submit' value='Submit' id="sumbit">
+                <p>Do not have an account? Please <a href="./sign_up.html">sign up</a> .</p>
+                <input type='submit' value='Submit' id="sumbit">
 
-
+            </div>
         </div>
     </div>
 
@@ -135,6 +136,26 @@
             }
         }
     });
+
+    //search
+    function search_course_enter() {
+        if (event.keyCode == 13)
+            search_course();
+    }
+
+    // get search course data 
+    function search_course() {
+        var client_keyword = document.getElementsByClassName("search__input")[0].value;
+
+        // function ucfirst(str) {
+        var lowcase_keyword = client_keyword.toLowerCase();
+        var keyword_arr = lowcase_keyword.split(' ');
+        for (var i = 0; i < keyword_arr.length; i++) {
+            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
+        }
+        // console.log(result)
+        window.location.replace("./search.html?keyword=" + result);
+    }
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0&appId=550797192123359&autoLogAppEvents=1"></script>
 

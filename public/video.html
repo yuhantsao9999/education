@@ -82,7 +82,8 @@
 
     // get search course data 
     function search_course() {
-        var client_keyword = document.getElementById("search").value;
+        var client_keyword = document.getElementsByClassName("search__input")[0].value;
+
         // function ucfirst(str) {
         var lowcase_keyword = client_keyword.toLowerCase();
         var keyword_arr = lowcase_keyword.split(' ');

@@ -3,6 +3,7 @@
 <head>
     <title>class introduction input</title>
     <link rel="stylesheet" href="./css/course_update.css" />
+
 </head>
 
 <body class="about">
@@ -113,7 +114,6 @@
                         <input type='submit' value='Submit' id="submit">
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -121,6 +121,7 @@
 </body>
 <script>
     //search
+
     function search_course_enter() {
         if (event.keyCode == 13)
             search_course();
@@ -519,7 +520,7 @@
 
             } else {
                 //新增
-                alert("Add");
+                // alert("Add");
                 class_video_arr.push(null)
                 if (document.getElementsByClassName('videoNow')[i].id.length != 0) {
                     // alert("舊有的")
@@ -540,7 +541,7 @@
             // alert("video_id_array : " + video_id_array)
         }
         // console.log(count)
-        alert("class_video_arr : " + class_video_arr)
+        // alert("class_video_arr : " + class_video_arr)
         document.getElementById('each_video_src').value = class_video_arr;
         document.getElementById('chapter_auto_id_arr').value = chapter_auto_id_arr;
         document.getElementById('video_id_arr').value = video_id_array;

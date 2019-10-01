@@ -19,8 +19,8 @@ aws.config.update({
 });
 const s3 = new aws.S3();
 
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
+router.use(bodyParser.json({ limit: '50000mb' }));
+router.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
 
 
 // 從根目錄使用router
