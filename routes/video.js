@@ -13,14 +13,14 @@ app.use('/', router);
 
 
 // GET video.html
-router.get('/', (req, res) => {
-    res.send('video');
-});
+// router.get('/', (req, res) => {
+//     res.send('video');
+// });
 
 // GET profile.html
-router.get('/', (req, res) => {
-    res.send('profile');
-});
+// router.get('/', (req, res) => {
+//     res.send('profile');
+// });
 
 
 //course detail api

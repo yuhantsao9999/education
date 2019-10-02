@@ -151,39 +151,44 @@ function search_course() {
 }
 
 //display none buttom
-function display_teacher_info() {
+function display_add_class_buttom() {
     var xml = new XMLHttpRequest();
     var accessToken = localStorage.getItem("accessToken");
     xml.open("POST", "/user/button");
+    var urlParams = new URLSearchParams(window.location.search);
     var course_title = urlParams.get('title');
     var js = {
         course_title: course_title
     }
+    console.log("ppppp")
     xml.setRequestHeader('Content-Type', 'application/json');
     xml.setRequestHeader("Authorization", "Bearer " + accessToken);
     xml.send(JSON.stringify(js));
-    xml.onload = function() {
-        var registered = xml.responseText;
-        // console.log(xml.responseText)
-        if (registered == "registered") {
-            // alert("課程已註冊過");
-            //TODO:bug
-            window.addEventListener("load", function() {
-                document.getElementById("add_class").setAttribute("style", "display:none");
-            })
-        } else { //error
-            // alert("課程尚未註冊過");
-            // var buttomInput = document.createElement("input");
-            // buttomInput.className = "add_class"
-            // buttomInput.setAttribute("onClick", "add_course()");
-            // buttomInput.type = "button"
-            // buttomInput.value = "加入課程"
-            // buttomInput.name = "按鈕名稱"
-            // document.getElementById("classInfo").appendChild(buttomInput)
-            // <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱">
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4) {
+            var registered = xml.responseText;
+            // console.log(xml.responseText)
+            if (registered == "registered") {
+                // alert("課程已註冊過llllllll");
+                window.addEventListener("load", function() {
+                        document.getElementById("add_class").setAttribute("style", "display:none");
+                    })
+                    //TODO:bug
+            } else { //error
+                // alert("課程尚未註冊過");
+                // var buttomInput = document.createElement("input");
+                // buttomInput.className = "add_class"
+                // buttomInput.setAttribute("onClick", "add_course()");
+                // buttomInput.type = "button"
+                // buttomInput.value = "加入課程"
+                // buttomInput.name = "按鈕名稱"
+                // document.getElementById("classInfo").appendChild(buttomInput)
+                // <input class="add_class" onclick="add_course()" type="button" value="加入課表" name="按鈕名稱">
+            }
         }
     }
 }
+display_add_class_buttom();
 
 //add course in user table
 function add_course() {
@@ -219,6 +224,7 @@ function add_course() {
         }
     }
 }
+
 
 
 //加入老師資訊
@@ -381,4 +387,5 @@ function comment() {
         }
     }
 }
+
 comment();

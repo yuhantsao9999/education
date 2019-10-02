@@ -17,16 +17,16 @@ function display_teacherinfo() {
                 document.getElementById("profile_add_info").appendChild(noSetUpClassContent);
             } else {
                 var obj = JSON.parse(xml.responseText);
-                console.log(obj)
-                    // <div class="profile_info"> profileDiv
-                    //         <a href="#">classImg_a
-                    //             <img src="./img/3.png" alt="">classImg
-                    //         </a>
-                    //         <div>classDiv_a_div
-                    //             <a href="#">classDiv_a
-                    //                 <div class="profile_class_info">testtest</div>classDiv
-                    //             </a>
-                    //          <input type="button" value="編輯課程" class="profile_info_button">
+                // console.log(obj)
+                // <div class="profile_info"> profileDiv
+                //         <a href="#">classImg_a
+                //             <img src="./img/3.png" alt="">classImg
+                //         </a>
+                //         <div>classDiv_a_div
+                //             <a href="#">classDiv_a
+                //                 <div class="profile_class_info">testtest</div>classDiv
+                //             </a>
+                //          <input type="button" value="編輯課程" class="profile_info_button">
 
                 //         </div>
                 // </div>
@@ -72,3 +72,8 @@ function display_teacherinfo() {
     }
 }
 display_teacherinfo();
+
+function edit_course(obj) {
+    window.location.assign("/course_update.html?course_id=" + obj);
+
+}

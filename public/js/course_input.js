@@ -9,42 +9,50 @@ function add_section(obj) {
     var section_titleP = document.createElement("p");
     section_titleP.appendChild(section_titleContent);
     section_titleDiv.appendChild(section_titleP);
+
     var section_title_input = document.createElement("input");
     section_title_input.id = "section_title"
     section_title_input.type = "text";
     section_title_input.name = "section_title";
     section_titleDiv.appendChild(section_title_input)
+
     var section_introDiv = document.createElement("div");
     section_introDiv.className = "row-video";
     var section_introContent = document.createTextNode("section introduction:");
     var section_introP = document.createElement("p");
     section_introP.appendChild(section_introContent);
     section_introDiv.appendChild(section_introP);
+
     var section_intro_textarea = document.createElement("textarea");
     section_intro_textarea.id = "section_intro"
     section_intro_textarea.style = "width:246px;height:100px;"
     section_intro_textarea.type = "text";
     section_intro_textarea.name = "section_intro";
-    section_introDiv.appendChild(section_intro_textarea)
+    section_introDiv.appendChild(section_intro_textarea);
+
     var deleteSpan = document.createElement("span");
     var deleteImg = document.createElement("img");
     deleteImg.src = "../img/delete3.png"
     deleteImg.className = count
     deleteImg.setAttribute("onClick", "delete_section(" + video_count + ")");
     deleteSpan.appendChild(deleteImg);
+
     var videoDiv = document.createElement("div");
     videoDiv.className = "row-video"
     var videomainp = document.createElement("p");
     var videoContent = document.createTextNode("video:");
     videomainp.appendChild(videoContent);
     videoDiv.appendChild(videomainp);
+
     var videoinput = document.createElement("input");
     videoinput.type = "file";
     videoinput.name = "class_video";
     videoDiv.appendChild(videoinput);
+
     var sectionmainDiv = document.createElement("div");
     sectionmainDiv.className = "section";
     sectionmainDiv.id = "section" + video_count;
+
     sectionmainDiv.appendChild(section_titleDiv);
     sectionmainDiv.appendChild(section_introDiv);
     sectionmainDiv.appendChild(videoDiv);

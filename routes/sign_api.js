@@ -14,20 +14,17 @@ const crypto = require('crypto');
 app.use('/', router);
 
 // GET sign_up.html
-router.get('/', (req, res) => {
-    res.send('sign_up');
-});
+// router.get('/', (req, res) => {
+//     res.send('sign_up');
+// });
 
 
 // GET sign_in.html
-router.get('/', (req, res) => {
-    res.send('sign_in');
-});
-
-// GET profile.html
 // router.get('/', (req, res) => {
-//     res.send('profile');
+//     res.send('sign_in');
 // });
+
+
 
 //signup API
 router.post('/user/signup', function(req, res) {
