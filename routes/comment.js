@@ -1,7 +1,6 @@
 const express = require('express')
-    // var bodyParser = require('body-parser')
 var con = require('../module/db');
-const path = require('path')
+// const path = require('path')
 const app = express();
 const router = express.Router();
 var async = require('async');
@@ -9,8 +8,6 @@ var async = require('async');
 
 // 從根目錄使用router
 app.use('/', router);
-// router.use(bodyParser.json());
-// router.use(bodyParser.urlencoded({ extended: false }));
 
 
 // GET profile_done.html

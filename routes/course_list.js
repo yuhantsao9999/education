@@ -1,5 +1,5 @@
 const express = require('express')
-var bodyParser = require('body-parser')
+    // var bodyParser = require('body-parser')
 var con = require('../module/db');
 const path = require('path')
 const app = express();
@@ -8,8 +8,8 @@ const router = express.Router();
 
 // 從根目錄使用router
 app.use('/', router);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // GET acd.html
@@ -48,9 +48,9 @@ router.get("/education/classinfo/all", function(req, res) {
 
 //course api for all
 router.get("/education/classinfo/for_newHand", function(req, res) {
-    var mysql_course_new_hand = "select * from new_course where for_who like '%沒有基礎%' or for_who like '%初學%'  or for_who like '%嘗試%' or  for_who like '%新手％' or  for_who like '%快速％' ;"
+    var mysql_course_new_hand = "select * from new_course where for_who like '%沒有基礎%' or for_who like '%初學%' or for_who like '%嘗試%' or  for_who like '%新手%' or  for_who like '%快速%' ;"
     con.query(mysql_course_new_hand, function(err, result_course) {
-        console.log("kkkkkkk : " + JSON.stringify(result_course))
+        // console.log("kkkkkkk : " + JSON.stringify(result_course))
         if (err) throw err
         var test = {};
         test['data'] = result_course

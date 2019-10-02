@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express')
-var bodyParser = require('body-parser')
+    // var bodyParser = require('body-parser')
 var con = require('../module/db');
 const app = express();
 const router = express.Router();
@@ -19,8 +19,8 @@ aws.config.update({
 });
 const s3 = new aws.S3();
 
-router.use(bodyParser.json({ limit: '50000mb' }));
-router.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
+// router.use(bodyParser.json({ limit: '50000mb' }));
+// router.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
 
 
 // 從根目錄使用router

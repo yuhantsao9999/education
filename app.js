@@ -1,5 +1,10 @@
 const express = require('express')
-const app = express()
+const app = express();
+var bodyParser = require('body-parser')
+
+
+app.use(bodyParser.json({ limit: '50000mb' }));
+app.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
 
 //可以使用名為public資料夾底下的資料
 app.use(express.static('public'));

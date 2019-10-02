@@ -126,7 +126,7 @@
                     <p></p>
                 </div>
 
-               <div class="row">
+                <div class="row">
                     <div class="col-2">
                         <img src="./img/go.jpg" alt="logo" />
                     </div>
@@ -152,7 +152,8 @@
 
     </div>
 
-    <div id="footer" class="dark"> <div class="info">
+    <div id="footer" class="dark">
+        <div class="info">
             <div class="container">
 
                 <div class="row">
@@ -181,7 +182,7 @@
                 </div>
 
             </div>
-        </div> 
+        </div>
         <div class="bottom">
             <div class="container clearfix">
 
@@ -197,37 +198,9 @@
 
 </body>
 <script>
-    //search
-    function search_course_enter() {
-        if (event.keyCode == 13)
-            search_course();
-    }
-
-    // get search course data 
-    function search_course() {
-        var client_keyword = document.getElementById("search").value;
-
-        // function ucfirst(str) {
-        var lowcase_keyword = client_keyword.toLowerCase();
-        var keyword_arr = lowcase_keyword.split(' ');
-        for (var i = 0; i < keyword_arr.length; i++) {
-            var result = keyword_arr[i].substring(0, 1).toUpperCase() + keyword_arr[i].substring(1).toLowerCase();
-        }
-        // console.log(result)
-        window.location.replace("./search.html?keyword=" + result);
-    }
-
-
-
-
-
-    let currentUrl = window.location.href;
-    currentUrl = new URL(currentUrl);
-    let courseHttp = new XMLHttpRequest();
-    var keyword = currentUrl.searchParams.get("keyword");
+    const currentUrl = new URL(window.location.href);
+    const keyword = currentUrl.searchParams.get("keyword");
     let courseUrl = "/education/classinfo/search/?keyword=" + keyword;
-
-
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", courseUrl, true);
@@ -282,59 +255,9 @@
             }
         }
     }
-
-    // user_sign_icon
-    accessToken = localStorage.getItem("accessToken")
-    console.log("accessToken" + accessToken)
-    var xml_icon = new XMLHttpRequest();
-    xml_icon.open("get", "/profile/getinfo", true);
-    xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
-    xml_icon.send(null);
-    xml_icon.onreadystatechange = function() {
-        if (xml_icon.readyState == 4) {
-            if (xml_icon.responseText == "error") {
-                //還沒登入
-                var sign_li = document.createElement("li");
-                var signContent = document.createTextNode("登入");
-                var sign_a = document.createElement("a");
-                sign_a.href = "./sign_in.html"
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
-            } else {
-                //已登入
-                var sign_li = document.createElement("li");
-                var signContent = document.createTextNode("Hello!");
-                var sign_a = document.createElement("a");
-                sign_a.href = "./profile.html?tab=current"
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
-            }
-        }
-    }
-
-    //gray bar info
-    var xml_gray = new XMLHttpRequest();
-    xml_gray.open("get", "/gray/info", true);
-    xml_gray.send(null);
-    xml_gray.onreadystatechange = function() {
-        if (xml_gray.readyState == 4) {
-            var obj = JSON.parse(xml_gray.responseText)
-            console.log(obj)
-
-            var userNum_content = document.createTextNode(obj.user_num);
-            var courseNum_content = document.createTextNode(obj.course_num);
-            var commentNum_content = document.createTextNode(obj.comment_num);
-            var starAver_content = document.createTextNode(obj.total_class_average_star);
-
-
-            document.getElementsByClassName("count")[0].appendChild(userNum_content)
-            document.getElementsByClassName("count")[1].appendChild(courseNum_content)
-            document.getElementsByClassName("count")[2].appendChild(starAver_content)
-            document.getElementsByClassName("count")[3].appendChild(commentNum_content)
-        }
-    }
 </script>
+<script type="text/javascript" src="js/search.js"></script>
+<script type="text/javascript" src="js/user.js"></script>
+<script type="text/javascript" src="js/gray_bar_info.js"></script>
 
 </html>

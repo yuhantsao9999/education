@@ -3,12 +3,12 @@ var con = require('../module/db');
 var app = express();
 const router = express.Router();
 var request = require('request');
-var bodyParser = require('body-parser')
+// var bodyParser = require('body-parser')
 const crypto = require('crypto');
 
 
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded({ extended: true }));
+// router.use(bodyParser.json());
 
 // 從根目錄使用router
 app.use('/', router);
@@ -200,38 +200,4 @@ router.post('/user/signin', function(req, res) {
     }
 });
 
-
-//User Profile APIs
-// router.get('/user/icon', function(req, res) {
-//     var Bearer_token = String(req.headers.authorization)
-//     console.log("bt : " + Bearer_token)
-//     var test = {};
-//     var array = [];
-//     var Bearer = Bearer_token.substr(0, 6);
-//     var Token = Bearer_token.substr(7, Bearer_token.length - 1);
-//     console.log("tokn : " + Token)
-//         //取出mysql中的token
-//     var user_token = `
-//             SELECT * from user where access_token = '${Token}';
-//             `
-//     con.query(user_token, function(err, user_token_result) {
-//         if (err) throw err;
-//         var profile = user_token_result;
-//         console.log('token')
-//         if (Bearer == 'Bearer' && profile.length != 0) {
-//             array.push({
-//                 id: profile[0].id,
-//                 provider: profile[0].provider,
-//                 name: profile[0].name,
-//                 email: profile[0].email,
-//                 pricture: profile[0].picture
-//             });
-//             console.log(array);
-//             test['data'] = (array[0]);
-//             res.send(test);
-//         } else {
-//             res.send('"error": "Invalid token."')
-//         };
-//     });
-// });
 module.exports = router;

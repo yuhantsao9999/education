@@ -1,12 +1,12 @@
 const express = require('express')
-var bodyParser = require('body-parser')
+    // var bodyParser = require('body-parser')
 var con = require('../module/db');
 const app = express();
 const router = express.Router();
 var async = require('async');
 
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded({ extended: true }));
+// router.use(bodyParser.json());
 
 // 從根目錄使用router
 app.use('/', router);

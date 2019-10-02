@@ -71,7 +71,7 @@ router.post('/user/addcourse', function(req, res) {
 
     var profile_checkmember = `SELECT user_id,email FROM user WHERE access_token='${Token}'`
     con.query(profile_checkmember, function(err, result) {
-        if (err) throw err;
+        if (err) return err;
         var user_id = result[0].user_id;
         var email = result[0].email;
         // console.log(email);

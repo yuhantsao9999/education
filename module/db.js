@@ -5,8 +5,8 @@ require('dotenv').config();
 //     connectionLimit: 10,
 //     host: "localhost",
 //     user: "root",
-//     password: "sweet840818",
-//     database: "education",
+//     password: "",
+//     database: "",
 //     // option
 //     acquireTimeout: 10000,
 //     waitForConnections: true,

@@ -274,8 +274,4 @@ router.get('/profile/teacher/class', function(req, res) {
     });
 })
 
-function gogogo(course_id, flag) {
-    if (flag)
-        console.log("Complete : " + course_id);
-}
 module.exports = router;
