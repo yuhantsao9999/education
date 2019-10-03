@@ -23,19 +23,6 @@ const s3 = new aws.S3();
 // 從根目錄使用router
 app.use('/', router);
 
-// router.use(bodyParser.json({ limit: '50000mb' }));
-// router.use(bodyParser.urlencoded({ limit: '50000mb', extended: true }));
-
-// GET intro.html
-router.get('/', (req, res) => {
-    res.send('course_input');
-});
-
-// GET course_input.html
-router.get('/', (req, res) => {
-    res.send('course_input');
-});
-
 
 //使用multer將影片傳到assets並幫影片命名
 // var storage = multer.diskStorage({
@@ -80,8 +67,8 @@ router.post("/education/class_input", mixupload, function(req, res) {
 
     async.waterfall([
         (next) => {
-            var mysql_user_name = `select name,user_id from user where access_token = '${access_token}'`;
-            con.query(mysql_user_name, function(err1, result_user_name) {
+            var mysql_user_name = `select name,user_id from user where access_token = ?`;
+            con.query(mysql_user_name, access_token, function(err1, result_user_name) {
                 var user_name = result_user_name[0].name;
                 var user_id = result_user_name[0].user_id;
                 if (err1) throw err1;
@@ -89,39 +76,52 @@ router.post("/education/class_input", mixupload, function(req, res) {
             });
         },
         (user_name, user_id, next) => {
-            var mysql_course_input = `INSERT INTO new_course (course_title,course_teacher,course_teacher_id,course_teacher_intro,course_intro,course_field,for_who,main_image) 
-                        Values('${course_title}','${user_name}','${user_id}','${course_teacher_intro}','${course_intro}','${course_field}','${for_who}','${main_image}')`;
-            con.query(mysql_course_input, function(err1, result_course_input) {
+            var insert_course_sql = {
+                course_title: `${course_title}`,
+                course_teacher: `${user_name}`,
+                course_teacher_id: `${user_id}`,
+                course_teacher_intro,
+                course_intro,
+                course_field,
+                for_who,
+                main_image,
+            }
+            var mysql_course_input = `INSERT INTO new_course SET ?`;
+            con.query(mysql_course_input, insert_course_sql, function(err1, result_course_input) {
                 if (err1) throw err1
             });
             next(null, user_name)
         },
         (user_name, next) => {
-            var mysql_course_id = `select course_id from new_course where course_title = '${course_title}' and course_teacher='${user_name}'`;
-            con.query(mysql_course_id, function(err2, result_course) {
+            var mysql_course_id = `SELECT course_id FROM new_course WHERE course_title = ? and course_teacher = ?`;
+            console.log("title : " + course_title)
+            console.log("user_nameeeeee : " + user_name)
+            con.query(mysql_course_id, [course_title, user_name], function(err2, result_course) {
+                console.log(result_course)
                 var course_id = result_course[0].course_id
                     // console.log(course_id)
                 next(null, course_id)
             });
         },
         (course_id, next) => {
-            var chapter_id_arr = []
+
             for (var i = 0; i < chapter_num; i++) {
-                // console.log("for loop " + i)
-                // if ((i > 0) && (req.body.chapter_id[i] == req.body.chapter_id[i - 1])) {
-                //     continue;
-                // }
-                // chapter_id_arr.push(i)
                 var chapter_title = req.body.chapter_title[i]
-                var mysql_chapter_input = `INSERT INTO new_chapter (course_id,chapter_id,chapter_title) 
-                            Values('${course_id}','${i+1}','${chapter_title}')`;
-                con.query(mysql_chapter_input, function(err3, result_chapter_input) {});
+                var insert_sql = {
+                    course_id,
+                    chapter_id,
+                    chapter_title,
+                }
+                var mysql_chapter_input = `INSERT INTO new_chapter set ?`;
+                con.query(mysql_chapter_input, insert_sql, function(err3, result_chapter_input) {
+                    if (err3) throw err3
+                });
             }
             next(null, course_id)
         },
         (course_id, next) => {
-            var mysql_chapter_auto_id = `select chapter_auto_id from new_chapter where course_id = '${course_id}'`;
-            con.query(mysql_chapter_auto_id, function(err2, result_chapter_auto_id) {
+            var mysql_chapter_auto_id = `select chapter_auto_id from new_chapter where course_id = ?`;
+            con.query(mysql_chapter_auto_id, course_id, function(err2, result_chapter_auto_id) {
                 var chapter_auto_id_arr = [];
                 for (i = 0; i < result_chapter_auto_id.length; i++) {
                     chapter_auto_id_arr.push(result_chapter_auto_id[i].chapter_auto_id)
@@ -160,14 +160,23 @@ router.post("/education/class_input", mixupload, function(req, res) {
             // }
             for (var i = 0; i < section_num; i++) {
 
-                var section_title = req.body.section_title[i]
-                var section_intro = req.body.section_intro[i]
-                    // console.log(req.files)
+                var section_title = req.body.section_title[i];
+                var section_intro = req.body.section_intro[i];
+                // var chapter_auto_id = each_video_chapter_auto_id_arr[i];
+                // var section_id = i + 1;
                 var video = req.files.class_video[i].key;
 
-                var mysql_section_input = `insert into final_section (course_id,chapter_auto_id,section_id,section_title,section_intro,video)
-                                    values('${course_id}','${each_video_chapter_auto_id_arr[i]}','${i+1}','${section_title}','${section_intro}','${video}');`
-                con.query(mysql_section_input, function(err4, result_section_input) {
+                var insert_section_sql = {
+                    course_id,
+                    chapter_auto_id: each_video_chapter_auto_id_arr[i],
+                    section_id: i + 1,
+                    section_title,
+                    section_intro,
+                    video,
+                }
+                console.log(insert_section_sql);
+                var mysql_section_input = `INSET INTO final_section SET ?;`
+                con.query(mysql_section_input, insert_section_sql, function(err4, result_section_input) {
                     if (err4) throw err4
                         // console.log("input section successful")
                 });

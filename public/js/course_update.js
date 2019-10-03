@@ -2,7 +2,7 @@
     function display_classinfo_now() {
         var urlParams = new URLSearchParams(window.location.search);
         var course_id = urlParams.get('course_id');
-
+        console.log(course_id)
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("get", "/course_update?course_id=" + course_id, true)
         xmlhttp.send();
@@ -24,10 +24,10 @@
                 courseFieldDiv.appendChild(courseFieldContent);
                 document.getElementsByClassName("row-maininfo")[1].appendChild(courseFieldDiv);
                 //替換課程圖片
-                var courseImageImg = document.createElement("img");
-                courseImageImg.className = "courseImageImg"
-                courseImageImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data.main_image
-                document.getElementsByClassName("row-maininfo")[2].appendChild(courseImageImg);
+                var course_image_img = document.createElement("img");
+                course_image_img.className = "courseImageImg"
+                course_image_img.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data.main_image
+                document.getElementsByClassName("row-maininfo")[2].appendChild(course_image_img);
 
                 var count = 0;
                 var video_count = 0; //vidoe的編號 非個數
@@ -213,10 +213,11 @@
         deleteSpan.appendChild(deleteImg);
 
         // <input type="hidden" id="course_id" name="course_id">
+
         var origin_videoInput = document.createElement("input");
         origin_videoInput.type = "hidden"
         origin_videoInput.className = "videoNow"
-        origin_videoInput.id = "";
+            // origin_videoInput.id = "course_id";
 
         var videoDiv = document.createElement("div");
         videoDiv.className = "row-video"
@@ -333,13 +334,15 @@
                 document.getElementById('old_image_path_arr').value = old_image_path_arr;
             }
 
+            var urlParams = new URLSearchParams(window.location.search);
+            var course_id = urlParams.get('course_id');
+            document.getElementById('course_id').value = course_id;
+
             var each_chapter_section_num_arr = [];
             var count = document.getElementById('count').value;
 
-            document.getElementById('course_id').value = course_id;
-
             var chapter_num = (Number(count) - delete_count) //chapter的個數
-            document.getElementById('chapter_num').value = chapter_num; //5
+            document.getElementById('chapter_num').value = chapter_num; //1
             //計算chapter_auto_id
             var chapter_auto_id_arr = [];
             for (var i = 0; i < chapter_num; i++) {
@@ -347,13 +350,15 @@
                 var chapter_auto_id = document.getElementsByClassName('chapter')[i].id
                 if (chapter_auto_id.length == 0) {
                     chapter_auto_id_arr.push(null);
+
                     console.log("rrrrrrr")
                 } else {
                     chapter_auto_id_arr.push(document.getElementsByClassName('chapter')[i].id);
                 }
                 each_chapter_section_num_arr.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
             }
-            // alert("each_chapter_section_num_arr : " + each_chapter_section_num_arr)
+            alert(chapter_auto_id_arr)
+            alert("each_chapter_section_num_arr : " + each_chapter_section_num_arr)
 
             var section_num = 0
             for (var i = 0; i < each_chapter_section_num_arr.length; i++) {
@@ -382,6 +387,7 @@
                     //新增
                     // alert("Add");
                     class_video_arr.push(null)
+                    alert(document.getElementsByClassName('videoNow')[i].id.length);
                     if (document.getElementsByClassName('videoNow')[i].id.length != 0) {
                         // alert("舊有的")
                         video_id_array.push(document.getElementsByClassName('videoNow')[i].id)

@@ -41,15 +41,15 @@
                 <form action='/education/class_input' method='POST' enctype="multipart/form-data">
                     <div id="maininfo">
                         <div class="row-maininfo">
-                            <p><b>想一個課程標題如何？</b></p><input type='text' name='course_title'>
+                            <p><b>想一個課程標題如何？</b></p><input type='text' name='course_title' required>
                             <p>吸引人的標題很重要</p>
                         </div>
                         <div class="row-maininfo">
                             <p><b>
-                                        哪個類別最適合您所分享的知識？</b></p><input type='text' name='field'></div>
+                                        哪個類別最適合您所分享的知識？</b></p><input type='text' name='field' required></div>
                         <div class="row-maininfo">
                             <p><b>來張課程的封面照片吧！</b></p>
-                            <input style="border:none;width: 300px;padding: 0 0" class="image" type='file' name='main_image' src="./img/picture.png">
+                            <input style="border:none;width: 300px;padding: 0 0" class="image" type='file' name='main_image' src="./img/picture.png" required>
                             <!-- <img class="picture" src="./img/picture.png" alt=""> -->
 
                             <p>檔案格式僅支援 jpg, png, gif</p>
@@ -60,15 +60,15 @@
                     </div>
                     <div id="subinfo">
                         <div class="row-maininfo">
-                            <p><b>關於講師</b></p><textarea style="width:246px;height:100px;" type='text' name='course_teacher_intro'></textarea>
+                            <p><b>關於講師</b></p><textarea style="width:246px;height:100px;" type='text' name='course_teacher_intro' required></textarea>
                             <p>讓學生更近一步了解授課老師的背景增吧！</p>
 
                         </div>
 
                         <div class="row-maininfo">
-                            <p><b>簡短的課程描述（建議 64 字內）</b></p><textarea style="width:246px;height:100px;" type='text' name='course_intro'></textarea></div>
+                            <p><b>簡短的課程描述（建議 64 字內）</b></p><textarea style="width:246px;height:100px;" type='text' name='course_intro' required></textarea></div>
                         <div class="row-maininfo">
-                            <p><b>哪些學生適合這堂課？</b></p><textarea style="width:246px;height:100px;" type='text' name='for_who'></textarea>
+                            <p><b>哪些學生適合這堂課？</b></p><textarea style="width:246px;height:100px;" type='text' name='for_who' required></textarea>
                             <p>形容這堂課適合的學生族群，可以更讓學生了解課程內容的方向</p>
                         </div>
                     </div>

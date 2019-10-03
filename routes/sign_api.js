@@ -3,27 +3,11 @@ var con = require('../module/db');
 var app = express();
 const router = express.Router();
 var request = require('request');
-// var bodyParser = require('body-parser')
 const crypto = require('crypto');
 
 
-// router.use(bodyParser.urlencoded({ extended: true }));
-// router.use(bodyParser.json());
-
 // 從根目錄使用router
 app.use('/', router);
-
-// GET sign_up.html
-// router.get('/', (req, res) => {
-//     res.send('sign_up');
-// });
-
-
-// GET sign_in.html
-// router.get('/', (req, res) => {
-//     res.send('sign_in');
-// });
-
 
 
 //signup API
@@ -46,14 +30,14 @@ router.post('/user/signup', function(req, res) {
         email: email,
     }
     var sql = "INSERT INTO user SET ?"
-    var sql2 = `SELECT * from user where email='${email}';`
-    var sql3 = `SELECT email from user where email = '${email}';`
-    con.query(sql3, function(err, result3) {
+    var sql2 = `SELECT * from user where email=?;`
+    var sql3 = `SELECT email from user where email = ?;`
+    con.query(sql3, email, function(err, result3) {
         if (err) throw err;
         if (result3.length == 0) {
             con.query(sql, user, function(err, result) {
                 if (err) throw err;
-                con.query(sql2, function(err, result2) {
+                con.query(sql2, email, function(err, result2) {
                     var user = result2;
                     console.log(user)
                     if (err) throw err;
@@ -74,23 +58,27 @@ router.post('/user/signin', function(req, res) {
     if (req.body.provider == "native") {
         var { name, email } = req.body;
         var pwd = req.body.password;
-        console.log(name + " " + email + " " + pwd)
+        // console.log(name + " " + email + " " + pwd)
         var test = {};
         var array = [];
         var hash = crypto.createHash('sha256');
         hash.update(pwd + Date.now() + 12000);
         var token = hash.digest('hex')
-        console.log("this is token " + token)
+            // console.log("this is token " + token)
         var access_expired = Date.now() + 12000
+        var update_user_access_token_sql = {
+            access_token: token,
+            access_expired: access_expired,
+        }
         var sql5 = `
-            UPDATE user SET access_token = '${token}', access_expired = '${access_expired}'
-            WHERE email = '${email}'
+            UPDATE user SET ?
+            WHERE email = ?
             and provider = 'native';
             `
         var mysql4 = `
-            SELECT * from user where email = '${email}';
+            SELECT * from user where email = ?;
             `
-        con.query(mysql4, function(err, result4_1) {
+        con.query(mysql4, email, function(err, result4_1) {
             if (err) throw err;
             console.log(result4_1)
             if (result4_1.length == 0) {
@@ -98,7 +86,7 @@ router.post('/user/signin', function(req, res) {
                 console.log(req.body.email)
                 res.send("error")
             } else {
-                con.query(sql5, function(err, result5) {
+                con.query(sql5, email, function(err, result5) {
                     if (err) throw err;
                     con.query(mysql4, function(err, result4) {
                         if (err) throw err;

@@ -1,40 +1,42 @@
 var count = 0;
-var video_count = 0; //vidoe的編號 非個數
+var videoCount = 0; //vidoe的編號 非個數
 
 function add_section(obj) {
-    video_count++;
-    var section_titleDiv = document.createElement("div");
-    section_titleDiv.className = "row-video";
-    var section_titleContent = document.createTextNode("section title:");
-    var section_titleP = document.createElement("p");
-    section_titleP.appendChild(section_titleContent);
-    section_titleDiv.appendChild(section_titleP);
+    videoCount++;
+    var sectionTitleDiv = document.createElement("div");
+    sectionTitleDiv.className = "row-video";
+    var sectionTitleContent = document.createTextNode("section title:");
+    var sectionTitleP = document.createElement("p");
+    sectionTitleP.appendChild(sectionTitleContent);
+    sectionTitleDiv.appendChild(sectionTitleP);
 
-    var section_title_input = document.createElement("input");
-    section_title_input.id = "section_title"
-    section_title_input.type = "text";
-    section_title_input.name = "section_title";
-    section_titleDiv.appendChild(section_title_input)
+    var sectionTitleInput = document.createElement("input");
+    sectionTitleInput.id = "section_title"
+    sectionTitleInput.type = "text";
+    sectionTitleInput.name = "section_title";
+    sectionTitleInput.required = true;
+    sectionTitleDiv.appendChild(sectionTitleInput)
 
-    var section_introDiv = document.createElement("div");
-    section_introDiv.className = "row-video";
-    var section_introContent = document.createTextNode("section introduction:");
-    var section_introP = document.createElement("p");
-    section_introP.appendChild(section_introContent);
-    section_introDiv.appendChild(section_introP);
+    var sectionIntroDiv = document.createElement("div");
+    sectionIntroDiv.className = "row-video";
+    var sectionIntroContent = document.createTextNode("section introduction:");
+    var sectionIntroP = document.createElement("p");
+    sectionIntroP.appendChild(sectionIntroContent);
+    sectionIntroDiv.appendChild(sectionIntroP);
 
-    var section_intro_textarea = document.createElement("textarea");
-    section_intro_textarea.id = "section_intro"
-    section_intro_textarea.style = "width:246px;height:100px;"
-    section_intro_textarea.type = "text";
-    section_intro_textarea.name = "section_intro";
-    section_introDiv.appendChild(section_intro_textarea);
+    var sectionIntroTextarea = document.createElement("textarea");
+    sectionIntroTextarea.id = "section_intro"
+    sectionIntroTextarea.style = "width:246px;height:100px;"
+    sectionIntroTextarea.type = "text";
+    sectionIntroTextarea.name = "section_intro";
+    sectionIntroTextarea.required = true;
+    sectionIntroDiv.appendChild(sectionIntroTextarea);
 
     var deleteSpan = document.createElement("span");
     var deleteImg = document.createElement("img");
     deleteImg.src = "../img/delete3.png"
     deleteImg.className = count
-    deleteImg.setAttribute("onClick", "delete_section(" + video_count + ")");
+    deleteImg.setAttribute("onClick", "deleteSection(" + videoCount + ")");
     deleteSpan.appendChild(deleteImg);
 
     var videoDiv = document.createElement("div");
@@ -47,85 +49,89 @@ function add_section(obj) {
     var videoinput = document.createElement("input");
     videoinput.type = "file";
     videoinput.name = "class_video";
+    videoinput.required = true;
     videoDiv.appendChild(videoinput);
 
-    var sectionmainDiv = document.createElement("div");
-    sectionmainDiv.className = "section";
-    sectionmainDiv.id = "section" + video_count;
+    var sectionMainDiv = document.createElement("div");
+    sectionMainDiv.className = "section";
+    sectionMainDiv.id = "section" + videoCount;
 
-    sectionmainDiv.appendChild(section_titleDiv);
-    sectionmainDiv.appendChild(section_introDiv);
-    sectionmainDiv.appendChild(videoDiv);
-    sectionmainDiv.appendChild(deleteSpan);
-    document.getElementById(obj).appendChild(sectionmainDiv);
-    console.log(video_count)
+    sectionMainDiv.appendChild(sectionTitleDiv);
+    sectionMainDiv.appendChild(sectionIntroDiv);
+    sectionMainDiv.appendChild(videoDiv);
+    sectionMainDiv.appendChild(deleteSpan);
+    document.getElementById(obj).appendChild(sectionMainDiv);
+    console.log(videoCount)
 }
 
 function add_chapter() {
     count++;
     // document.getElementById('count').value = count;
-    var chaptermainDiv = document.createElement("div");
-    chaptermainDiv.className = "chapter"
-    var chapter_titleDiv = document.createElement("div");
-    chapter_titleDiv.className = "row-video";
-    var chapter_titleP = document.createElement("p");
+    var chapterMainDiv = document.createElement("div");
+    chapterMainDiv.className = "chapter"
+    var chapterTitleDiv = document.createElement("div");
+    chapterTitleDiv.className = "row-video";
+    var chapterTitleP = document.createElement("p");
     var chapter_titleContent = document.createTextNode("chapter title:");
-    chapter_titleP.appendChild(chapter_titleContent);
-    chapter_titleDiv.appendChild(chapter_titleP);
-    var chapter_title_input = document.createElement("input");
-    chapter_title_input.id = "chapter_title"
-    chapter_title_input.type = "text";
-    chapter_title_input.name = "chapter_title";
-    chapter_titleDiv.appendChild(chapter_title_input)
-    var add_sectionDiv = document.createElement("div");
-    add_sectionDiv.className = "button"
-    var add_sectioninput = document.createElement("input");
-    add_sectioninput.value = "Add section"
-    add_sectioninput.type = "button"
-    add_sectioninput.setAttribute("onClick", "add_section(" + count + ")");
-    add_sectionDiv.appendChild(add_sectioninput)
-    var delete_chapyerSpan = document.createElement("span");
-    var delete_chapyerImg = document.createElement("img");
-    delete_chapyerImg.src = "../img/delete.png"
-    delete_chapyerImg.className = count
-    delete_chapyerImg.setAttribute("onClick", "delete_chapter(" + count + ")");
-    delete_chapyerSpan.appendChild(delete_chapyerImg);
-    chaptermainDiv.appendChild(chapter_titleDiv);
-    chaptermainDiv.appendChild(add_sectionDiv);
-    chaptermainDiv.appendChild(delete_chapyerSpan);
-    var chapter_video_Div = document.createElement("div");
-    chapter_video_Div.id = parseInt(count);
-    chapter_video_Div.appendChild(chaptermainDiv);
-    document.getElementById("videoinfo").appendChild(chapter_video_Div);
+    chapterTitleP.appendChild(chapter_titleContent);
+    chapterTitleDiv.appendChild(chapterTitleP);
+    var chapterTitleInput = document.createElement("input");
+    chapterTitleInput.id = "chapter_title"
+    chapterTitleInput.type = "text";
+    chapterTitleInput.name = "chapter_title";
+    chapterTitleInput.required = true;
+
+    chapterTitleDiv.appendChild(chapterTitleInput)
+    var addSectionDiv = document.createElement("div");
+    addSectionDiv.className = "button"
+    var addSectioninput = document.createElement("input");
+    addSectioninput.value = "Add section"
+    addSectioninput.type = "button"
+    addSectioninput.required = true;
+    addSectioninput.setAttribute("onClick", "add_section(" + count + ")");
+    addSectionDiv.appendChild(addSectioninput)
+    var deleteChapyerSpan = document.createElement("span");
+    var deleteChapyerImg = document.createElement("img");
+    deleteChapyerImg.src = "../img/delete.png"
+    deleteChapyerImg.className = count
+    deleteChapyerImg.setAttribute("onClick", "deleteChapter(" + count + ")");
+    deleteChapyerSpan.appendChild(deleteChapyerImg);
+    chapterMainDiv.appendChild(chapterTitleDiv);
+    chapterMainDiv.appendChild(addSectionDiv);
+    chapterMainDiv.appendChild(deleteChapyerSpan);
+    var chapterVideoDiv = document.createElement("div");
+    chapterVideoDiv.id = parseInt(count);
+    chapterVideoDiv.appendChild(chapterMainDiv);
+    document.getElementById("videoinfo").appendChild(chapterVideoDiv);
 }
 
-var delete_count = 0
-    //delete_chapter()
-function delete_chapter(obj) {
-    delete_count++;
+var deleteCount = 0
+    //deleteChapter()
+function deleteChapter(obj) {
+    deleteCount++;
     // document.getElementById('count').value = count;
-    var delete_chapter = document.getElementById(obj);
-    delete_chapter.parentNode.removeChild(delete_chapter);
+    var deleteChapter = document.getElementById(obj);
+    deleteChapter.parentNode.removeChild(deleteChapter);
 }
-//delete_section()
-function delete_section(obj) {
-    video_count--;
-    // document.getElementById('video_count').value = video_count;
-    var delete_id = document.getElementById("section" + obj);
-    delete_id.parentNode.removeChild(delete_id);
-    console.log(video_count)
+//deleteSection()
+function deleteSection(obj) {
+    videoCount--;
+    // document.getElementById('videoCount').value = videoCount;
+    var deleteId = document.getElementById("section" + obj);
+    deleteId.parentNode.removeChild(deleteId);
+    console.log(videoCount)
 }
 
 
 document.getElementById("submit").addEventListener("click", function() {
-    var each_chapter_section_num_arr = [];
-    // var chapter_num = Number(document.getElementById('count').value);
-    var chapter_num = count - delete_count //chapter的個數
-    document.getElementById('chapter_num').value = chapter_num;
-    for (var i = 0; i < chapter_num; i++) {
-        each_chapter_section_num_arr.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
+    var eachChapterSectionNumberArray = [];
+    // var chapterNumber = Number(document.getElementById('count').value);
+    var chapterNumber = count - deleteCount //chapter的個數
+    document.getElementById('chapterNumber').value = chapterNumber;
+    for (var i = 0; i < chapterNumber; i++) {
+        eachChapterSectionNumberArray.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
     }
-    document.getElementById('each_chapter_section_num').value = each_chapter_section_num_arr;
+    document.getElementById('each_chapter_section_num').value = eachChapterSectionNumberArray;
 });
 
 // user_icon
@@ -140,24 +146,24 @@ function check_member_sign_status() {
         if (xml_icon.readyState == 4) {
             if (xml_icon.responseText == "error") {
                 //還沒登入
-                // var sign_li = document.createElement("li");
+                // var signLi = document.createElement("li");
                 // var signContent = document.createTextNode("登入");
-                // var sign_a = document.createElement("a");
-                // sign_a.href = "./sign_in.html"
-                // sign_a.appendChild(signContent)
-                // sign_li.appendChild(sign_a)
-                // document.getElementById("clearfix").appendChild(sign_li)
+                // var signA = document.createElement("a");
+                // signA.href = "./sign_in.html"
+                // signA.appendChild(signContent)
+                // signLi.appendChild(signA)
+                // document.getElementById("clearfix").appendChild(signLi)
                 alert("請先登入帳號哦!");
                 window.location.assign("./sign_in.html")
             } else {
                 //已登入
-                var sign_li = document.createElement("li");
+                var signLi = document.createElement("li");
                 var signContent = document.createTextNode("Hello!");
-                var sign_a = document.createElement("a");
-                sign_a.href = "./profile.html"
-                sign_a.appendChild(signContent)
-                sign_li.appendChild(sign_a)
-                document.getElementById("clearfix").appendChild(sign_li)
+                var signA = document.createElement("a");
+                signA.href = "./profile.html"
+                signA.appendChild(signContent)
+                signLi.appendChild(signA)
+                document.getElementById("clearfix").appendChild(signLi)
             }
         }
     }

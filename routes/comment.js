@@ -10,12 +10,6 @@ var async = require('async');
 app.use('/', router);
 
 
-// GET profile_done.html
-router.get('/', (req, res) => {
-    res.send('profile_done');
-});
-
-
 //insert comment in profile.done.html
 router.post("/profile/done/comment", function(req, res) {
     // console.log(req.body);
@@ -26,8 +20,8 @@ router.post("/profile/done/comment", function(req, res) {
     // console.log("課程星星數量 : " + star_number)
     async.waterfall([
         (next) => {
-            var comment_checkmember = `SELECT user_id FROM user WHERE access_token='${user_token}'`
-            con.query(comment_checkmember, function(err, result) {
+            var comment_checkmember = `SELECT user_id FROM user WHERE access_token=?`
+            con.query(comment_checkmember, user_token, function(err, result) {
                 if (err) throw err;
                 var user_id = result[0].user_id;
                 // console.log(user_id)
@@ -47,13 +41,20 @@ router.post("/profile/done/comment", function(req, res) {
             //TODO: 讓使用者一旦變更就會update,而不是無限制input,這裡還要修改(目前讓一個課程只能評論一次)
             var dt = new Date();
             var year = dt.getFullYear();
-            var month = dt.getMonth();
+            var month = dt.getMonth() + 1;
             var date = dt.getDate();
             var comment_date = month + "月 " + date + ", " + year
-                // console.log(comment_date)
-            var insert_comment = `INSERT INTO comment (user_id,course_id,star,comment,comment_date) 
-                Values('${user_id}','${course_id}','${star_number}','${comment}','${comment_date}')`
-            con.query(insert_comment, function(err, result_insert_comment) {
+            const insert_sql = {
+                user_id,
+                course_id,
+                star: `${star_number}`,
+                comment,
+                comment_date
+            };
+
+            var insert_comment = `INSERT INTO comment set ?`
+
+            con.query(insert_comment, insert_sql, function(err, result_insert_comment) {
                 if (err) throw err;
                 // console.log(result_insert_comment);
                 // res.redirect("/profile_done.html");
@@ -61,8 +62,8 @@ router.post("/profile/done/comment", function(req, res) {
             });
         },
         (user_id, course_id, next) => {
-            var star_comment_number_select = `SELECT star,comment FROM comment WHERE course_id='${course_id}' `
-            con.query(star_comment_number_select, function(err, result_star_comment) {
+            var star_comment_number_select = `SELECT star,comment FROM comment WHERE course_id=? `
+            con.query(star_comment_number_select, course_id, function(err, result_star_comment) {
                 var star_arr = [];
                 var comment_arr = [];
                 for (i = 0; i < result_star_comment.length; i++) {
@@ -89,9 +90,13 @@ router.post("/profile/done/comment", function(req, res) {
             });
         },
         (user_id, course_id, star_number, average_star, comment_number, next) => { //紀錄評論數量以及星數於頁面上
-            var course_star_comment = `update new_course set star_number='${star_number}', average_star='${average_star}',comment_number='${comment_number}'
-            where  course_id='${course_id}' ;`
-            con.query(course_star_comment, function(err, result_course_star_comment) {
+            const updateSql = {
+                star_number,
+                average_star,
+                comment_number,
+            }
+            var course_star_comment = `update new_course set ? where course_id='${course_id}' ;`
+            con.query(course_star_comment, updateSql, function(err, result_course_star_comment) {
                 if (err) throw err;
                 // console.log(result_insert_comment);
                 res.redirect("/profile_done.html");
@@ -108,8 +113,8 @@ router.post("/course/comment", function(req, res) {
     var course_title = req.body.course_title;
     async.waterfall([
         (next) => {
-            var course_id_mysql = `SELECT course_id FROM new_course WHERE course_title='${course_title}';`
-            con.query(course_id_mysql, function(err, course_id_result) {
+            var course_id_mysql = `SELECT course_id FROM new_course WHERE course_title=?;`
+            con.query(course_id_mysql, course_title, function(err, course_id_result) {
                 if (err) throw err;
                 // console.log(result_insert_comment);
                 var course_id = course_id_result[0].course_id;
@@ -119,8 +124,8 @@ router.post("/course/comment", function(req, res) {
         (course_id, next) => {
             var user_comment = `SELECT user.name,comment.comment_date ,comment.star,comment.comment
             FROM comment join user on comment.user_id=user.user_id 
-            WHERE comment.course_id='${course_id}';`
-            con.query(user_comment, function(err, result_user_comment) {
+            WHERE comment.course_id=?;`
+            con.query(user_comment, course_id, function(err, result_user_comment) {
                 if (err) throw err;
                 // console.log(result_insert_comment);
                 res.send(result_user_comment)

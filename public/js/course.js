@@ -60,19 +60,6 @@ function display_class_info() {
                 display_buttom();
             }
 
-            // var buttomInput = document.createElement("input");
-            // buttomInput.className = "add_class"
-            // buttomInput.setAttribute("onClick", "add_course()");
-            // buttomInput.type = "button"
-            // buttomInput.id = "add_class"
-            // buttomInput.value = "加入課程"
-            //     // buttomInput.setAttribute("style", "display:block");
-            //     // buttomInput.style.display = "block"
-            // buttomInput.name = "按鈕名稱"
-            // document.getElementById("classInfo").appendChild(buttomInput)
-
-
-
             //替換章節ID
             var number = obj.data.Course_detail.length
                 // console.log("Course_detail的長度 ： " + number)
@@ -89,6 +76,7 @@ function display_class_info() {
                 //TODO:應該要註冊過後才可以看影片
                 // accessToken = localStorage.getItem("accessToken")
                 if (accessToken) {
+                    // 但如果token變了就gg
                     var chapterDiv_a = document.createElement("a");
                     // obj.data.Course_detail[i].Chapter_id
                     //TODO:目前全部都會連到第一章第一個影片
@@ -116,9 +104,6 @@ function display_class_info() {
 
                 chapter_row_Div.appendChild(chapter_title_Content)
                 chapter_section_detail_div.appendChild(chapter_row_Div)
-
-                // chapterDiv.appendChild(chapterDiv_a);
-                // document.getElementById("class_chapter_section_container").appendChild(chapterDiv)
 
                 // console.log(obj.data.Course_detail[i].Chapter_detail.length)
                 var section_div = document.createElement("div");
@@ -187,10 +172,10 @@ function display_add_class_buttom() {
             // console.log(xml.responseText)
             if (registered == "registered") {
                 // alert("課程已註冊過llllllll");
-                display_buttom();
-                document.getElementById("add_class").style.display = "none";
+                // display_buttom();
+                // document.getElementById("add_class").style.display = "none";
 
-                //TODO:bug
+
             } else { //error
                 // alert("課程尚未註冊過");
                 display_buttom();

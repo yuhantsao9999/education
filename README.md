@@ -2,7 +2,7 @@
 if err throw err
 if err reject(new modules.Err(500,13,`query table i  user table:${email}`,function(err,result))
                                                                 ${err}
-命名風格ㄧ致 
+命名風格ㄧ致 剩下前端的js不一致
 
 token 傳的方式要改   ---->用middleware  要驗證
 
@@ -11,6 +11,7 @@ error message 寫好
 transection
 
 
+sign_api還需要改fb的部分
 
 
 

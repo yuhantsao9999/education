@@ -1,7 +1,7 @@
 const express = require('express')
 var con = require('../module/db');
-const path = require('path')
-const app = express();
+// const path = require('path')
+// const app = express();
 const router = express.Router();
 var async = require('async');
 

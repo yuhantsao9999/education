@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>class</title>
-    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/search.css" />
 </head>
 
 <body class="about">
@@ -38,9 +38,9 @@
             <div class="container clearfix">
                 <div class="row">
                     <div class="col-12">
-                        <h1 class="title" id="title">依據您的時間表學習</h1>
-                        <h3 class="subtitle" id="course_content">隨時隨地學習任何主題</h3>
-                        <h3 class="subtitle" id="course_teacher">探索數以千計的課程</h3>
+                        <h1 class="title" id="title">以下是您的搜尋結果...</h1>
+                        <!-- <h3 class="subtitle" id="course_content">隨時隨地學習任何主題</h3>
+                        <h3 class="subtitle" id="course_teacher">探索數以千計的課程</h3> -->
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@
     </div>
 
     <div id="footer" class="dark">
-        <div class="info">
+        <!-- <div class="info">
             <div class="container">
 
                 <div class="row">
@@ -182,7 +182,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> -->
         <div class="bottom">
             <div class="container clearfix">
 
@@ -197,65 +197,7 @@
     <a href="#header" id="go-top"><i class="icon-up-open"></i></a>
 
 </body>
-<script>
-    const currentUrl = new URL(window.location.href);
-    const keyword = currentUrl.searchParams.get("keyword");
-    let courseUrl = "/education/classinfo/search/?keyword=" + keyword;
-
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", courseUrl, true);
-    xmlhttp.send(null);
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var obj = JSON.parse(xmlhttp.responseText)
-            console.log(JSON.stringify(obj))
-            if (obj.length == 0) {
-                var contentDiv = document.createElement("div");
-                var noclassContent = document.createTextNode("沒有任何相關課程哦~");
-                contentDiv.appendChild(noclassContent)
-                document.getElementById("class_container").appendChild(contentDiv)
-            } else {
-                for (var i = 0; i < obj.length; i++) {
-                    //替換課程圖片
-                    var classImg = document.createElement("img");
-                    var colDiv = document.createElement("div");
-                    var rowA = document.createElement("a");
-                    // var titleContent = document.createTeLINExtNode(obj.Course_title);
-                    classImg.className = "class_picture";
-                    classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
-                    colDiv.className = "col-4"
-                    rowA.className = "row clearfix"
-
-
-                    rowA.href = ("/course.html?title=" + obj[i].course_title);
-                    console.log("TITLE IS" + obj[i].title)
-
-                    colDiv.appendChild(classImg)
-                        // document.getElementById("class_container").appendChild(rowDiv)
-                        //替換課程標題
-
-                    var titleh3 = document.createElement("h3");
-                    var introP = document.createElement("p");
-                    var col_8Div = document.createElement("div");
-                    titleh3.className = "title"
-
-                    col_8Div.className = "col-8"
-
-                    var titleContent = document.createTextNode(obj[i].course_title);
-                    console.log(titleContent)
-                    var introContent = document.createTextNode(obj[i].course_intro);
-                    titleh3.appendChild(titleContent)
-                    introP.appendChild(introContent)
-                    col_8Div.appendChild(titleh3)
-                    col_8Div.appendChild(introP)
-                    rowA.appendChild(colDiv)
-                    rowA.appendChild(col_8Div)
-                    document.getElementById("class_container").appendChild(rowA)
-                }
-            }
-        }
-    }
-</script>
+<script type="text/javascript" src="js/search_page.js"></script>
 <script type="text/javascript" src="js/search.js"></script>
 <script type="text/javascript" src="js/user.js"></script>
 <script type="text/javascript" src="js/gray_bar_info.js"></script>

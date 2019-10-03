@@ -1,5 +1,4 @@
 const express = require('express')
-    // var bodyParser = require('body-parser')
 var con = require('../module/db');
 const path = require('path')
 const app = express();
@@ -8,14 +7,7 @@ const router = express.Router();
 
 // 從根目錄使用router
 app.use('/', router);
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
 
-
-// GET acd.html
-router.get('/', (req, res) => {
-    res.send('acd');
-});
 
 
 //course api for hot

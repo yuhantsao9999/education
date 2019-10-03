@@ -15,8 +15,8 @@ app.use('/', router);
 router.get("/education/classinfo/search", function(req, res) {
     var keyword = req.query.keyword;
     // console.log(keyword)
-    var mysql_search = `SELECT * from new_course WHERE course_title LIKE '%${keyword}%'`;
-    con.query(mysql_search, function(err, result_search) {
+    var mysql_search = "SELECT * from new_course WHERE course_title LIKE '%" + keyword + "%'";
+    con.query(mysql_search, keyword, function(err, result_search) {
         if (err) throw err
 
         res.send(result_search);
