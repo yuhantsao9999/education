@@ -56,16 +56,21 @@ function display_class_info() {
             document.getElementById("comment_numebr").appendChild(comment_numebrContent)
 
             //TODO:按鈕
-            var buttomInput = document.createElement("input");
-            buttomInput.className = "add_class"
-            buttomInput.setAttribute("onClick", "add_course()");
-            buttomInput.type = "button"
-            buttomInput.id = "add_class"
-            buttomInput.value = "加入課程"
-                // buttomInput.setAttribute("style", "display:block");
-                // buttomInput.style.display = "block"
-            buttomInput.name = "按鈕名稱"
-            document.getElementById("classInfo").appendChild(buttomInput)
+            if (!accessToken) {
+                display_buttom();
+            }
+
+            // var buttomInput = document.createElement("input");
+            // buttomInput.className = "add_class"
+            // buttomInput.setAttribute("onClick", "add_course()");
+            // buttomInput.type = "button"
+            // buttomInput.id = "add_class"
+            // buttomInput.value = "加入課程"
+            //     // buttomInput.setAttribute("style", "display:block");
+            //     // buttomInput.style.display = "block"
+            // buttomInput.name = "按鈕名稱"
+            // document.getElementById("classInfo").appendChild(buttomInput)
+
 
 
             //替換章節ID
@@ -142,7 +147,19 @@ function display_class_info() {
 display_class_info();
 
 
+function display_buttom() {
+    var buttomInput = document.createElement("input");
+    buttomInput.className = "add_class"
+    buttomInput.setAttribute("onClick", "add_course()");
+    buttomInput.type = "button"
+    buttomInput.id = "add_class"
+    buttomInput.value = "加入課程"
+        // buttomInput.setAttribute("style", "display:block");
+        // buttomInput.style.display = "block"
+    buttomInput.name = "按鈕名稱"
+    document.getElementById("classInfo").appendChild(buttomInput)
 
+}
 
 // get search course data
 function search_course() {
@@ -170,12 +187,14 @@ function display_add_class_buttom() {
             // console.log(xml.responseText)
             if (registered == "registered") {
                 // alert("課程已註冊過llllllll");
-                window.addEventListener("load", function() {
-                        document.getElementById("add_class").setAttribute("style", "display:none");
-                    })
-                    //TODO:bug
+                display_buttom();
+                document.getElementById("add_class").style.display = "none";
+
+                //TODO:bug
             } else { //error
                 // alert("課程尚未註冊過");
+                display_buttom();
+
                 // var buttomInput = document.createElement("input");
                 // buttomInput.className = "add_class"
                 // buttomInput.setAttribute("onClick", "add_course()");
