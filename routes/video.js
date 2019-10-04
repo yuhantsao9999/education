@@ -24,11 +24,11 @@ router.get("/education/classinfo", function(req, res) {
         var intro = result_course[0].course_intro;
         var teacher = result_course[0].course_teacher;
         //TODO:以chapter id做排序大到小
-        var mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id DESC`;
+        var mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
         con.query(mysql_chapter, course_id, function(err, result_chapter) {
             if (err) throw err
                 // console.log(result_chapter) //所有章節資訊
-            var mysql_section = `select * from final_section where course_id=? ORDER BY section_id DESC`;
+            var mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
             con.query(mysql_section, course_id, function(err, result_section) {
                 // console.log("result_section : " + JSON.stringify(result_section))
                 if (err) throw err

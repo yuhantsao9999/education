@@ -44,19 +44,17 @@ router.post('/profile/student/class', function(req, res) {
                             // }
                     }
 
-                    // console.log(course_id_arr)
+                    console.log("我修的課 : " + course_id_arr)
                     var course_id = course_id_arr.filter(function(element, index, arr) {
                         return arr.indexOf(element) === index;
                     });
-                    course_id = String(course_id).split();
-                    // console.log(String(course_id).split())
-
-                    var profile_courser_info = "SELECT * FROM new_course where course_id in ( ? );"
-                    con.query(profile_courser_info, course_id, function(err, result) {
+                    var profile_courser_info = 'SELECT * FROM new_course where course_id in (?);'
+                    con.query(profile_courser_info, [course_id], function(err, result) {
                         if (err)
                             throw err;
-                        // console.log(result);
+                        console.log(result);
                         res.send(result)
+
                     });
                 } else {
                     //有token是會員，但沒有有註冊過課程
@@ -204,7 +202,7 @@ router.get('/profile/done', function(req, res) {
                             flag = 1;
                         }
                     }
-                    console.log(course_id_arr)
+                    console.log("course_id_arr : " + course_id_arr)
                         // course_id = String(course_id_arr).split();
                     if (course_id_arr.length != 0) {
                         // console.log(String(course_id).split())
