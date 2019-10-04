@@ -58,39 +58,39 @@ router.post('/user/signin', function(req, res) {
     if (req.body.provider == "native") {
         var { name, email } = req.body;
         var pwd = req.body.password;
-        // console.log(name + " " + email + " " + pwd)
+        console.log(name + " " + email + " " + pwd)
         var test = {};
         var array = [];
         var hash = crypto.createHash('sha256');
         hash.update(pwd + Date.now() + 12000);
         var token = hash.digest('hex')
-            // console.log("this is token " + token)
+        console.log("this is token " + token)
         var access_expired = Date.now() + 12000
         var update_user_access_token_sql = {
             access_token: token,
-            access_expired: access_expired,
+            access_expired,
         }
         var sql5 = `
-            UPDATE user SET ?
-            WHERE email = ?
-            and provider = 'native';
+            UPDATE user SET ? WHERE email = ? and provider = 'native';
             `
         var mysql4 = `
             SELECT * from user where email = ?;
             `
         con.query(mysql4, email, function(err, result4_1) {
-            if (err) throw err;
+            // if (err) throw err;
             console.log(result4_1)
             if (result4_1.length == 0) {
                 console.log('no this member');
                 console.log(req.body.email)
                 res.send("error")
             } else {
-                con.query(sql5, email, function(err, result5) {
+                con.query(sql5, [update_user_access_token_sql, email], function(err, result5) {
                     if (err) throw err;
-                    con.query(mysql4, function(err, result4) {
-                        if (err) throw err;
+                    console.log("ooaaoaoao")
+                    con.query(mysql4, email, function(err, result4) {
+                        // if (err) throw err;
                         var sign_in = result4;
+                        console.log(result4)
                         console.log("this is email " + sign_in[0]);
                         var access_token = sign_in[0].access_token
                         console.log(access_token);

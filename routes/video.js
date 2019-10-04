@@ -24,11 +24,11 @@ router.get("/education/classinfo", function(req, res) {
         var intro = result_course[0].course_intro;
         var teacher = result_course[0].course_teacher;
         //TODO:以chapter id做排序大到小
-        var mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id DESC'`;
+        var mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id DESC`;
         con.query(mysql_chapter, course_id, function(err, result_chapter) {
             if (err) throw err
                 // console.log(result_chapter) //所有章節資訊
-            var mysql_section = `select * from final_section where course_id=? ORDER BY section_id DESC'`;
+            var mysql_section = `select * from final_section where course_id=? ORDER BY section_id DESC`;
             con.query(mysql_section, course_id, function(err, result_section) {
                 // console.log("result_section : " + JSON.stringify(result_section))
                 if (err) throw err
@@ -38,6 +38,8 @@ router.get("/education/classinfo", function(req, res) {
                 obj['Course_title'] = result_course[0].course_title;
                 obj['Course_intro'] = result_course[0].course_intro;
                 obj['Course_teacher'] = result_course[0].course_teacher;
+                obj['Course_teacher_intro'] = result_course[0].course_teacher_intro;
+                obj['For_who'] = result_course[0].for_who;
                 obj['star_number'] = result_course[0].star_number;
                 obj['average_star'] = result_course[0].average_star;
                 obj['comment_number'] = result_course[0].comment_number;
@@ -62,7 +64,7 @@ router.get("/education/classinfo", function(req, res) {
                 }
                 var test = {};
                 test["data"] = obj
-                    // console.log("testtttttt : " + JSON.stringify(test))
+                console.log("testtttttt : " + JSON.stringify(test))
                 res.send(test)
             });
         });

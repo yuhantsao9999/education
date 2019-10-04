@@ -236,7 +236,7 @@ router.get('/profile/teacher/class', function(req, res) {
     var Bearer_token = req.headers.authorization;
     var Bearer = Bearer_token.substr(0, 6);
     var token = Bearer_token.substr(7);
-    console.log("token : " + Token)
+    console.log("token : " + token)
     async.waterfall([
         (next) => {
             var profile_check_member = `SELECT user_id FROM user WHERE access_token=?`

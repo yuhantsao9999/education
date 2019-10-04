@@ -19,7 +19,23 @@ function display_table_of_course_content() {
             var about_classP = document.createElement("p");
             var about_classContent = document.createTextNode(obj.data.Course_detail[Number(chapter) - 1].Chapter_detail[Number(section) - 1].Section_intro)
             about_classP.appendChild(about_classContent)
+
+            var for_who_p = document.createElement("p");
+            var for_who_content = document.createTextNode(obj.data.For_who)
+            for_who_p.appendChild(for_who_content)
+
+
+            var course_teacher_content = document.createTextNode("關於講師 : " + obj.data.Course_teacher)
+            document.getElementById("teacher_intro").appendChild(course_teacher_content)
+
+            var course_teacher_intro_p = document.createElement("p");
+            var course_teacher_intro_content = document.createTextNode(obj.data.Course_teacher_intro)
+            course_teacher_intro_p.appendChild(course_teacher_intro_content)
+
+
             document.getElementById("section_intro").appendChild(about_classP)
+            document.getElementById("for_who").appendChild(for_who_p)
+            document.getElementById("teacher_intro").appendChild(course_teacher_intro_p)
                 //左側列表
             var chapter_number = obj.data.Course_detail.length
             for (i = 0; i < chapter_number; i++) {
@@ -180,3 +196,21 @@ function send_ajax() {
 }
 
 setInterval("send_ajax()", 3000);
+
+
+
+
+function up_play_speed() {
+    myVid = document.getElementById("video");
+    myVid.playbackRate = (myVid.playbackRate) + 0.5;
+}
+
+function down_play_speed() {
+    myVid = document.getElementById("video");
+    myVid.playbackRate = (myVid.playbackRate) - 0.5;
+}
+
+function getPlaySpeed() {
+    myVid = document.getElementById("video");
+    alert(myVid.playbackRate);
+}

@@ -70,7 +70,7 @@
     margin-top: 1.7em;
 }
 
-button {
+.nav_item_bar button {
     position: absolute;
     width: 70px;
     height: 40px;
@@ -230,13 +230,27 @@ a {
     padding: 0 12px;
 }
 
+#course_menu {
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+#course_menu h3 {
+    margin-left: -10px;
+}
+
 .theDiv {
     float: left;
-    width: 240px;
+    width: 300px;
     height: 100vh;
     /* overflow-x: hidden;
     overflow-y: auto; */
     overflow-y: scroll;
+}
+
+#section_intro,
+#for_who {
+    border-bottom: 1px solid #dedfe0;
 }
 
 .scroll {
@@ -311,6 +325,10 @@ a {
     margin-left: 15%;
     margin-right: 15%;
     width: 70%;
+}
+
+.video_speed_button {
+    margin-left: 15%;
 }
 
 .class_intro {
