@@ -24,7 +24,7 @@ function display_classinfo_most_readed() {
 
                 var hotClassImg = document.createElement("img");
                 hotClassImg.className = "class_picture";
-                hotClassImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + main_image;
+                hotClassImg.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + main_image;
                 var hotClassImg_a = document.createElement("a");
                 hotClassImg_a.href = "/course.html?title=" + obj.data[i].course_title
                 hotClassImg_a.appendChild(hotClassImg)
@@ -56,7 +56,7 @@ function display_classinfo_all() {
                 var rowA = document.createElement("a");
                 // var titleContent = document.createTextNode(obj.Course_title);
                 classImg.className = "class_picture";
-                classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data[i].main_image
+                classImg.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj.data[i].main_image
                     // classImg.src = "./img/course5.png"
                 colDiv.className = "col-3"
                 rowA.className = "row clearfix"
@@ -138,7 +138,7 @@ function display_classinfo_for_new_hand() {
             console.log(obj)
             for (i = 0; i < obj.data.length; i++) {
                 var courseImg_img = document.createElement("img");
-                courseImg_img.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data[i].main_image
+                courseImg_img.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj.data[i].main_image
 
                 var courseImg_a = document.createElement("a");
                 courseImg_a.href = ("/course.html?title=" + obj.data[i].course_title);

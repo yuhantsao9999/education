@@ -1,5 +1,5 @@
 const express = require('express')
-var con = require('../module/db');
+var mysql = require('../module/db');
 // const path = require('path')
 // const app = express();
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get("/gray/info", function(req, res) {
     async.waterfall([
         (next) => {
             var user_mysql = `SELECT user_id FROM user;`
-            con.query(user_mysql, function(err, user_result) {
+            mysql.con.query(user_mysql, function(err, user_result) {
                 if (err) throw err;
                 var user_num = user_result.length;
                 console.log(user_num)
@@ -20,7 +20,7 @@ router.get("/gray/info", function(req, res) {
         },
         (user_num, next) => {
             var course_mysql = `SELECT course_id FROM new_course;`
-            con.query(course_mysql, function(err, course_result) {
+            mysql.con.query(course_mysql, function(err, course_result) {
                 if (err) throw err;
                 var course_num = course_result.length;
                 console.log(course_num)
@@ -29,7 +29,7 @@ router.get("/gray/info", function(req, res) {
         },
         (user_num, course_num, next) => {
             var comment_mysql = `SELECT comment_id,star FROM comment;`
-            con.query(comment_mysql, function(err, comment_result) {
+            mysql.con.query(comment_mysql, function(err, comment_result) {
                 if (err) throw err;
                 var comment_num = comment_result.length;
                 console.log(comment_num)

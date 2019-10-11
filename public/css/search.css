@@ -209,7 +209,7 @@ a {
 }
 
 .row {
-    padding-bottom: 50px;
+    /* padding-bottom: 50px; */
     margin: 0 -15px;
 }
 
@@ -550,4 +550,12 @@ a {
     text-align: center;
     line-height: 40px;
     text-decoration: none;
+}
+
+h2 {
+    margin-bottom: 1.8em;
+}
+
+#for_newHand {
+    padding-bottom: 50px;
 }

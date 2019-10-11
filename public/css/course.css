@@ -561,7 +561,7 @@ a {
 }
 
 #footer .copyright {
-    float: left;
+    /* float: left; */
     text-transform: uppercase;
     letter-spacing: 2px;
 }

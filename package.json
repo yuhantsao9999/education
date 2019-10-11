@@ -1,23 +1,26 @@
 {
-  "name": "education",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "async": "^3.1.0",
-    "aws-sdk": "^2.536.0",
-    "body-parser": "^1.19.0",
-    "dotenv": "^8.1.0",
-    "express": "^4.17.1",
-    "multer": "^1.4.2",
-    "multer-s3": "^2.9.0",
-    "mysql": "^2.17.1",
-    "progressbar.js": "^1.0.1",
-    "request": "^2.88.0"
-  }
+    "name": "education",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "async": "^3.1.0",
+        "aws-sdk": "^2.536.0",
+        "body-parser": "^1.19.0",
+        "dotenv": "^8.1.0",
+        "express": "^4.17.1",
+        "multer": "^1.4.2",
+        "multer-s3": "^2.9.0",
+        "mysql": "^2.17.1",
+        "progressbar.js": "^1.0.1",
+        "request": "^2.88.0"
+    },
+    "devDependencies": {
+        "jest": "^24.9.0"
+    }
 }

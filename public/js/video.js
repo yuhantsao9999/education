@@ -111,6 +111,7 @@ function display_user_video_percentage() {
                     } else {
                         var video_pecentDiv = document.createElement("div");
                         var video_pecentContent = document.createTextNode(obj[i] + "%");
+                        console.log("每個課程進度 : " + obj[i] + "%")
                         video_pecentDiv.appendChild(video_pecentContent)
                         document.getElementsByClassName("scroll_section")[i].appendChild(video_pecentDiv)
 
@@ -162,7 +163,7 @@ function update_user_video_percentage() {
                 // console.log(video_user_currentTime)
                 video.id = "video"
                 video.controls = "controls"
-                video.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + video_name
+                video.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + video_name
                 video.currentTime = video_user_currentTime;
                 document.getElementById("videoDiv").appendChild(video)
             }

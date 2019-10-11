@@ -243,9 +243,8 @@ a {
     float: left;
     width: 300px;
     height: 100vh;
-    /* overflow-x: hidden;
-    overflow-y: auto; */
     overflow-y: scroll;
+    padding-bottom: 100px;
 }
 
 #section_intro,
@@ -313,7 +312,7 @@ a {
 
 .video_intro_Div {
     /* width: 85%; */
-    height: 100vh;
+    /* height: 100vh; */
     overflow-y: scroll;
 }
 

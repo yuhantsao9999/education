@@ -58,3 +58,39 @@ function display_search_course_info() {
     }
 }
 display_search_course_info();
+
+
+//image_for new_hand
+function display_classinfo_for_new_hand() {
+    var xml_new_hand = new XMLHttpRequest();
+    xml_new_hand.open("get", "/education/classinfo/for_newHand", true);
+    xml_new_hand.send(null);
+    xml_new_hand.onreadystatechange = function() {
+        if (xml_new_hand.readyState == 4) {
+            var obj = JSON.parse(xml_new_hand.responseText)
+            console.log(obj)
+            for (i = 0; i < obj.data.length; i++) {
+                var courseImg_img = document.createElement("img");
+                courseImg_img.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data[i].main_image
+
+                var courseImg_a = document.createElement("a");
+                courseImg_a.href = ("/course.html?title=" + obj.data[i].course_title);
+
+
+                var courseImg_div = document.createElement("div");
+                courseImg_div.className = "col-2"
+
+                courseImg_a.appendChild(courseImg_img)
+                courseImg_div.appendChild(courseImg_a)
+                document.getElementById("for_newHand").appendChild(courseImg_div);
+
+                // <div class="col-2">
+                //         <!-- <a href="">
+                //             <img src="./img/go.jpg" alt="logo" /></a> -->
+
+                //     </div>
+            }
+        }
+    }
+}
+display_classinfo_for_new_hand();

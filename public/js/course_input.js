@@ -1,137 +1,140 @@
 var count = 0;
-var videoCount = 0; //vidoe的編號 非個數
+var video_count = 0; //vidoe的編號 非個數
 
 function add_section(obj) {
-    videoCount++;
-    var sectionTitleDiv = document.createElement("div");
-    sectionTitleDiv.className = "row-video";
-    var sectionTitleContent = document.createTextNode("section title:");
-    var sectionTitleP = document.createElement("p");
-    sectionTitleP.appendChild(sectionTitleContent);
-    sectionTitleDiv.appendChild(sectionTitleP);
+    video_count++;
+    var section_title_div = document.createElement("div");
+    section_title_div.className = "row-video";
+    var section_title_content = document.createTextNode("section title:");
+    var section_title_p = document.createElement("p");
+    section_title_p.appendChild(section_title_content);
+    section_title_div.appendChild(section_title_p);
 
-    var sectionTitleInput = document.createElement("input");
-    sectionTitleInput.id = "section_title"
-    sectionTitleInput.type = "text";
-    sectionTitleInput.name = "section_title";
-    sectionTitleInput.required = true;
-    sectionTitleDiv.appendChild(sectionTitleInput)
+    var section_title_Input = document.createElement("input");
+    section_title_Input.id = "section_title"
+    section_title_Input.type = "text";
+    section_title_Input.name = "section_title";
+    section_title_Input.required = true;
+    section_title_div.appendChild(section_title_Input)
 
-    var sectionIntroDiv = document.createElement("div");
-    sectionIntroDiv.className = "row-video";
-    var sectionIntroContent = document.createTextNode("section introduction:");
-    var sectionIntroP = document.createElement("p");
-    sectionIntroP.appendChild(sectionIntroContent);
-    sectionIntroDiv.appendChild(sectionIntroP);
+    var section_intro_div = document.createElement("div");
+    section_intro_div.className = "row-video";
+    var section_intro_content = document.createTextNode("section introduction:");
+    var section_intro_p = document.createElement("p");
+    section_intro_p.appendChild(section_intro_content);
+    section_intro_div.appendChild(section_intro_p);
 
-    var sectionIntroTextarea = document.createElement("textarea");
-    sectionIntroTextarea.id = "section_intro"
-    sectionIntroTextarea.style = "width:246px;height:100px;"
-    sectionIntroTextarea.type = "text";
-    sectionIntroTextarea.name = "section_intro";
-    sectionIntroTextarea.required = true;
-    sectionIntroDiv.appendChild(sectionIntroTextarea);
+    var section_intro_textarea = document.createElement("textarea");
+    section_intro_textarea.id = "section_intro"
+    section_intro_textarea.style = "width:246px;height:100px;"
+    section_intro_textarea.type = "text";
+    section_intro_textarea.name = "section_intro";
+    section_intro_textarea.required = true;
+    section_intro_div.appendChild(section_intro_textarea);
 
-    var deleteSpan = document.createElement("span");
-    var deleteImg = document.createElement("img");
-    deleteImg.src = "../img/delete3.png"
-    deleteImg.className = count
-    deleteImg.setAttribute("onClick", "deleteSection(" + videoCount + ")");
-    deleteSpan.appendChild(deleteImg);
+    var delete_span = document.createElement("span");
+    var delete_img = document.createElement("img");
+    delete_img.src = "../img/delete3.png"
+    delete_img.className = count
+    delete_img.setAttribute("onClick", "delete_section(" + video_count + ")");
+    delete_span.appendChild(delete_img);
 
-    var videoDiv = document.createElement("div");
-    videoDiv.className = "row-video"
-    var videomainp = document.createElement("p");
-    var videoContent = document.createTextNode("video:");
-    videomainp.appendChild(videoContent);
-    videoDiv.appendChild(videomainp);
+    var video_div = document.createElement("div");
+    video_div.className = "row-video"
+    var video_main_p = document.createElement("p");
+    var video_content = document.createTextNode("video:");
+    video_main_p.appendChild(video_content);
+    video_div.appendChild(video_main_p);
 
-    var videoinput = document.createElement("input");
-    videoinput.type = "file";
-    videoinput.name = "class_video";
-    videoinput.required = true;
-    videoDiv.appendChild(videoinput);
+    var video_input = document.createElement("input");
+    video_input.type = "file";
+    video_input.name = "class_video";
+    video_input.required = true;
+    video_div.appendChild(video_input);
 
-    var sectionMainDiv = document.createElement("div");
-    sectionMainDiv.className = "section";
-    sectionMainDiv.id = "section" + videoCount;
+    var section_main_div = document.createElement("div");
+    section_main_div.className = "section";
+    section_main_div.id = "section" + video_count;
 
-    sectionMainDiv.appendChild(sectionTitleDiv);
-    sectionMainDiv.appendChild(sectionIntroDiv);
-    sectionMainDiv.appendChild(videoDiv);
-    sectionMainDiv.appendChild(deleteSpan);
-    document.getElementById(obj).appendChild(sectionMainDiv);
-    console.log(videoCount)
+    section_main_div.appendChild(section_title_div);
+    section_main_div.appendChild(section_intro_div);
+    section_main_div.appendChild(video_div);
+    section_main_div.appendChild(delete_span);
+    document.getElementById(obj).appendChild(section_main_div);
+    console.log(video_count)
 }
 
 function add_chapter() {
     count++;
     // document.getElementById('count').value = count;
-    var chapterMainDiv = document.createElement("div");
-    chapterMainDiv.className = "chapter"
-    var chapterTitleDiv = document.createElement("div");
-    chapterTitleDiv.className = "row-video";
-    var chapterTitleP = document.createElement("p");
-    var chapter_titleContent = document.createTextNode("chapter title:");
-    chapterTitleP.appendChild(chapter_titleContent);
-    chapterTitleDiv.appendChild(chapterTitleP);
-    var chapterTitleInput = document.createElement("input");
-    chapterTitleInput.id = "chapter_title"
-    chapterTitleInput.type = "text";
-    chapterTitleInput.name = "chapter_title";
-    chapterTitleInput.required = true;
+    var chapter_main_div = document.createElement("div");
+    chapter_main_div.className = "chapter"
+    var chapter_title_div = document.createElement("div");
+    chapter_title_div.className = "row-video";
+    var chapter_title_p = document.createElement("p");
+    var chapter_title_content = document.createTextNode("chapter title:");
+    chapter_title_p.appendChild(chapter_title_content);
+    chapter_title_div.appendChild(chapter_title_p);
+    var chapter_title_input = document.createElement("input");
+    chapter_title_input.id = "chapter_title"
+    chapter_title_input.type = "text";
+    chapter_title_input.name = "chapter_title";
+    chapter_title_input.required = true;
 
-    chapterTitleDiv.appendChild(chapterTitleInput)
-    var addSectionDiv = document.createElement("div");
-    addSectionDiv.className = "button"
-    var addSectioninput = document.createElement("input");
-    addSectioninput.value = "Add section"
-    addSectioninput.type = "button"
-    addSectioninput.required = true;
-    addSectioninput.setAttribute("onClick", "add_section(" + count + ")");
-    addSectionDiv.appendChild(addSectioninput)
-    var deleteChapyerSpan = document.createElement("span");
-    var deleteChapyerImg = document.createElement("img");
-    deleteChapyerImg.src = "../img/delete.png"
-    deleteChapyerImg.className = count
-    deleteChapyerImg.setAttribute("onClick", "deleteChapter(" + count + ")");
-    deleteChapyerSpan.appendChild(deleteChapyerImg);
-    chapterMainDiv.appendChild(chapterTitleDiv);
-    chapterMainDiv.appendChild(addSectionDiv);
-    chapterMainDiv.appendChild(deleteChapyerSpan);
-    var chapterVideoDiv = document.createElement("div");
-    chapterVideoDiv.id = parseInt(count);
-    chapterVideoDiv.appendChild(chapterMainDiv);
-    document.getElementById("videoinfo").appendChild(chapterVideoDiv);
+    chapter_title_div.appendChild(chapter_title_input)
+    var add_section_div = document.createElement("div");
+    add_section_div.className = "button"
+    var add_section_input = document.createElement("input");
+    add_section_input.value = "Add section"
+    add_section_input.type = "button"
+    add_section_input.required = true;
+    add_section_input.setAttribute("onClick", "add_section(" + count + ")");
+    add_section_div.appendChild(add_section_input)
+    var delete_chapter_span = document.createElement("span");
+    var delete_chapter_img = document.createElement("img");
+    delete_chapter_img.src = "../img/delete.png"
+    delete_chapter_img.className = count
+    delete_chapter_img.setAttribute("onClick", "delete_chapter(" + count + ")");
+    delete_chapter_span.appendChild(delete_chapter_img);
+    chapter_main_div.appendChild(chapter_title_div);
+    chapter_main_div.appendChild(add_section_div);
+    chapter_main_div.appendChild(delete_chapter_span);
+    var chapter_video_div = document.createElement("div");
+    chapter_video_div.id = parseInt(count);
+    chapter_video_div.appendChild(chapter_main_div);
+    document.getElementById("videoinfo").appendChild(chapter_video_div);
+    // alert(count)
 }
 
 var deleteCount = 0
-    //deleteChapter()
-function deleteChapter(obj) {
+    //delete_chapter()
+function delete_chapter(obj) {
     deleteCount++;
     // document.getElementById('count').value = count;
-    var deleteChapter = document.getElementById(obj);
-    deleteChapter.parentNode.removeChild(deleteChapter);
+    var delete_chapter = document.getElementById(obj);
+    delete_chapter.parentNode.removeChild(delete_chapter);
 }
-//deleteSection()
-function deleteSection(obj) {
-    videoCount--;
-    // document.getElementById('videoCount').value = videoCount;
-    var deleteId = document.getElementById("section" + obj);
-    deleteId.parentNode.removeChild(deleteId);
-    console.log(videoCount)
+//delete_section()
+function delete_section(obj) {
+    video_count--;
+    // document.getElementById('video_count').value = video_count;
+    var delete_id = document.getElementById("section" + obj);
+    delete_id.parentNode.removeChild(delete_id);
+    // console.log(video_count)
 }
 
 
 document.getElementById("submit").addEventListener("click", function() {
-    var eachChapterSectionNumberArray = [];
-    // var chapterNumber = Number(document.getElementById('count').value);
-    var chapterNumber = count - deleteCount //chapter的個數
-    document.getElementById('chapterNumber').value = chapterNumber;
-    for (var i = 0; i < chapterNumber; i++) {
-        eachChapterSectionNumberArray.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
+    var each_chapter_section_number_array = [];
+    // var chapter_number = Number(document.getElementById('count').value);
+    var chapter_number = count - deleteCount //chapter的個數
+    document.getElementById('chapter_num').value = chapter_number;
+    // alert("chapter_number : " + chapter_number)
+    for (var i = 0; i < chapter_number; i++) {
+        each_chapter_section_number_array.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
     }
-    document.getElementById('each_chapter_section_num').value = eachChapterSectionNumberArray;
+    document.getElementById('each_chapter_section_num').value = each_chapter_section_number_array;
+    // alert("each_chapter_section_number_array : " + each_chapter_section_number_array)
 });
 
 // user_icon

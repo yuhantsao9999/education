@@ -1,6 +1,6 @@
 const express = require('express')
     // var bodyParser = require('body-parser')
-var con = require('../module/db');
+var mysql = require('../module/db');
 const app = express();
 const router = express.Router();
 var async = require('async');
@@ -16,7 +16,7 @@ router.get("/education/classinfo", function(req, res) {
     var title = req.query.title;
     // console.log(title)
     var mysql_course = `select * from new_course where course_title=?`;
-    con.query(mysql_course, title, function(err, result_course) {
+    mysql.con.query(mysql_course, title, function(err, result_course) {
         if (err) throw err
             // console.log("heyyyyyyyyy : " + result_course) //所有課程資訊
         var course_id = result_course[0].course_id;
@@ -25,11 +25,11 @@ router.get("/education/classinfo", function(req, res) {
         var teacher = result_course[0].course_teacher;
         //TODO:以chapter id做排序大到小
         var mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
-        con.query(mysql_chapter, course_id, function(err, result_chapter) {
+        mysql.con.query(mysql_chapter, course_id, function(err, result_chapter) {
             if (err) throw err
                 // console.log(result_chapter) //所有章節資訊
             var mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
-            con.query(mysql_section, course_id, function(err, result_section) {
+            mysql.con.query(mysql_section, course_id, function(err, result_section) {
                 // console.log("result_section : " + JSON.stringify(result_section))
                 if (err) throw err
                     // console.log(result_section) //所有節的資訊
@@ -83,7 +83,7 @@ router.post("/education/videoinfo", function(req, res) {
     async.waterfall([
         (next) => {
             var mysql_course = `select * from new_course where course_title=?;`;
-            con.query(mysql_course, title, function(err1, result_course) {
+            mysql.con.query(mysql_course, title, function(err1, result_course) {
                 var course_id = result_course[0].course_id;
                 next(null, course_id);
             });
@@ -92,7 +92,7 @@ router.post("/education/videoinfo", function(req, res) {
         (course_id, next) => {
             var mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter 
             on  final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id=? and new_chapter.chapter_id=? and final_section.section_id=?`;
-            con.query(mysql_video, [course_id, chapter_id, section_id], function(err, result_video) {
+            mysql.con.query(mysql_video, [course_id, chapter_id, section_id], function(err, result_video) {
                 var video = result_video[0].video;
                 var video_id = result_video[0].video_id;
                 next(null, course_id, video, video_id)
@@ -100,9 +100,9 @@ router.post("/education/videoinfo", function(req, res) {
             });
         },
         (course_id, video, video_id, next) => {
-            var mysql_video_current_time = `SELECT video_time FROM status JOIN user  on status.user_id=user.user_id 
-            WHERE status.video_id=? and user.access_token=?;`;
-            con.query(mysql_video_current_time, [video_id, user_token], function(err1, result_video_current_time) {
+            var mysql_video_current_time = `SELECT video_time FROM course_progress JOIN user  on course_progress.user_id=user.user_id 
+            WHERE course_progress.video_id=? and user.access_token=?;`;
+            mysql.con.query(mysql_video_current_time, [video_id, user_token], function(err1, result_video_current_time) {
                 // console.log(result_video_current_time)
                 // console.log("oooooooooooooooh")
                 // console.log(JSON.stringify(result_video_current_time))
@@ -136,7 +136,7 @@ router.post("/video_percent", function(req, res) {
     async.waterfall([
         (next) => {
             var profile_check_member = `SELECT user_id FROM user WHERE access_token = ? `
-            con.query(profile_check_member, access_token, function(err1, result_course) {
+            mysql.con.query(profile_check_member, access_token, function(err1, result_course) {
                 var user_id = result_course[0].user_id;
                 console.log(user_id)
                 next(null, user_id)
@@ -144,9 +144,9 @@ router.post("/video_percent", function(req, res) {
         },
         (user_id, next) => {
             var video_time_sql =
-                `SELECT video_time,video_duration FROM status
+                `SELECT video_time,video_duration FROM course_progress
             where course_title = ? and user_id = ? `
-            con.query(video_time_sql, [title, user_id], function(err1, video_time_result) {
+            mysql.con.query(video_time_sql, [title, user_id], function(err1, video_time_result) {
                 if (err1) throw err1;
                 console.log(JSON.stringify(video_time_result))
                 var progress_arr = []
@@ -188,7 +188,7 @@ router.post("/videoupdate", function(req, res) {
     async.waterfall([
         (next) => {
             var profile_checkmember = `SELECT user_id FROM user WHERE access_token=? `
-            con.query(profile_checkmember, token, function(err1, result_course) {
+            mysql.con.query(profile_checkmember, token, function(err1, result_course) {
                 var user_id = result_course[0].user_id;
                 next(null, user_id)
             });
@@ -202,7 +202,7 @@ router.post("/videoupdate", function(req, res) {
             on final_section.chapter_auto_id=new_chapter.chapter_auto_id 
             and new_course.course_id=new_chapter.course_id
             and course_title = ? and chapter_id = ? and section_id = ?;`
-            con.query(video_id_sql, [title, chapter_id, section_id], function(err1, video_id_result) {
+            mysql.con.query(video_id_sql, [title, chapter_id, section_id], function(err1, video_id_result) {
                 if (err1)
                     throw err1;
                 var video_id = video_id_result[0].video_id;
@@ -217,10 +217,10 @@ router.post("/videoupdate", function(req, res) {
                 complete: complete,
             }
             var update_videotime =
-                `UPDATE status SET ?
+                `UPDATE course_progress SET ?
             WHERE user_id = ?
             and video_id = ?;`
-            con.query(update_videotime, [update_videotile_detail_sql, user_id, video_id], function(err1, update_videotime_result) {
+            mysql.con.query(update_videotime, [update_videotile_detail_sql, user_id, video_id], function(err1, update_videotime_result) {
                 next(null)
                 res.send("data")
             });

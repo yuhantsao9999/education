@@ -1,33 +1,104 @@
 var mysql = require("mysql");
 require('dotenv').config();
-// connect mysql
-// var con = mysql.createPool({
-//     connectionLimit: 10,
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "",
-//     // option
-//     acquireTimeout: 10000,
-//     waitForConnections: true,
-//     queueLimit: 0,
-// });
 
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
 
-var con = mysql.createConnection({
+// connect mysql
+const mysqlCon = mysql.createPool({
+    connectionLimit: 10,
     host: DB_HOST,
     user: DB_USER,
     password: DB_PASSWORD,
     database: DB_DATABASE,
+    // option
+    acquireTimeout: 10000,
+    waitForConnections: true,
+    queueLimit: 0,
 });
 
-con.connect(function(err) {
-    if (err) {
-        console.error(err);
-        return;
+// mysqlCon.getConnection((error, connection) => {
+//     console.log('MySQL connected')
+//     if (error) {
+//         if (connection) connection.release()
+//         return
+//     }
+// });
+
+
+// var mysqlCon = mysql.createConnection({
+//     host: DB_HOST,
+//     user: DB_USER,
+//     password: DB_PASSWORD,
+//     database: DB_DATABASE,
+// });
+
+// mysqlCon.connect(function(err) {
+//     if (err) {
+//         console.error(err);
+//         return;
+//     }
+//     console.log("Mysql Connect");
+// });
+
+
+
+const sql_query = function(sql, params, callback) {
+    if (params) {
+        return new Promise(function(resolve, reject) {
+            mysqlCon.query(sql, params, function(error, results) {
+                if (error) {
+                    reject(callback(error));
+                } else resolve(results);
+            });
+        });
+    } else {
+        return new Promise(function(resolve, reject) {
+            mysqlCon.query(sql, function(error, results) {
+                if (error) reject(callback(error));
+                else resolve(results);
+            });
+        });
     }
-    console.log("Mysql Connect");
-});
+}
 
-module.exports = con
+const sql_query_connection = function(sql, params, connection) {
+    if (params) {
+        return new Promise(function(resolve, reject) {
+            connection.query(sql, params, function(error, results) {
+                if (error) {
+                    // return mysql.con.rollback(function() {});
+                    // connection.rollback(function() {
+                    console.log("connecttion_rollback")
+                        // connection.release();
+                        //     console.log("rollback2")
+                    reject("Database Query Error: " + error);
+                    return (connection.rollback(() => connection.release()))
+                        // });
+
+                } else
+                    resolve(results);
+            });
+        });
+    } else {
+        return new Promise(function(resolve, reject) {
+            connection.query(sql, function(error, results) {
+                if (error) {
+                    // return mysql.con.rollback(function() {});
+                    connection.rollback(function() {
+                        connection.release();
+                        reject("Database Query Error: " + error);
+                        connection.release();
+                    });
+                } else resolve(results);
+            });
+        });
+    }
+}
+
+module.exports = {
+    core: mysql,
+    con: mysqlCon,
+    // pool: pool,
+    sql_query: sql_query,
+    sql_query_connection: sql_query_connection
+};
