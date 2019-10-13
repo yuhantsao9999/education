@@ -12,6 +12,8 @@ app.use(express.static('public'));
 //可以使用名為uploads資料夾底下的資料
 app.use(express.static('uploads'));
 
+app.use(express.static('dao'));
+
 
 //使用router資料夾下的course
 const course_input = require('./routes/course_input');

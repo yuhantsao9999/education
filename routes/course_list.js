@@ -1,6 +1,6 @@
 const express = require('express')
 var mysql = require('../module/db');
-const path = require('path')
+const course = require('../dao/course')
 const app = express();
 const router = express.Router();
 
@@ -11,18 +11,19 @@ app.use('/', router);
 
 
 //course api for hot
-router.get("/education/classinfo/hot", function(req, res) {
-    var sql_hot_course = 'select * from new_course ORDER BY average_star DESC';
-    mysql.con.query(sql_hot_course, function(err, result_hot_course) {
-        if (err) throw err
-        var test = {};
-        test['data'] = result_hot_course
-        res.send(test)
-    });
-
+router.get("/education/classinfo/hot", async function(req, res) {
+    try {
+        let result = await course.course_hot(req);
+        if (result != "err") {
+            res.json(result)
+            return "Success"
+        } else {
+            return "input error"
+        }
+    } catch {
+        return "error"
+    }
 })
-
-
 
 //course api for all
 router.get("/education/classinfo/all", function(req, res) {

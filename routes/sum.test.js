@@ -1,6 +1,7 @@
-const sum = require('./sum');
+const diff = require('./sum');
 
-test('adds 1 + 2 to equal 3', () => {
-    expect(sum(4, 2)).toBe(6);
-    expect(sum(2, null)).toBeNull();
+test('difference set between two array', () => {
+    expect(diff([1, 3, 5, 6], [2, 6])).toStrictEqual([1, 3, 5]);
+    expect(diff([1, 3, null, 6], [2, 6])).toStrictEqual([1, 3]);
+    expect(diff([1, 3, 6], [1, 3, 6])).toStrictEqual([]);
 });

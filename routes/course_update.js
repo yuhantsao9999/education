@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express')
-    // var bodyParser = require('body-parser')
 var mysql = require('../module/db');
 const app = express();
 const router = express.Router();
@@ -23,6 +22,12 @@ const s3 = new aws.S3();
 
 // 從根目錄使用router
 app.use('/', router);
+
+// router.get("/test", function(req, res) {
+//     // if (err) throw err;
+//     res.json({ "FUCK": "OK" });
+//     // return ({ "FUCK": "OK" })
+// })
 
 //course detail api
 router.get("/course_update/", function(req, res) {
@@ -384,7 +389,7 @@ function diff(array1, array2) {
     for (var i = 0; i < array1.length; i++) {
         flag = true
         for (var j = 0; j < array2.length; j++) {
-            if (array1[i] == array2[j]) {
+            if (array1[i] == array2[j] || array1[i] == "undefined" || array1[i] == null) {
                 flag = false;
             }
         }

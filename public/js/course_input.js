@@ -124,18 +124,26 @@ function delete_section(obj) {
 }
 
 
-document.getElementById("submit").addEventListener("click", function() {
-    var each_chapter_section_number_array = [];
-    // var chapter_number = Number(document.getElementById('count').value);
-    var chapter_number = count - deleteCount //chapter的個數
-    document.getElementById('chapter_num').value = chapter_number;
-    // alert("chapter_number : " + chapter_number)
-    for (var i = 0; i < chapter_number; i++) {
-        each_chapter_section_number_array.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
+function isvalid() {
+    if (document.getElementsByName('section_title').length < 2) {
+        alert("至少要有兩隻課程影片的內容！")
+        return false;
+    } else {
+        var each_chapter_section_number_array = [];
+        // var chapter_number = Number(document.getElementById('count').value);
+        var chapter_number = count - deleteCount //chapter的個數
+        document.getElementById('chapter_num').value = chapter_number;
+        // alert("chapter_number : " + chapter_number)
+        for (var i = 0; i < chapter_number; i++) {
+            each_chapter_section_number_array.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
+        }
+        document.getElementById('each_chapter_section_num').value = each_chapter_section_number_array;
+
+        return true;
     }
-    document.getElementById('each_chapter_section_num').value = each_chapter_section_number_array;
-    // alert("each_chapter_section_number_array : " + each_chapter_section_number_array)
-});
+}
+
+
 
 // user_icon
 function check_member_sign_status() {

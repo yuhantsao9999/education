@@ -136,23 +136,6 @@ router.post("/course/comment", async function(req, res) {
         ], (err, rst) => {
             if (err) return err;
         });
-
-
-
-
-    // if (!course_title) res.json(errMsg("Access denied without course_title."));
-    // else {
-    //     let course_id_mysql = `SELECT course_id FROM new_course WHERE course_title=?;`;
-    //     let userWithToken = await querySQL(course_id_mysql);
-    //     if (userWithToken.length !== 1) {
-    //         res.json(errMsg("Token expired."));
-    //     } else {
-    //         let userInfo = userWithToken[0];
-    //         delete userInfo.access_expired;
-    //         res.send(result_user_comment)
-    //     }
-    // }
-
 })
 
 

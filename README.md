@@ -1,56 +1,144 @@
-# education
-錯誤處理 error message 寫好
-if err throw err （Ｘ）
-if err reject(new modules.Err(500,13,`query table i  user table:${email}`,function(err,result))
-                                                                ${err}
+# Course at door
 
-                                                                
-命名風格ㄧ致 剩下前端的js不一致 OK
+Course At Door is an education platform for teaching like Coursera.
 
-token 傳的方式要改 
-1.token檢驗  OK
-2.用middleware  //TODO:
+## Table of Contents
 
+- [Technologies](#Technologies)
+- [Architecture](#Architecture)
+- [Database Schema](#Database-Schema)
+- [Main Features](#Main-Features)
+- [Demonstration](#Features-Demo)
+  
+- [Contact](#Contact)
 
-token要過時間就換掉
+## Technologies
 
+#### Backend
+- Node.js / Express.js
+- SSL Certificate (Let's Encrypt)
 
+#### Front-End
+- HTML
+- CSS
+- JavaScript
+- AJAX
 
-transection
-ex.會員的檢查與新增
+#### Database
+ - MySQL
+ - CRUD
+ - Index, Primary key, Foreign key
+ - Transaction
 
-sign_api還需要改fb的部分
+#### Cloud Service (AWS)
+- EC2
+- S3
+- CloudFront
 
-外鍵的設定 OK
-
-
-
-安全性問題：
-1.sql injection    OK
-solution:
->mysql 改成 ?
-'select * from users where user_id = ? ',user_id
-'select * from users where user_id ='+comnect.escape(user_id)
-
-2.ddos(distributed denial of service)
-
-
-RASful api
-新增 post
-取得 get
-更新 put 
-刪除 delete
-
+#### Networking
+- HTTP & HTTPS
+- Domain Name System(DNS)
+- NGINX
 
 
-履歷 
-從左對齊
-cowork 是在stylish >> 時序 ＋跟特別的 非時程表
-比例配置
-想被問的放前面
-不用內推
-換頁標題再打一次
-by git flow
+#### Additional
+- Unit Test: Jest
+- Git / GitHub
 
-npm install jest
-readme
+## Architecture 
+
+<p align="center">
+ <img src="https://i.imgur.com/RoOu7y0.png
+" width="800">
+</p>
+
+- NGINX redirects 443 port requests from clients to corresponding ports
+- Used AWS S3 to store course videos and course pictures
+- Optimized videos loading time by AWS CloudFront
+   
+## Database Schema
+
+<p align="center">
+ <img src="https://i.imgur.com/FJ7Wszx.jpg" width="800">
+</p>
+
+## Main Features
+- Course Search
+    - Search course names
+- Planning System
+    - Users can create, view, edit their course
+- Registration system
+    - Register course
+    - Archive user’s course video progress
+- Recommending System
+    - Recommend users the courses for junior
+
+## Demonstration
+
+### Home Page
+In the home page, users can see all the courses, and find the specific courses through the search bar.
+<p align="center">
+ <img src="https://i.imgur.com/ujONuRM.png)"
+ width="800">
+</p>
+
+---
+
+### Course Page
+
+<p align="center">
+ <img src="https://i.imgur.com/wVdddQb.png)
+" width="800">
+</p>
+
+- Users can see the information of the course.
+- Click the button 加入課程, then users can register the course.
+
+
+---
+
+### Profile Page
+
+<p align="center">
+ <img src="https://i.imgur.com/WX06OVy.png" width="800">
+</p>
+
+- Users can see all the courses that he registered.
+
+<p align="center">
+ <img src="https://i.imgur.com/sErW4cj.png
+" width="800">
+</p>
+
+- Users can give stars and write the comment after finishing the course.
+
+---
+
+### video page
+
+<p align="center">
+ <img src="https://i.imgur.com/KTvT9RD.png" width="800">
+</p>
+
+
+- 資料庫會記錄各個課程影片的進度，並於使用者再次登入頁面時顯示
+- 左側課程大綱也會顯示各影片的進度
+
+
+---
+
+### User  Management
+
+<p align="center">
+ <img src="https://i.imgur.com/EBSrUHG.png)
+" width="800">
+</p>
+
+- Users can create and edit course through profile
+- Images and videos of courses are uploaded to AWS S3 and read through AWS CloudFront to optimise load speed
+
+---
+
+## Contact
+
+#### Email:  yuhantsao9999@gmail.com
