@@ -16,6 +16,7 @@ Course At Door is an education platform for teaching like Coursera.
 
 #### Backend
 - Node.js / Express.js
+- CI / CD (Jenkins)
 - SSL Certificate (Let's Encrypt)
 
 #### Front-End
@@ -78,7 +79,7 @@ Course At Door is an education platform for teaching like Coursera.
 ### Home Page
 In the home page, users can see all the courses, and find the specific courses through the search bar.
 <p align="center">
- <img src="https://i.imgur.com/ujONuRM.png)"
+ <img src="https://i.imgur.com/ujONuRM.png"
  width="800">
 </p>
 
@@ -87,8 +88,7 @@ In the home page, users can see all the courses, and find the specific courses t
 ### Course Page
 
 <p align="center">
- <img src="https://i.imgur.com/wVdddQb.png)
-" width="800">
+ <img src="https://i.imgur.com/wVdddQb.png" width="800">
 </p>
 
 - Users can see the information of the course.
@@ -106,8 +106,7 @@ In the home page, users can see all the courses, and find the specific courses t
 - Users can see all the courses that he registered.
 
 <p align="center">
- <img src="https://i.imgur.com/sErW4cj.png
-" width="800">
+ <img src="https://i.imgur.com/sErW4cj.png" width="800">
 </p>
 
 - Users can give stars and write the comment after finishing the course.
@@ -130,8 +129,7 @@ In the home page, users can see all the courses, and find the specific courses t
 ### User  Management
 
 <p align="center">
- <img src="https://i.imgur.com/EBSrUHG.png)
-" width="800">
+ <img src="https://i.imgur.com/EBSrUHG.png" width="800">
 </p>
 
 - Users can create and edit course through profile
