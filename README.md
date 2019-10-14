@@ -49,8 +49,7 @@ Course At Door is an education platform for teaching like Coursera.
 ## Architecture 
 
 <p align="center">
- <img src="https://i.imgur.com/RoOu7y0.png
-" width="800">
+ <img src="https://i.imgur.com/RoOu7y0.png" width="800">
 </p>
 
 - NGINX redirects 443 port requests from clients to corresponding ports
