@@ -79,9 +79,10 @@ Course At Door is an education platform for teaching like Coursera.
 ### Home Page
 In the home page, users can see all the courses, and find the specific courses through the search bar.
 <p align="center">
- <img src="https://i.imgur.com/ujONuRM.png"
+ <img src="https://i.imgur.com/BPYGs4k.gif"
  width="800">
 </p>
+
 
 ---
 
