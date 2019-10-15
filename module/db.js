@@ -66,9 +66,11 @@ const sql_query_connection = function(sql, params, connection) {
         return new Promise(function(resolve, reject) {
             connection.query(sql, params, function(error, results) {
                 if (error) {
+
                     // return mysql.con.rollback(function() {});
                     // connection.rollback(function() {
                     console.log("connecttion_rollback")
+                        // throw error
                         // connection.release();
                         //     console.log("rollback2")
                     reject("Database Query Error: " + error);

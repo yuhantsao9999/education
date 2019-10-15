@@ -111,13 +111,8 @@ router.post('/user/addcourse', function(req, res) {
 router.post("/course/teacher/info", async function(req, res) {
     var course_title = req.body.course_title;
     console.log("課程標題 : " + course_title)
-    var mysql_course_info = "SELECT new_course.course_teacher,user.about_me,user.PersonalWebsite,user.facebookProfile,user.youtubeProfile,user.user_image FROM new_course Join user ON new_course.course_teacher=user.name where course_title = ?";
+    var mysql_course_info = "SELECT new_course.course_teacher,user.provider,user.user_image,user.about_me,user.PersonalWebsite,user.facebookProfile,user.youtubeProfile,user.user_image FROM new_course Join user ON new_course.course_teacher=user.name where course_title = ?";
     var teacher_info = await mysql.sql_query(mysql_course_info, course_title);
-    // , function(err, result_course_info) {
-    //     if (err) throw err;
-    //     console.log("搜尋結果 : " + result_course_info)
-    //     res.send(result_course_info)
-    // });
     res.send(teacher_info)
 })
 

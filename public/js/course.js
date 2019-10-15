@@ -243,13 +243,11 @@ function display_teacher_info() {
         course_title: course_title
     }
     xml_teacher.setRequestHeader('Content-Type', 'application/json');
-    // xml_teacher.setRequestHeader("Authorization", "Bearer " + accessToken);
-    // console.log("accessToken : " + accessToken)
     xml_teacher.send(JSON.stringify(course_title_obj));
     xml_teacher.onreadystatechange = function() {
         if (xml_teacher.readyState == 4) {
             var obj = JSON.parse(xml_teacher.responseText)
-                // console.log("sobj : " + JSON.stringify(obj))
+            console.log("sobj : " + JSON.stringify(obj))
                 //更換老師資訊
             var teacher_name = obj[0].course_teacher
                 // console.log("teacher : " + teacher_name)
@@ -263,10 +261,19 @@ function display_teacher_info() {
             //更換圖片
             //TODO:要讓使用者可以先更換圖片
             // <img src="./img/golang.png" alt="">
-            // var teacher_image = obj[0].user_image;
-            // var teacher_imageImg = document.createElement("img");
-            // teacher_imageImg.src=""
-
+            var teacher_image = obj[0].user_image;
+            var provider = obj[0].provider;
+            var teacher_imageImg = document.createElement("img");
+            if (teacher_image != null) {
+                if (provider == "facebook") {
+                    teacher_imageImg.src = teacher_image;
+                } else {
+                    teacher_imageImg.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + teacher_image
+                }
+            } else {
+                teacher_imageImg.src = "./img/profile.png"
+            }
+            document.getElementsByClassName("picture_circle")[0].appendChild(teacher_imageImg);
 
             //更換icon
             // <a href="#"> <img src="./img/home2.png" alt=""></a>
@@ -393,3 +400,40 @@ function comment() {
 }
 
 comment();
+
+
+
+//image_for new_hand
+function display_classinfo_for_new_hand() {
+    var xml_new_hand = new XMLHttpRequest();
+    xml_new_hand.open("get", "/education/classinfo/for_newHand", true);
+    xml_new_hand.send(null);
+    xml_new_hand.onreadystatechange = function() {
+        if (xml_new_hand.readyState == 4) {
+            var obj = JSON.parse(xml_new_hand.responseText)
+            console.log(obj)
+            for (i = 0; i < obj.data.length; i++) {
+                var courseImg_img = document.createElement("img");
+                courseImg_img.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj.data[i].main_image
+
+                var courseImg_a = document.createElement("a");
+                courseImg_a.href = ("/course.html?title=" + obj.data[i].course_title);
+
+
+                var courseImg_div = document.createElement("div");
+                courseImg_div.className = "col-3"
+
+                courseImg_a.appendChild(courseImg_img)
+                courseImg_div.appendChild(courseImg_a)
+                document.getElementById("for_newHand").appendChild(courseImg_div);
+
+                // <div class="col-2">
+                //         <!-- <a href="">
+                //             <img src="./img/go.jpg" alt="logo" /></a> -->
+
+                //     </div>
+            }
+        }
+    }
+}
+display_classinfo_for_new_hand();

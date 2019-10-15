@@ -12,8 +12,7 @@ app.use('/', router);
 
 //signup API
 router.post('/user/signup', function(req, res) {
-    var name = req.body.name;
-    var email = req.body.email;
+    var { name, email } = req.body;
     var pwd = req.body.password;
     var test = {};
     var array = [];
@@ -32,13 +31,11 @@ router.post('/user/signup', function(req, res) {
     return new Promise(function(resolve, reject) {
         mysql.con.getConnection(function(err, connection) {
             if (err) {
-                throw err;
                 reject("Database get connection err: " + err);
                 return;
             }
             connection.beginTransaction((err) => {
                 if (err) {
-                    throw err;
                     reject("Transcaction Error: " + err);
                     return;
                 }
@@ -46,7 +43,7 @@ router.post('/user/signup', function(req, res) {
                 var sql3 = `SELECT email from user where email = ?;`
                 connection.query(sql3, email, function(err, result3) {
                     if (err) {
-                        throw err;
+                        // throw err;
                         reject("Database Query err: " + err);
                         return;
                     }
@@ -54,7 +51,7 @@ router.post('/user/signup', function(req, res) {
                         var sql = "INSERT INTO user SET ?"
                         connection.query(sql, user, function(err, result) {
                             if (err) {
-                                throw err;
+                                // throw err;
                                 reject("Database Query err: " + err);
                                 connection.rollback(function() {});
                                 return;
@@ -64,7 +61,7 @@ router.post('/user/signup', function(req, res) {
                                 var user = result2;
                                 console.log(user)
                                 if (err) {
-                                    throw err;
+                                    // throw err;
                                     reject("Database Query err: " + err);
                                     connection.rollback(function() {});
                                     return;
@@ -76,7 +73,7 @@ router.post('/user/signup', function(req, res) {
                                 // res.json(test);
                                 connection.commit(function(err) {
                                     if (err) {
-                                        throw err;
+                                        // throw err;
                                         reject("Database Query err: " + err);
                                         return;
                                     }
@@ -176,15 +173,15 @@ router.post('/user/signin', function(req, res) {
             })
         })
     } else {
-
         // 向 FB 要求使用者名稱和ID
         var token = req.body.fb_token;
         console.log(token)
-        request('https://graph.facebook.com/v3.3/me?&fields=name,email&access_token=' + token, (err, response, body) => {
+        request('https://graph.facebook.com/me?&fields=id,name,email,picture.width(160).height(160)&access_token=' + token, (err, response, body) => {
             var profile = JSON.parse(body);
-            // console.log(profile)
+            console.log(profile)
             var { name, email } = profile;
-            // console.log(name)
+            var user_image = profile.picture.data.url;
+            console.log(email)
             var test = {};
             var array = [];
             var hash = crypto.createHash('sha256');
@@ -197,7 +194,7 @@ router.post('/user/signin', function(req, res) {
                 provider: "facebook",
                 name: name,
                 email: email,
-                picture: "https://schoolvoyage.ga/images/123498.png"
+                user_image: user_image,
             };
             var access_expired = Date.now() + 12000
             var fb_insert = "INSERT INTO user SET ?";
@@ -210,9 +207,13 @@ router.post('/user/signin', function(req, res) {
             and email = '${email}';
             `
             var fb_select = `
-            SELECT * from user where provider = 'facebook'
-            and name = '${name}';
-            `
+                SELECT * from user where provider = 'facebook'
+                and name = '${name}';
+                `
+            var fb_select_all_from_email = `
+                SELECT * from user where provider = 'facebook'
+                and email = '${email}';
+                `
             mysql.con.query(fb_repeat, function(err, fb_repeat_result) {
                 if (err) throw err;
                 //若mysql內有沒有這筆臉書的emil資料，沒有則存取資料
@@ -224,7 +225,7 @@ router.post('/user/signin', function(req, res) {
                             if (err) throw err;
                             // console.log(fb_result2)
                             var user = fb_result2
-                            array.push({ id: user[0].id, provider: user[0].provider, name: user[0].name, email: user[0].email, pricture: user[0].picture });
+                            array.push({ id: user[0].id, provider: user[0].provider, name: user[0].name, email: user[0].email, pricture: user[0].user_image });
                             test['data'] = ({ access_token: user[0].access_token, access_expired: user[0].access_expired, user: array[0] });
                             // console.log(test)
                             res.json(test);
@@ -233,12 +234,16 @@ router.post('/user/signin', function(req, res) {
                 } else { //若mysql內有這筆臉書的emil資料，則update資料並直接顯示資料
                     mysql.con.query(fb_update, fb_user, function(err, fb_update) {
                         if (err) throw err;
-                        mysql.con.query(fb_select, function(err, fb_result2) {
+                        mysql.con.query(fb_select_all_from_email, function(err, fb_result2) {
                             if (err) throw err;
-                            console.log(fb_result2)
+                            console.log("wwwwwqwwwww :" + JSON.stringify(fb_result2))
                             var user = fb_result2
-                            array.push({ id: user[0].id, provider: user[0].provider, name: user[0].name, email: user[0].email, pricture: user[0].picture });
-                            test['data'] = ({ access_token: user[0].access_token, access_expired: user[0].access_expired, user: array[0] });
+                            array.push({ id: user[0].id, provider: user[0].provider, name: user[0].name, email: user[0].email, pricture: user[0].user_image });
+                            test['data'] = ({
+                                access_token: user[0].access_token,
+                                access_expired: user[0].access_expired,
+                                user: array[0],
+                            });
                             // console.log(test)
                             res.json(test);
                         })

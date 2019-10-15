@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
-var bodyParser = require('body-parser')
+const mysql = require('./module/db');
+const bodyParser = require('body-parser')
 
 
 app.use(bodyParser.json({ limit: '50000mb' }));
@@ -13,6 +14,51 @@ app.use(express.static('public'));
 app.use(express.static('uploads'));
 
 app.use(express.static('dao'));
+
+
+//middleware
+let check_member_token_and_status = function(req, res, next) {
+    //先判斷有是否是會員(有token)
+    let token;
+    if (req.headers.authorization == null) {
+        // let error = {
+        //     "error": "! 尚無會員token，請重新註冊。"
+        // };
+        return res.send("error");
+    } else {
+        let bearer_token = req.headers.authorization;
+        if (bearer_token.substr(0, 6) != "Bearer") {
+            console.log("not a Bearerrrr token");
+            return res.send("error");
+        } else {
+            let bearer = bearer_token.substr(0, 6);
+            token = bearer_token.substr(7);
+            // console.log("token : " + Token)
+        }
+    }
+    let profile_check_member = "SELECT user_id FROM user WHERE access_token= ?"
+    mysql.con.query(profile_check_member, token, function(err, result) {
+        if (err) throw err;
+        if (String(result).length == 0) {
+            //如果沒有token，就傳失敗訊息
+            // let error = {
+            //     "error": "! 查無此會員，請重新註冊。"
+            // };
+            // var token = "";
+            return res.send("error");
+            // res.send("error")
+        } else {
+            req.user_id = result[0].user_id;
+            console.log(result[0].user_id)
+            next();
+        }
+    });
+
+}
+
+
+
+
 
 
 //使用router資料夾下的course
@@ -36,8 +82,7 @@ app.use('/', sign_api);
 const course = require('./routes/course');
 app.use('/', course);
 
-const profile = require('./routes/profile');
-app.use('/', profile);
+
 
 const comment = require('./routes/comment');
 app.use('/', comment);
@@ -48,6 +93,9 @@ app.use('/', course_update);
 
 const gray_bar = require('./routes/gray_bar');
 app.use('/', gray_bar);
+
+const profile = require('./routes/profile');
+app.use('/', check_member_token_and_status, profile);
 
 
 

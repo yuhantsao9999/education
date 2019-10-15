@@ -43,7 +43,7 @@ function statusChangeCallback(response) {
     if (response.status === 'connected') {
         // Logged into your app and Facebook.
         testAPI();
-        console.log("gggggg" + response.authResponse.accessToken);
+        // console.log("gggggg" + response.authResponse.accessToken);
         var accessToken = response.authResponse.accessToken;
         // localStorage.setItem('fb_Token', accessToken);
         //FB
@@ -79,7 +79,7 @@ function checkLoginState() {
 }
 window.fbAsyncInit = function() {
     FB.init({
-        appId: '1237750719731551',
+        appId: '513734669198278',
         cookie: true, // enable cookies to allow the server to access 
         // the session
         xfbml: true, // parse social plugins on this page

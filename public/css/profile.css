@@ -417,6 +417,7 @@ textarea::placeholder {
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.24);
     float: left;
     margin: 10px;
+    margin-left: 30px;
 }
 
 .teacher_intro {

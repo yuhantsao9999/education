@@ -76,7 +76,6 @@
                                         <!-- <img src="./img/pen.png" alt=""> -->
                                         <!-- <input type="image" src="./img/pen.png" alt="send" name="user_picture" id="user_picture" onclick="send();" /> -->
                                     </div>
-
                                     <div id="name">
                                         <!-- <span> <input type="text" class="name" placeholder="名字" required>
                                             <img src="./img/pen.png" alt="">
@@ -85,6 +84,11 @@
                                     </div>
                                     <!-- <div class="about_me"> -->
                                     <textarea type="text" class="about_me" rows="1" placeholder="簡單介紹一下自己吧!" onpropertychange="setHeight(this);" onpaste="setHeight(this);" oninput="setHeight(this);"></textarea>
+                                    <!-- <form action="/profile/updateUserImage" method='POST' enctype="multipart/form-data"> -->
+                                    <!-- <b style="color: white;">更換大頭照</b> -->
+                                    <!-- <label class="btn-primary">  <input type="file" name="user_image"  ></label> -->
+                                    <!-- <button type="submit" class="btn-primary" style="color: white;"><b>確認更新大頭照</b></button> -->
+                                    <!-- </form> -->
                                 </div>
 
                             </div>
@@ -111,9 +115,9 @@
                                 </span>
                             </div>
                             <div class="upload_button">
-                                <form action="/profile/updateUserImage" method='POST' enctype="multipart/form-data">
-                                    <button type="submit" class="btn-primary"><b>更換大頭照</b></button>
-                                </form>
+                                <!-- <form action="/profile/updateUserImage" method='POST' enctype="multipart/form-data"> -->
+                                <!-- <label class="btn-primary">  <input type="file" name="user_image" class="btn-primary" ><b>更換大頭照</b></label> -->
+                                <!-- </form> -->
                                 <button type="submit" class="btn-primary" onclick="add_user_info()"><b>儲存</b></button>
                             </div>
                         </div>

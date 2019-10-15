@@ -86,10 +86,10 @@ router.post("/profile/done/comment", function(req, res) {
                     // console.log("評論次數" + comment_number);
                 if (err) throw err;
                 // console.log(result_insert_comment);
-                next(null, user_id, course_id, star_number, average_star, comment_number);
+                next(null, course_id, star_number, average_star, comment_number);
             });
         },
-        (user_id, course_id, star_number, average_star, comment_number, next) => { //紀錄評論數量以及星數於頁面上
+        (course_id, star_number, average_star, comment_number, next) => { //紀錄評論數量以及星數於頁面上
             const updateSql = {
                 star_number,
                 average_star,
@@ -111,31 +111,30 @@ router.post("/profile/done/comment", function(req, res) {
 //select comment to course.html
 router.post("/course/comment", async function(req, res) {
     var course_title = req.body.course_title;
-    let course_id =
-        async.waterfall([
-            (next) => {
-                var course_id_mysql = `SELECT course_id FROM new_course WHERE course_title=?;`
-                mysql.con.query(course_id_mysql, course_title, function(err, course_id_result) {
-                    if (err) throw err;
-                    // console.log(result_insert_comment);
-                    var course_id = course_id_result[0].course_id;
-                    next(null, course_id);
-                });
-            },
-            (course_id, next) => {
-                var user_comment = `SELECT user.name,comment.comment_date ,comment.star,comment.comment
+    // console.log(course_title)
+    async.waterfall([
+        (next) => {
+            var course_id_mysql = `SELECT course_id FROM new_course WHERE course_title=?;`
+            mysql.con.query(course_id_mysql, course_title, function(err, course_id_result) {
+                if (err) throw err;
+                // console.log(result_insert_comment);
+                var course_id = course_id_result[0].course_id;
+                next(null, course_id);
+            });
+        },
+        (course_id, next) => {
+            var user_comment = `SELECT user.name,comment.comment_date ,comment.star,comment.comment
             FROM comment join user on comment.user_id=user.user_id 
             WHERE comment.course_id=?;`
-                mysql.con.query(user_comment, course_id, function(err, result_user_comment) {
-                    if (err) throw err;
-                    // console.log(result_insert_comment);
-                    res.send(result_user_comment)
-                });
+            mysql.con.query(user_comment, course_id, function(err, result_user_comment) {
+                if (err) throw err;
+                res.send(result_user_comment)
+            });
 
-            }
-        ], (err, rst) => {
-            if (err) return err;
-        });
+        }
+    ], (err, rst) => {
+        if (err) return err;
+    });
 })
 
 

@@ -23,73 +23,68 @@ const s3 = new aws.S3();
 // 從根目錄使用router
 app.use('/', router);
 
-// router.get("/test", function(req, res) {
-//     // if (err) throw err;
-//     res.json({ "FUCK": "OK" });
-//     // return ({ "FUCK": "OK" })
-// })
 
 //course detail api
-router.get("/course_update/", function(req, res) {
+// router.get("/course_update/", function(req, res) {
 
-    var course_id = req.query.course_id;
-    // console.log(title)
-    var mysql_course = `select * from new_course where course_id = ?`;
-    mysql.con.query(mysql_course, course_id, function(err, result_course) {
-        if (err) throw err
-            // console.log("heyyyyyyyyy : " + result_course) //所有課程資訊
-        var course_id = result_course[0].course_id;
-        var title = result_course[0].course_title;
-        var intro = result_course[0].course_intro;
-        var teacher = result_course[0].course_teacher;
-        var mysql_chapter = `select * from new_chapter where course_id = ?`;
-        mysql.con.query(mysql_chapter, course_id, function(err, result_chapter) {
-            if (err) throw err
-                // console.log(result_chapter) //所有章節資訊
-            var mysql_section = `select * from final_section where course_id = ?`;
-            mysql.con.query(mysql_section, course_id, function(err, result_section) {
-                // console.log("result_section : " + JSON.stringify(result_section))
-                if (err) throw err
-                    // console.log(result_section) //所有節的資訊
-                var obj = {};
-                obj['Course_id'] = result_course[0].course_id; //添加名稱
-                obj['Course_title'] = result_course[0].course_title;
-                obj['Course_field'] = result_course[0].course_field;
-                obj['Course_intro'] = result_course[0].course_intro;
-                obj['Course_teacher'] = result_course[0].course_teacher;
-                obj['main_image'] = result_course[0].main_image;
-                obj['star_number'] = result_course[0].star_number;
-                obj['average_star'] = result_course[0].average_star;
-                obj['comment_number'] = result_course[0].comment_number;
-                obj["Course_detail"] = []
-                for (var i = 0; i < result_chapter.length; i++) {
-                    var chp_obj = {}
-                    chp_obj['Chapter_id'] = result_chapter[i].chapter_id
-                    chp_obj['Chapter_auto_id'] = result_chapter[i].chapter_auto_id
-                    chp_obj['Chapter_title'] = result_chapter[i].chapter_title
-                    chp_obj['Chapter_detail'] = []
-                    for (var j = 0; j < result_section.length; j++) {
-                        if (result_section[j].chapter_auto_id == chp_obj['Chapter_auto_id']) {
-                            var obj_tmp = {}
-                            obj_tmp['Section_id'] = result_section[j].section_id
-                            obj_tmp['Video_id'] = result_section[j].video_id
-                            obj_tmp['Section_title'] = result_section[j].section_title
-                            obj_tmp['Section_intro'] = result_section[j].section_intro
-                            obj_tmp['Video'] = result_section[j].video
-                            chp_obj['Chapter_detail'].push(obj_tmp)
-                        }
-                    }
-                    obj["Course_detail"].push(chp_obj)
-                }
-                var test = {};
-                test["data"] = obj
-                    // console.log("testtttttt : " + JSON.stringify(test))
-                res.send(test)
-            });
-        });
-    });
+//     var course_id = req.query.course_id;
+//     // console.log(title)
+//     var mysql_course = `select * from new_course where course_id = ?`;
+//     mysql.con.query(mysql_course, course_id, function(err, result_course) {
+//         if (err) throw err
+//             // console.log("heyyyyyyyyy : " + result_course) //所有課程資訊
+//         var course_id = result_course[0].course_id;
+//         var title = result_course[0].course_title;
+//         var intro = result_course[0].course_intro;
+//         var teacher = result_course[0].course_teacher;
+//         var mysql_chapter = `select * from new_chapter where course_id = ?`;
+//         mysql.con.query(mysql_chapter, course_id, function(err, result_chapter) {
+//             if (err) throw err
+//                 // console.log(result_chapter) //所有章節資訊
+//             var mysql_section = `select * from final_section where course_id = ?`;
+//             mysql.con.query(mysql_section, course_id, function(err, result_section) {
+//                 // console.log("result_section : " + JSON.stringify(result_section))
+//                 if (err) throw err
+//                     // console.log(result_section) //所有節的資訊
+//                 var obj = {};
+//                 obj['Course_id'] = result_course[0].course_id; //添加名稱
+//                 obj['Course_title'] = result_course[0].course_title;
+//                 obj['Course_field'] = result_course[0].course_field;
+//                 obj['Course_intro'] = result_course[0].course_intro;
+//                 obj['Course_teacher'] = result_course[0].course_teacher;
+//                 obj['main_image'] = result_course[0].main_image;
+//                 obj['star_number'] = result_course[0].star_number;
+//                 obj['average_star'] = result_course[0].average_star;
+//                 obj['comment_number'] = result_course[0].comment_number;
+//                 obj["Course_detail"] = []
+//                 for (var i = 0; i < result_chapter.length; i++) {
+//                     var chp_obj = {}
+//                     chp_obj['Chapter_id'] = result_chapter[i].chapter_id
+//                     chp_obj['Chapter_auto_id'] = result_chapter[i].chapter_auto_id
+//                     chp_obj['Chapter_title'] = result_chapter[i].chapter_title
+//                     chp_obj['Chapter_detail'] = []
+//                     for (var j = 0; j < result_section.length; j++) {
+//                         if (result_section[j].chapter_auto_id == chp_obj['Chapter_auto_id']) {
+//                             var obj_tmp = {}
+//                             obj_tmp['Section_id'] = result_section[j].section_id
+//                             obj_tmp['Video_id'] = result_section[j].video_id
+//                             obj_tmp['Section_title'] = result_section[j].section_title
+//                             obj_tmp['Section_intro'] = result_section[j].section_intro
+//                             obj_tmp['Video'] = result_section[j].video
+//                             chp_obj['Chapter_detail'].push(obj_tmp)
+//                         }
+//                     }
+//                     obj["Course_detail"].push(chp_obj)
+//                 }
+//                 var test = {};
+//                 test["data"] = obj
+//                     // console.log("testtttttt : " + JSON.stringify(test))
+//                 res.send(test)
+//             });
+//         });
+//     });
 
-})
+// })
 
 
 //使用multer將影片傳到assets並幫影片命名
@@ -128,8 +123,9 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
     var chapter_title = req.body.chapter_title;
     console.log(JSON.stringify(req.body))
     var old_image_path_arr = req.body.old_image_path_arr;
-    // var main_image = req.files.main_image[0].key;
     var chapter_num = Number(req.body.chapter_num);
+    var section_title = req.body.section_title;
+    var section_intro = req.body.section_intro;
 
     return new Promise(function(resolve, reject) {
         mysql.con.getConnection(function(err, connection) {
@@ -179,6 +175,36 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             })
                         },
                         (origin_chapter_id_arr, next) => {
+                            var origin_vidoe_id_mysql = "SELECT video_id FROM final_section where course_id = ? ORDER BY section_id ASC"
+                            mysql.con.query(origin_vidoe_id_mysql, course_id, function(err7, origin_vidoe_id) {
+                                if (err7) throw err7;
+                                var origin_video_id_arr = [];
+                                for (i = 0; i < origin_vidoe_id.length; i++) {
+                                    origin_video_id_arr.push(origin_vidoe_id[i].video_id)
+                                }
+                                // console.log("origin_chapter_id_arr: " + origin_chapter_id_arr)
+                                next(null, origin_chapter_id_arr, origin_video_id_arr)
+                            })
+                        },
+                        (origin_chapter_id_arr, origin_video_id_arr, next) => {
+
+                            var video_id_arr = (req.body.video_id_arr).split(",");
+
+                            var video_id_different = diff(origin_video_id_arr, video_id_arr);
+
+                            console.log("origin_video_id_arr: " + origin_video_id_arr)
+                            console.log("video_id_arr: " + video_id_arr)
+                            console.log("video_id_different: " + video_id_different)
+                            if (video_id_different.length != 0) {
+                                var delete_video_id_sql = "DELETE FROM final_section WHERE course_id = ? AND video_id = ? ;"
+                                mysql.con.query(delete_video_id_sql, [course_id, video_id_different[0]], function(err8, delete_video_result) {
+                                    if (err8) throw err8;
+                                    console.log("------------delete video id : " + video_id_different[0] + "------------")
+                                })
+                            }
+                            next(null, origin_chapter_id_arr, video_id_arr)
+                        },
+                        (origin_chapter_id_arr, video_id_arr, next) => {
                             //進行chapter的更新
                             var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
                             var auto_id_different = diff(origin_chapter_id_arr, chapter_auto_id);
@@ -221,56 +247,26 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                     })
                                 }
                             }
-                            next(null)
+                            next(null, video_id_arr)
                         },
-                        (next) => {
+                        (video_id_arr, next) => {
                             var updte_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
                             mysql.con.query(updte_chapter_id_mysql, course_id, function(err2, update_chapter_id) {
                                 if (err2) throw err2;
                                 var update_chapter_id_arr = [];
+                                console.log("update_chapter_id : " + JSON.stringify(update_chapter_id))
                                 for (i = 0; i < update_chapter_id.length; i++) {
                                     update_chapter_id_arr.push(update_chapter_id[i].chapter_auto_id)
                                 }
                                 console.log("update_chapter_id_arr: " + update_chapter_id_arr)
-                                next(null, update_chapter_id_arr)
+                                next(null, update_chapter_id_arr, video_id_arr)
                             })
                         },
-                        (update_chapter_id_arr, next) => {
-                            var origin_vidoe_id_mysql = "SELECT video_id FROM final_section where course_id = ? ORDER BY section_id ASC"
-                            mysql.con.query(origin_vidoe_id_mysql, course_id, function(err7, origin_vidoe_id) {
-                                if (err7) throw err7;
-                                var origin_video_id_arr = [];
-                                for (i = 0; i < origin_vidoe_id.length; i++) {
-                                    origin_video_id_arr.push(origin_vidoe_id[i].video_id)
-                                }
-                                // console.log("origin_chapter_id_arr: " + origin_chapter_id_arr)
-                                next(null, update_chapter_id_arr, origin_video_id_arr)
-                            })
-                        },
-                        (update_chapter_id_arr, origin_video_id_arr, next) => {
-
-                            console.log("update_chapter_id_arr: " + update_chapter_id_arr)
-                                // var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
+                        (update_chapter_id_arr, video_id_arr, next) => {
                             var each_chapter_section_num = (req.body.each_chapter_section_num).split(",");
-                            var each_video_src = (req.body.each_video_src).split(",");
-
-                            var section_title = req.body.section_title;
-                            var section_intro = req.body.section_intro;
-                            var video_id_arr = (req.body.video_id_arr).split(",");
-
-                            var video_id_different = diff(origin_video_id_arr, video_id_arr);
-
-                            console.log("origin_video_id_arr: " + origin_video_id_arr)
-                            console.log("video_id_arr: " + video_id_arr)
-                            console.log("video_id_different: " + video_id_different)
-                            if (video_id_different.length != 0) {
-                                var delete_video_id_sql = "DELETE FROM final_section WHERE course_id = ? AND video_id = ? ;"
-                                mysql.con.query(delete_video_id_sql, [course_id, video_id_different[0]], function(err8, delete_video_result) {
-                                    if (err8) throw err8;
-                                    console.log("------------delete video id : " + video_id_different[0] + "------------")
-                                })
-                            }
-
+                            console.log("update_chapter_id_arr: " + update_chapter_id_arr)
+                            console.log("each_chapter_section_num: " + each_chapter_section_num)
+                                // var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
                             var m = 0;
 
                             for (var i = 0, k = 0; i < update_chapter_id_arr.length; i++) {
@@ -295,6 +291,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                         })
                                         m++;
                                     } else {
+                                        var each_video_src = (req.body.each_video_src).split(",");
                                         if (each_video_src[k].length == "") {
                                             var new_video_name = req.files.class_video[m].key
                                             console.log("-----------------------upadte video--------------------------")

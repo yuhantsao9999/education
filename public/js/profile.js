@@ -27,10 +27,16 @@ function display_profile_user_info() {
             userPictureInput.name = "user_picture"
             userPictureInput.setAttribute("onclick", "updateUserImage()");
             var userPicturePath = profile_info_obj.info[0].user_image
+            console.log(profile_info_obj.info[0].provider)
+            console.log(userPicturePath)
             if (userPicturePath !== null) {
-                userPictureInput.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + userPicturePath;
+                if (profile_info_obj.info[0].provider == "facebook") {
+                    userPictureInput.src = userPicturePath
+                } else {
+                    userPictureInput.src = "c" + userPicturePath;
+                }
             } else {
-                userPictureInput.src = "./img/pen.png"
+                userPictureInput.src = "./img/profile_student.png"
             }
             document.getElementById("user_picture").appendChild(userPictureInput);
 
@@ -81,7 +87,9 @@ display_profile_user_info();
 //     var xml_img = new XMLHttpRequest;
 //     xml_img.open('post', '/profile/updateUserImage', true);
 //     xml_img.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
-//     xml_img.send(null);
+//     var user_image = document.getElementsByName("user_image")[0].value;
+//     xml_img.send(JSON.stringify(user_image));
+//     // alert("圖片修改成功！")
 //     xml_img.onreadystatechange = function() {
 
 //     }
@@ -95,6 +103,7 @@ function add_user_info() {
     var accessToken = localStorage.getItem("accessToken")
     xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     var user_name = document.getElementsByClassName("name")[0].value;
+    // var user_image = document.getElementsByName("user_image")[0].value;
     var about_me = document.getElementsByClassName("about_me")[0].value;
     var urlPersonalWebsite = document.getElementsByName("urlPersonalWebsite")[0].value;
     var facebookProfile = document.getElementsByName("facebookProfile")[0].value;
@@ -103,6 +112,7 @@ function add_user_info() {
     var profile_detail = {
         user_name: user_name,
         about_me: about_me,
+        // user_image: user_image,
         PersonalWebsite: urlPersonalWebsite,
         facebookProfile: facebookProfile,
         youtubeProfile: youtubeProfile,

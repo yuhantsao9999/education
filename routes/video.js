@@ -11,75 +11,11 @@ app.use('/', router);
 
 
 
-//course detail api
-router.get("/education/classinfo", function(req, res) {
-    var title = req.query.title;
-    // console.log(title)
-    var mysql_course = `select * from new_course where course_title=?`;
-    mysql.con.query(mysql_course, title, function(err, result_course) {
-        if (err) throw err
-            // console.log("heyyyyyyyyy : " + result_course) //所有課程資訊
-        var course_id = result_course[0].course_id;
-        var title = result_course[0].course_title;
-        var intro = result_course[0].course_intro;
-        var teacher = result_course[0].course_teacher;
-        //TODO:以chapter id做排序大到小
-        var mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
-        mysql.con.query(mysql_chapter, course_id, function(err, result_chapter) {
-            if (err) throw err
-                // console.log(result_chapter) //所有章節資訊
-            var mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
-            mysql.con.query(mysql_section, course_id, function(err, result_section) {
-                // console.log("result_section : " + JSON.stringify(result_section))
-                if (err) throw err
-                    // console.log(result_section) //所有節的資訊
-                var obj = {};
-                obj['Course_id'] = result_course[0].course_id; //添加名稱
-                obj['Course_title'] = result_course[0].course_title;
-                obj['Course_intro'] = result_course[0].course_intro;
-                obj['Course_teacher'] = result_course[0].course_teacher;
-                obj['Course_teacher_intro'] = result_course[0].course_teacher_intro;
-                obj['For_who'] = result_course[0].for_who;
-                obj['star_number'] = result_course[0].star_number;
-                obj['average_star'] = result_course[0].average_star;
-                obj['comment_number'] = result_course[0].comment_number;
-                obj["Course_detail"] = []
-                for (var i = 0; i < result_chapter.length; i++) {
-                    var chp_obj = {}
-                    chp_obj['Chapter_id'] = result_chapter[i].chapter_id
-                    chp_obj['Chapter_auto_id'] = result_chapter[i].chapter_auto_id
-                    chp_obj['Chapter_title'] = result_chapter[i].chapter_title
-                    chp_obj['Chapter_detail'] = []
-                    for (var j = 0; j < result_section.length; j++) {
-                        if (result_section[j].chapter_auto_id == chp_obj['Chapter_auto_id']) {
-                            var obj_tmp = {}
-                            obj_tmp['Section_id'] = result_section[j].section_id
-                            obj_tmp['Section_title'] = result_section[j].section_title
-                            obj_tmp['Section_intro'] = result_section[j].section_intro
-                            obj_tmp['Video'] = result_section[j].video
-                            chp_obj['Chapter_detail'].push(obj_tmp)
-                        }
-                    }
-                    obj["Course_detail"].push(chp_obj)
-                }
-                var test = {};
-                test["data"] = obj
-                console.log("testtttttt : " + JSON.stringify(test))
-                res.send(test)
-            });
-        });
-    });
-})
-
 
 //video.html
-//course video api
 router.post("/education/videoinfo", function(req, res) {
-    var title = req.body.videoinfo_obj.title;
+    var { title, section, section_id, user_token } = req.body.videoinfo_obj;
     var chapter_id = req.body.videoinfo_obj.chapter;
-    var section = req.body.videoinfo_obj.section;
-    var section_id = req.body.videoinfo_obj.section_id;
-    var user_token = req.body.videoinfo_obj.user_token;
     async.waterfall([
         (next) => {
             var mysql_course = `select * from new_course where course_title=?;`;
@@ -88,7 +24,6 @@ router.post("/education/videoinfo", function(req, res) {
                 next(null, course_id);
             });
         },
-        //TODO:之後可以新增使用者再次回到課程時，直接回到上次觀看的時候,這個有bug(好像又修好了？！)
         (course_id, next) => {
             var mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter 
             on  final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id=? and new_chapter.chapter_id=? and final_section.section_id=?`;
@@ -116,7 +51,6 @@ router.post("/education/videoinfo", function(req, res) {
                     video_detail_array.push({ video: video, user_currentTime: user_vider_current_time })
                     var data = {};
                     data["data"] = video_detail_array;
-                    // console.log(data)
                     next(null);
                     res.send(data)
                 }
@@ -210,7 +144,8 @@ router.post("/videoupdate", function(req, res) {
             });
         },
         (user_id, video_id, next) => {
-            var complete = Math.floor(current_time / total_time);
+            console.log(current_time)
+            var complete = Math.round((current_time + 3) / total_time);
             var update_videotile_detail_sql = {
                 video_time: current_time,
                 video_duration: total_time,
@@ -230,8 +165,5 @@ router.post("/videoupdate", function(req, res) {
     });
 })
 
-router.get("/test", function(req, res) {
-    // console.log("hi");
-    res.send();
-});
+
 module.exports = router;

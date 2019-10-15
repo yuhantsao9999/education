@@ -85,10 +85,6 @@ function display_classinfo_all() {
                 } else {
                     average_star_div.appendChild(average_star)
                 }
-
-
-
-
                 var course_teacher_div = document.createElement("div");
                 course_teacher_div.className = "course_teacher"
                 var course_teacher = document.createTextNode(obj.data[i].course_teacher);
@@ -145,7 +141,7 @@ function display_classinfo_for_new_hand() {
 
 
                 var courseImg_div = document.createElement("div");
-                courseImg_div.className = "col-2"
+                courseImg_div.className = "col-3"
 
                 courseImg_a.appendChild(courseImg_img)
                 courseImg_div.appendChild(courseImg_a)

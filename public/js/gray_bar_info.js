@@ -6,7 +6,6 @@ function gray_bar_info() {
     xml_gray.onreadystatechange = function() {
         if (xml_gray.readyState == 4) {
             var obj = JSON.parse(xml_gray.responseText)
-            console.log(obj)
 
             var userNum_content = document.createTextNode(obj.user_num);
             var courseNum_content = document.createTextNode(obj.course_num);

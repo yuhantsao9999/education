@@ -11,7 +11,7 @@ var multerS3 = require('multer-s3');
 var multer = require('multer');
 
 //s3的帳號密碼於.env
-const { BUCKET_NAME, IAM_USER_KEY, IAM_USER_SECRET } = process.env;
+const { IAM_USER_KEY, IAM_USER_SECRET } = process.env;
 
 aws.config.update({
     accessKeyId: IAM_USER_KEY,

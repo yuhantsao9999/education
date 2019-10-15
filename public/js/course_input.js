@@ -157,14 +157,6 @@ function check_member_sign_status() {
         if (xml_icon.readyState == 4) {
             if (xml_icon.responseText == "error") {
                 //還沒登入
-                // var signLi = document.createElement("li");
-                // var signContent = document.createTextNode("登入");
-                // var signA = document.createElement("a");
-                // signA.href = "./sign_in.html"
-                // signA.appendChild(signContent)
-                // signLi.appendChild(signA)
-                // document.getElementById("clearfix").appendChild(signLi)
-                alert("請先登入帳號哦!");
                 window.location.assign("./sign_in.html")
             } else {
                 //已登入

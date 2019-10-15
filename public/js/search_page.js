@@ -23,7 +23,7 @@ function display_search_course_info() {
                     var rowA = document.createElement("a");
                     // var titleContent = document.createTeLINExtNode(obj.Course_title);
                     classImg.className = "class_picture";
-                    classImg.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj[i].main_image
+                    classImg.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj[i].main_image
                     colDiv.className = "col-4"
                     rowA.className = "row clearfix"
 
@@ -71,7 +71,7 @@ function display_classinfo_for_new_hand() {
             console.log(obj)
             for (i = 0; i < obj.data.length; i++) {
                 var courseImg_img = document.createElement("img");
-                courseImg_img.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data[i].main_image
+                courseImg_img.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj.data[i].main_image
 
                 var courseImg_a = document.createElement("a");
                 courseImg_a.href = ("/course.html?title=" + obj.data[i].course_title);
@@ -83,12 +83,6 @@ function display_classinfo_for_new_hand() {
                 courseImg_a.appendChild(courseImg_img)
                 courseImg_div.appendChild(courseImg_a)
                 document.getElementById("for_newHand").appendChild(courseImg_div);
-
-                // <div class="col-2">
-                //         <!-- <a href="">
-                //             <img src="./img/go.jpg" alt="logo" /></a> -->
-
-                //     </div>
             }
         }
     }
