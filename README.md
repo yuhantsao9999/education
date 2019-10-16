@@ -120,8 +120,8 @@ In the home page, users can see all the courses, and find the specific courses t
 </p>
 
 
-- 資料庫會記錄各個課程影片的進度，並於使用者再次登入頁面時顯示
-- 左側課程大綱也會顯示各影片的進度
+- Archived user’s course video progress by polling status regularly and stored in course_progress table
+- The course progress will display in left side
 
 
 ---
