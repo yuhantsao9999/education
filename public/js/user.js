@@ -2,7 +2,6 @@
 // 註冊登入或 hello 按鈕
 function user_sign_icon() {
     accessToken = localStorage.getItem("accessToken")
-        // console.log("accessToken" + accessToken)
     var xml_icon = new XMLHttpRequest();
     xml_icon.open("get", "/profile/getinfo", true);
     xml_icon.setRequestHeader("Authorization", "Bearer" + " " + accessToken);

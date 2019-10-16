@@ -1,11 +1,8 @@
 var express = require("express");
 var mysql = require('../module/db');
-var app = express();
+const app = express();
 const router = express.Router();
-var request = require('request');
-
-// 從根目錄使用router
-app.use('/', router);
+// const verification = require('../util/verification')
 
 
 

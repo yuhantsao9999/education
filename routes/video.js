@@ -6,12 +6,6 @@ const router = express.Router();
 var async = require('async');
 
 
-// 從根目錄使用router
-app.use('/', router);
-
-
-
-
 //video.html
 router.post("/education/videoinfo", function(req, res) {
     var { title, section, section_id, user_token } = req.body.videoinfo_obj;

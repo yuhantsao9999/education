@@ -14,6 +14,8 @@ app.use(express.static('public'));
 app.use(express.static('uploads'));
 
 app.use(express.static('dao'));
+app.use(express.static('util'));
+
 
 
 //middleware
@@ -53,7 +55,6 @@ let check_member_token_and_status = function(req, res, next) {
             next();
         }
     });
-
 }
 
 
@@ -71,18 +72,11 @@ app.use('/', course_list);
 const course_search = require('./routes/course_search');
 app.use('/', course_search);
 
-
 const video = require('./routes/video');
 app.use('/', video);
 
-
 const sign_api = require('./routes/sign_api');
 app.use('/', sign_api);
-
-const course = require('./routes/course');
-app.use('/', course);
-
-
 
 const comment = require('./routes/comment');
 app.use('/', comment);
@@ -90,12 +84,16 @@ app.use('/', comment);
 const course_update = require('./routes/course_update');
 app.use('/', course_update);
 
-
 const gray_bar = require('./routes/gray_bar');
 app.use('/', gray_bar);
 
+const course = require('./routes/course');
+app.use('/', course);
+
 const profile = require('./routes/profile');
 app.use('/', check_member_token_and_status, profile);
+
+
 
 
 

@@ -5,10 +5,6 @@ const path = require('path')
 const app = express();
 const router = express.Router();
 
-// 從根目錄使用router
-app.use('/', router);
-
-
 router.post('/user/button', async function(req, res) {
     var course_title = req.body.course_title;
     //先判斷有是否是會員(有token)

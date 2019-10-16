@@ -19,22 +19,6 @@ aws.config.update({
 });
 const s3 = new aws.S3();
 
-// 從根目錄使用router
-app.use('/', router);
-
-
-//使用multer將影片傳到assets並幫影片命名
-// var storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, 'assets')
-//     },
-//     filename: function(req, file, cb) {
-//         cb(null, file.fieldname + '-' + Date.now() + file.originalname.slice(-4))
-//     },
-// })
-// var upload = multer({ storage: storage })
-
-// router.use(express.static(path.join(__dirname, 'public')))
 
 //s3取代multer
 var upload = multer({

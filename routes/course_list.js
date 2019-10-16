@@ -4,10 +4,6 @@ const course = require('../dao/course')
 const app = express();
 const router = express.Router();
 
-
-// 從根目錄使用router
-app.use('/', router);
-
 //course detail api
 router.get("/education/classinfo", function(req, res) {
     var title = req.query.title;

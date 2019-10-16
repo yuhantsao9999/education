@@ -6,10 +6,6 @@ var request = require('request');
 const crypto = require('crypto');
 
 
-// 從根目錄使用router
-app.use('/', router);
-
-
 //signup API
 router.post('/user/signup', function(req, res) {
     var { name, email } = req.body;
