@@ -11,7 +11,6 @@ sign_out_icon();
 //log out
 function sign_out() {
     localStorage.removeItem('accessToken');
-    alert(JSON.stringify(localStorage))
     alert("帳號登出囉!")
     window.location.replace("./sign_in.html");
 }
