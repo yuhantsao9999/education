@@ -38,7 +38,6 @@ document.getElementById("sumbit").addEventListener("click", function() {
 
 
 //FB
-// This is called with the results from from FB.getLoginStatus().
 function statusChangeCallback(response) {
     if (response.status === 'connected') {
         testAPI();
@@ -78,20 +77,15 @@ function checkLoginState() {
 window.fbAsyncInit = function() {
     FB.init({
         appId: '513734669198278',
-        cookie: true, // enable cookies to allow the server to access 
-        // the session
-        xfbml: true, // parse social plugins on this page
-        version: 'v3.3' // The Graph API version to use for the call
+        xfbml: true,
+        version: 'v4.0'
     });
-
-    FB.getLoginStatus(function(response) {
-        statusChangeCallback(response);
-    });
+    FB.AppEvents.logPageView();
 };
 
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
+    if (d.getElementById(id)) { return; }
     js = d.createElement(s);
     js.id = id;
     js.src = "https://connect.facebook.net/en_US/sdk.js";
