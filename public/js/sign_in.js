@@ -32,24 +32,16 @@ document.getElementById("sumbit").addEventListener("click", function() {
 
 
 //FB
-// This is called with the results from from FB.getLoginStatus().
+
 function statusChangeCallback(response) {
-    // console.log('statusChangeCallback');
-    // console.log(response);
-
     if (response.status === 'connected') {
-
+        console.log('Logged in and authenticated');
         testAPI();
-
-
     } else {
-        // The person is not logged into your app or we are unable to tell.
         console.log('Not authenticated')
     }
 }
-// This function is called when someone finishes with the Login
-// Button.  See the onlogin handler attached to it in the sample
-// code below.
+
 function checkLoginState() {
     FB.getLoginStatus(function(response) {
         statusChangeCallback(response);
@@ -63,12 +55,9 @@ function checkLoginState() {
             provider: "faceboook",
             fb_token: accessToken,
         }
-        console.log("this is profile_fb" + JSON.stringify(profile_fb))
         xml.send(JSON.stringify(profile_fb));
         xml.onload = function() {
-            console.log(xml.responseText)
             var accessToken = (JSON.parse(xml.responseText).data.access_token);
-            console.log("accessToken" + accessToken)
             localStorage.setItem("accessToken", accessToken)
             window.location.assign("./profile.html")
         }
@@ -81,13 +70,11 @@ window.fbAsyncInit = function() {
         xfbml: true,
         version: 'v3.3'
     });
-
-
     FB.getLoginStatus(function(response) {
         statusChangeCallback(response);
     });
 };
-// Load the SDK asynchronously
+
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
