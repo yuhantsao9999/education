@@ -11,7 +11,7 @@ function display_class_info() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText)
-                // console.log("OHHHHHHHHH: " + JSON.stringify(obj))
+            console.log("OHHHHHHHHH: " + JSON.stringify(obj))
                 //替換課程名稱
             var titleDiv = document.createElement("div");
             var titleContent = document.createTextNode(obj.data.Course_title);
@@ -52,7 +52,7 @@ function display_class_info() {
                 average_star = "0.0"
                 obj.data.comment_number = "課程新上架 0"
             }
-            var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.comment_number + "則評論)");
+            var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.star_number + "則評論)");
             document.getElementById("comment_numebr").appendChild(comment_numebrContent)
 
             //TODO:按鈕
