@@ -44,6 +44,7 @@ Course At Door is an education platform for teaching like Coursera.
 
 #### Additional
 - Unit Test: Jest
+- Facebook Login API
 - Git / GitHub
 
 ## Architecture 
