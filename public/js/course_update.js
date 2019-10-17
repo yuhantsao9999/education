@@ -26,7 +26,7 @@
                 //替換課程圖片
                 var course_image_img = document.createElement("img");
                 course_image_img.className = "courseImageImg"
-                course_image_img.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data.main_image
+                course_image_img.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj.data.main_image
                 document.getElementsByClassName("row-maininfo")[2].appendChild(course_image_img);
 
                 var count = 0;
@@ -137,7 +137,7 @@
                         //Video_id標記在此
                         videoNowVideo.id = obj.data.Course_detail[i].Chapter_detail[j].Video_id;
                         videoNowVideo.className = "videoNow"
-                        videoNowVideo.src = "https://cad-education-project.s3-ap-northeast-1.amazonaws.com/class-video-picture/" + obj.data.Course_detail[i].Chapter_detail[j].Video
+                        videoNowVideo.src = "https://d3u7d6vbm9yroa.cloudfront.net/" + obj.data.Course_detail[i].Chapter_detail[j].Video
                         videoNowDiv.appendChild(videoNowVideo);
 
                         var videoDiv = document.createElement("div");
