@@ -52,7 +52,11 @@ function display_class_info() {
                 average_star = "0.0"
                 obj.data.comment_number = "課程新上架 0"
             }
-            var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.star_number + "則評論)");
+            if (obj.data.star_number == "null") {
+                var comment_numebrContent = document.createTextNode(average_star + " (" + 0 + "則評論)");
+            } else {
+                var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.star_number + "則評論)");
+            }
             document.getElementById("comment_numebr").appendChild(comment_numebrContent)
 
             //TODO:按鈕
