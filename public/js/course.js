@@ -50,13 +50,10 @@ function display_class_info() {
             } else if (average_star == "null") {
                 console.log("ysss ")
                 average_star = "0.0"
-                obj.data.comment_number = "課程新上架 0"
+                obj.data.star_number = "課程新上架 0"
             }
-            if (obj.data.star_number == "null") {
-                var comment_numebrContent = document.createTextNode(average_star + " (" + 0 + "則評論)");
-            } else {
-                var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.star_number + "則評論)");
-            }
+            var comment_numebrContent = document.createTextNode(average_star + " (" + obj.data.star_number + "則評論)");
+
             document.getElementById("comment_numebr").appendChild(comment_numebrContent)
 
             //TODO:按鈕
