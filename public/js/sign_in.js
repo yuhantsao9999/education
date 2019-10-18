@@ -20,6 +20,9 @@ document.getElementById("sumbit").addEventListener("click", function() {
         if (xml.responseText == "error") {
             alert("please sign up first!")
             window.location.assign('./sign_up.html')
+        } else if (xml.responseText == "沒有填寫全部登入欄位") {
+            alert("請確實填寫所有登入欄位")
+            window.location.assign('./sign_in.html')
         } else {
             var accessToken = JSON.parse(xml.responseText).data.access_token;
             // console.log(accessToken);

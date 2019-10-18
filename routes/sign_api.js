@@ -8,8 +8,14 @@ const crypto = require('crypto');
 
 //signup API
 router.post('/user/signup', function(req, res) {
+
     var { name, email } = req.body;
     var pwd = req.body.password;
+    // 後端初步驗證資料是否確實填寫
+    if (!(name) || !(pwd) || !(email)) {
+        res.send("沒有填寫全部註冊欄位");
+        return;
+    }
     var test = {};
     var array = [];
     var hash = crypto.createHash('sha256');
@@ -93,9 +99,13 @@ router.post('/user/signup', function(req, res) {
 //signin API/user/signin
 router.post('/user/signin', function(req, res) {
     if (req.body.provider == "native") {
-        var { name, email } = req.body;
-        console.log(email)
+        var { email } = req.body;
+        // console.log(email)
         var pwd = req.body.password;
+        if (!(pwd) || !(email)) {
+            res.send("沒有填寫全部登入欄位");
+            return;
+        }
         // console.log(name + " " + email + " " + pwd)
         var test = {};
         var array = [];
