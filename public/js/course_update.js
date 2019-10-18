@@ -357,8 +357,8 @@
                 }
                 each_chapter_section_num_arr.push(((document.getElementsByName("chapter_title")[i]).parentNode.parentNode.parentNode.childNodes.length) - 1)
             }
-            alert(chapter_auto_id_arr)
-            alert("each_chapter_section_num_arr : " + each_chapter_section_num_arr)
+            // alert(chapter_auto_id_arr)
+            // alert("each_chapter_section_num_arr : " + each_chapter_section_num_arr)
 
             var section_num = 0
             for (var i = 0; i < each_chapter_section_num_arr.length; i++) {
@@ -387,7 +387,7 @@
                     //新增
                     // alert("Add");
                     class_video_arr.push(null)
-                    alert(document.getElementsByClassName('videoNow')[i].id.length);
+                        // alert(document.getElementsByClassName('videoNow')[i].id.length);
                     if (document.getElementsByClassName('videoNow')[i].id.length != 0) {
                         // alert("舊有的")
                         video_id_array.push(document.getElementsByClassName('videoNow')[i].id)
