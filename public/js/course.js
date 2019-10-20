@@ -178,6 +178,7 @@ function display_add_class_buttom() {
 
 
             } else { //error
+                // console.log("errrrrrr")
                 // alert("課程尚未註冊過");
                 display_buttom();
 
@@ -407,7 +408,7 @@ comment();
 //image_for new_hand
 function display_classinfo_for_new_hand() {
     var xml_new_hand = new XMLHttpRequest();
-    xml_new_hand.open("get", "/education/classinfo/for_newHand", true);
+    xml_new_hand.open("get", "/education/classinfo/for_beginner", true);
     xml_new_hand.send(null);
     xml_new_hand.onreadystatechange = function() {
         if (xml_new_hand.readyState == 4) {

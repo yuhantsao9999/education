@@ -1,35 +1,33 @@
 const express = require('express')
-    // var bodyParser = require('body-parser')
-var mysql = require('../module/db');
-const app = express();
+const mysql = require('../module/db');
 const router = express.Router();
-var async = require('async');
+const async = require('async');
 
 
 //video.html
 router.post("/education/videoinfo", function(req, res) {
-    var { title, section, section_id, user_token } = req.body.videoinfo_obj;
-    var chapter_id = req.body.videoinfo_obj.chapter;
+    let { title, section, section_id, user_token } = req.body.videoinfo_obj;
+    let chapter_id = req.body.videoinfo_obj.chapter;
     async.waterfall([
         (next) => {
-            var mysql_course = `select * from new_course where course_title=?;`;
+            let mysql_course = `select * from new_course where course_title=?;`;
             mysql.con.query(mysql_course, title, function(err1, result_course) {
-                var course_id = result_course[0].course_id;
+                let course_id = result_course[0].course_id;
                 next(null, course_id);
             });
         },
         (course_id, next) => {
-            var mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter 
+            let mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter 
             on  final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id=? and new_chapter.chapter_id=? and final_section.section_id=?`;
             mysql.con.query(mysql_video, [course_id, chapter_id, section_id], function(err, result_video) {
-                var video = result_video[0].video;
-                var video_id = result_video[0].video_id;
+                let video = result_video[0].video;
+                let video_id = result_video[0].video_id;
                 next(null, course_id, video, video_id)
                     // console.log(result_video)
             });
         },
         (course_id, video, video_id, next) => {
-            var mysql_video_current_time = `SELECT video_time FROM course_progress JOIN user  on course_progress.user_id=user.user_id 
+            let mysql_video_current_time = `SELECT video_time FROM course_progress JOIN user  on course_progress.user_id=user.user_id 
             WHERE course_progress.video_id=? and user.access_token=?;`;
             mysql.con.query(mysql_video_current_time, [video_id, user_token], function(err1, result_video_current_time) {
                 // console.log(result_video_current_time)
@@ -40,10 +38,10 @@ router.post("/education/videoinfo", function(req, res) {
                     res.send("need to registered first")
                 } else {
                     // console.log("2222222")
-                    var user_vider_current_time = result_video_current_time[0].video_time;
-                    var video_detail_array = []
+                    let user_vider_current_time = result_video_current_time[0].video_time;
+                    let video_detail_array = []
                     video_detail_array.push({ video: video, user_currentTime: user_vider_current_time })
-                    var data = {};
+                    let data = {};
                     data["data"] = video_detail_array;
                     next(null);
                     res.send(data)
@@ -57,36 +55,36 @@ router.post("/education/videoinfo", function(req, res) {
 
 //vidoe_percent
 router.post("/video_percent", function(req, res) {
-    var title = req.body.title;
-    var access_token = req.body.accessToken;
+    let title = req.body.title;
+    let access_token = req.body.accessToken;
     // console.log(req.body)
     // console.log("tokennnnnnn : " + accessToken)
     async.waterfall([
         (next) => {
-            var profile_check_member = `SELECT user_id FROM user WHERE access_token = ? `
+            let profile_check_member = `SELECT user_id FROM user WHERE access_token = ? `
             mysql.con.query(profile_check_member, access_token, function(err1, result_course) {
-                var user_id = result_course[0].user_id;
+                let user_id = result_course[0].user_id;
                 console.log(user_id)
                 next(null, user_id)
             });
         },
         (user_id, next) => {
-            var video_time_sql =
+            let video_time_sql =
                 `SELECT video_time,video_duration FROM course_progress
             where course_title = ? and user_id = ? `
             mysql.con.query(video_time_sql, [title, user_id], function(err1, video_time_result) {
                 if (err1) throw err1;
                 console.log(JSON.stringify(video_time_result))
-                var progress_arr = []
+                let progress_arr = []
                 for (i = 0; i < video_time_result.length; i++) {
                     console.log(video_time_result[i].video_time)
                     console.log(video_time_result[i].video_duration)
-                    var progress = (video_time_result[i].video_time / video_time_result[i].video_duration)
+                    let progress = (video_time_result[i].video_time / video_time_result[i].video_duration)
                     console.log("progress : " + progress)
                     if (isFinite(progress)) {
                         // isNaN(progress) ||
-                        var progress = progress * 100
-                        progress_arr.push(Math.round(progress));
+                        let progress_percentage = progress * 100
+                        progress_arr.push(Math.round(progress_percentage));
                     } else {
                         progress_arr.push("0");
                     }
@@ -105,19 +103,19 @@ router.post("/video_percent", function(req, res) {
 //update video length api
 router.post("/videoupdate", function(req, res) {
 
-    var title = req.body.title;
-    var chapter_id = req.body.chapter;
-    var section_id = req.body.section_id;
+    let title = req.body.title;
+    let chapter_id = req.body.chapter;
+    let section_id = req.body.section_id;
 
-    var current_time = req.body.currentTime;
-    var total_time = req.body.totalTime;
-    var token = req.body.accessToken;
+    let current_time = req.body.currentTime;
+    let total_time = req.body.totalTime;
+    let token = req.body.accessToken;
     // console.log("body : " + JSON.stringify(req.body))
     async.waterfall([
         (next) => {
-            var profile_checkmember = `SELECT user_id FROM user WHERE access_token=? `
+            let profile_checkmember = `SELECT user_id FROM user WHERE access_token=? `
             mysql.con.query(profile_checkmember, token, function(err1, result_course) {
-                var user_id = result_course[0].user_id;
+                let user_id = result_course[0].user_id;
                 next(null, user_id)
             });
         },
@@ -125,7 +123,7 @@ router.post("/videoupdate", function(req, res) {
             // console.log("titleeeeeee : " + title)
             // console.log("chapter_id : " + chapter_id)
             // console.log("section_id : " + section_id)
-            var video_id_sql =
+            let video_id_sql =
                 `SELECT final_section.video_id FROM final_section join new_chapter join new_course 
             on final_section.chapter_auto_id=new_chapter.chapter_auto_id 
             and new_course.course_id=new_chapter.course_id
@@ -133,19 +131,19 @@ router.post("/videoupdate", function(req, res) {
             mysql.con.query(video_id_sql, [title, chapter_id, section_id], function(err1, video_id_result) {
                 if (err1)
                     throw err1;
-                var video_id = video_id_result[0].video_id;
+                let video_id = video_id_result[0].video_id;
                 next(null, user_id, video_id)
             });
         },
         (user_id, video_id, next) => {
             console.log(current_time)
-            var complete = Math.round((current_time + 3) / total_time);
-            var update_videotile_detail_sql = {
+            let complete = Math.round((current_time + 3) / total_time);
+            let update_videotile_detail_sql = {
                 video_time: current_time,
                 video_duration: total_time,
                 complete: complete,
             }
-            var update_videotime =
+            let update_videotime =
                 `UPDATE course_progress SET ?
             WHERE user_id = ?
             and video_id = ?;`

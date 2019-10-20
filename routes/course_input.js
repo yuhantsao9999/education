@@ -1,14 +1,10 @@
 require('dotenv').config();
 const express = require('express')
-    // var mysql = require('../module/db');
-    // const path = require('path')
-var course = require('../dao/course')
-const app = express();
+const course = require('../dao/course')
 const router = express.Router();
-// var async = require('async');
-var aws = require('aws-sdk');
-var multerS3 = require('multer-s3');
-var multer = require('multer');
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const multer = require('multer');
 
 //s3的帳號密碼於.env
 const { IAM_USER_KEY, IAM_USER_SECRET } = process.env;
@@ -21,7 +17,7 @@ const s3 = new aws.S3();
 
 
 //s3取代multer
-var upload = multer({
+const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'cad-education-project/class-video-picture',
@@ -34,11 +30,11 @@ var upload = multer({
     })
 })
 
-var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
+const mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
 router.post("/education/class_input", mixupload, async function(req, res) {
     try {
         let result = await course.course_input(req);
-        console.log(result)
+        // console.log(result)
         if (result == "ok") {
             // res.json({ status: "Success" })
             return res.redirect("/profile_teacher.html");
@@ -46,9 +42,9 @@ router.post("/education/class_input", mixupload, async function(req, res) {
             return res.redirect("/course_input.html");
             // res.json({ status: "input error" })
         }
-    } catch {
+    } catch (err) {
         // res.json({ status: "error" })
-        return "error"
+        return err
     }
 })
 module.exports = router;

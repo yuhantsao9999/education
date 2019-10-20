@@ -1,15 +1,14 @@
 require('dotenv').config();
 const express = require('express')
-var mysql = require('../module/db');
-const app = express();
+const mysql = require('../module/db');
 const router = express.Router();
-var async = require('async');
-var aws = require('aws-sdk');
-var multerS3 = require('multer-s3');
-var multer = require('multer');
+const async = require('async');
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const multer = require('multer');
 
 //s3的帳號密碼
-const { BUCKET_NAME, IAM_USER_KEY, IAM_USER_SECRET } = process.env;
+const { IAM_USER_KEY, IAM_USER_SECRET } = process.env;
 
 aws.config.update({
     accessKeyId: IAM_USER_KEY,
@@ -19,7 +18,7 @@ const s3 = new aws.S3();
 
 
 //s3取代multer
-var upload = multer({
+const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'cad-education-project/class-video-picture',
@@ -32,16 +31,16 @@ var upload = multer({
     })
 })
 
-var mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
+const mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'class_video', maxCount: 10 }]);
 router.post("/course_update/insertMysql", mixupload, function(req, res) {
-    var access_token = req.body.user_token;
-    var course_id = req.body.course_id;
-    var chapter_title = req.body.chapter_title;
-    console.log(JSON.stringify(req.body))
-    var old_image_path_arr = req.body.old_image_path_arr;
-    var chapter_num = Number(req.body.chapter_num);
-    var section_title = req.body.section_title;
-    var section_intro = req.body.section_intro;
+    // let access_token = req.body.user_token;
+    let course_id = req.body.course_id;
+    let chapter_title = req.body.chapter_title;
+    // console.log(JSON.stringify(req.body))
+    let old_image_path_arr = req.body.old_image_path_arr;
+    // let chapter_num = Number(req.body.chapter_num);
+    let section_title = req.body.section_title;
+    let section_intro = req.body.section_intro;
 
     return new Promise(function(resolve, reject) {
         mysql.con.getConnection(function(err, connection) {
@@ -63,10 +62,10 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             } else {
                                 //更新
                                 console.log("22222222  更新")
-                                var new_image_path = req.files.main_image[0].key
+                                let new_image_path = req.files.main_image[0].key
                                 console.log("new_image_path: " + new_image_path)
                                 console.log("course_id: " + course_id)
-                                var new_image_path_sql = "update new_course set main_image = ? where course_id = ? ;"
+                                let new_image_path_sql = "update new_course set main_image = ? where course_id = ? ;"
                                 mysql.con.query(new_image_path_sql, [new_image_path, course_id], function(err1, new_image_path_result) {
                                     if (err1) {
                                         reject("Database Query Error: " + err1);
@@ -79,22 +78,21 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         },
                         (next) => {
                             console.log(course_id)
-                            var origin_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
+                            let origin_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
                             mysql.con.query(origin_chapter_id_mysql, course_id, function(err2, origin_chapter_id) {
                                 if (err2) throw err2;
-                                var origin_chapter_id_arr = [];
+                                let origin_chapter_id_arr = [];
                                 for (i = 0; i < origin_chapter_id.length; i++) {
                                     origin_chapter_id_arr.push(origin_chapter_id[i].chapter_auto_id)
                                 }
-                                // console.log("origin_chapter_id_arr: " + origin_chapter_id_arr)
                                 next(null, origin_chapter_id_arr)
                             })
                         },
                         (origin_chapter_id_arr, next) => {
-                            var origin_vidoe_id_mysql = "SELECT video_id FROM final_section where course_id = ? ORDER BY section_id ASC"
+                            let origin_vidoe_id_mysql = "SELECT video_id FROM final_section where course_id = ? ORDER BY section_id ASC"
                             mysql.con.query(origin_vidoe_id_mysql, course_id, function(err7, origin_vidoe_id) {
                                 if (err7) throw err7;
-                                var origin_video_id_arr = [];
+                                let origin_video_id_arr = [];
                                 for (i = 0; i < origin_vidoe_id.length; i++) {
                                     origin_video_id_arr.push(origin_vidoe_id[i].video_id)
                                 }
@@ -104,15 +102,15 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         },
                         (origin_chapter_id_arr, origin_video_id_arr, next) => {
 
-                            var video_id_arr = (req.body.video_id_arr).split(",");
+                            let video_id_arr = (req.body.video_id_arr).split(",");
 
-                            var video_id_different = diff(origin_video_id_arr, video_id_arr);
+                            let video_id_different = diff(origin_video_id_arr, video_id_arr);
 
                             console.log("origin_video_id_arr: " + origin_video_id_arr)
                             console.log("video_id_arr: " + video_id_arr)
                             console.log("video_id_different: " + video_id_different)
                             if (video_id_different.length != 0) {
-                                var delete_video_id_sql = "DELETE FROM final_section WHERE course_id = ? AND video_id = ? ;"
+                                let delete_video_id_sql = "DELETE FROM final_section WHERE course_id = ? AND video_id = ? ;"
                                 mysql.con.query(delete_video_id_sql, [course_id, video_id_different[0]], function(err8, delete_video_result) {
                                     if (err8) throw err8;
                                     console.log("------------delete video id : " + video_id_different[0] + "------------")
@@ -122,14 +120,14 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         },
                         (origin_chapter_id_arr, video_id_arr, next) => {
                             //進行chapter的更新
-                            var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
-                            var auto_id_different = diff(origin_chapter_id_arr, chapter_auto_id);
+                            let chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
+                            let auto_id_different = diff(origin_chapter_id_arr, chapter_auto_id);
 
                             console.log("origin_chapter_id_arr : " + origin_chapter_id_arr);
                             console.log("chapter_auto_id : " + chapter_auto_id);
                             console.log("auto_id_different : " + auto_id_different)
                             if (auto_id_different.length != 0) {
-                                var delete_chapter_sql = "DELETE FROM new_chapter WHERE course_id = ? AND chapter_auto_id = ? ;"
+                                let delete_chapter_sql = "DELETE FROM new_chapter WHERE course_id = ? AND chapter_auto_id = ? ;"
                                 mysql.con.query(delete_chapter_sql, [course_id, auto_id_different[0]], function(err4, delete_chapter_result) {
                                     if (err4) throw err4;
                                     console.log("delete")
@@ -141,22 +139,22 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                 // console.log("內容 : " + chapter_auto_id[i] + "  haha型態 : " + typeof(chapter_auto_id[i]))
                                 if (chapter_auto_id[i] == "") {
                                     // console.log("course_id:  " + course_id)
-                                    var insert_sql = {
+                                    let insert_sql = {
                                         chapter_title: chapter_title[i],
                                         chapter_id: i + 1,
                                         course_id: course_id,
                                     }
-                                    var insert_chapter_sql = "INSERT INTO new_chapter SET ?"
+                                    let insert_chapter_sql = "INSERT INTO new_chapter SET ?"
                                     mysql.con.query(insert_chapter_sql, insert_sql, function(err2, insert_chapter_result) {
                                         if (err2) throw err2;
                                         console.log("inserttttttt")
                                     })
                                 } else {
-                                    var update_sql_detail = {
+                                    let update_sql_detail = {
                                         chapter_title: chapter_title[i],
                                         chapter_id: i + 1,
                                     }
-                                    var update_chapter_sql = "UPDATE new_chapter SET ? WHERE course_id = ? AND chapter_auto_id = ?;"
+                                    let update_chapter_sql = "UPDATE new_chapter SET ? WHERE course_id = ? AND chapter_auto_id = ?;"
                                     mysql.con.query(update_chapter_sql, [update_sql_detail, course_id, chapter_auto_id[i]], function(err3, update_chapter_result) {
                                         if (err3) throw err3;
                                         console.log("updateeeeeee new_chapter")
@@ -166,10 +164,10 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             next(null, video_id_arr)
                         },
                         (video_id_arr, next) => {
-                            var updte_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
+                            let updte_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
                             mysql.con.query(updte_chapter_id_mysql, course_id, function(err2, update_chapter_id) {
                                 if (err2) throw err2;
-                                var update_chapter_id_arr = [];
+                                let update_chapter_id_arr = [];
                                 console.log("update_chapter_id : " + JSON.stringify(update_chapter_id))
                                 for (i = 0; i < update_chapter_id.length; i++) {
                                     update_chapter_id_arr.push(update_chapter_id[i].chapter_auto_id)
@@ -179,21 +177,21 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             })
                         },
                         (update_chapter_id_arr, video_id_arr, next) => {
-                            var each_chapter_section_num = (req.body.each_chapter_section_num).split(",");
+                            let each_chapter_section_num = (req.body.each_chapter_section_num).split(",");
                             console.log("update_chapter_id_arr: " + update_chapter_id_arr)
                             console.log("each_chapter_section_num: " + each_chapter_section_num)
-                                // var chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
-                            var m = 0;
+                                // let chapter_auto_id = (req.body.chapter_auto_id_arr).split(",");
+                            let m = 0;
 
-                            for (var i = 0, k = 0; i < update_chapter_id_arr.length; i++) {
-                                for (var j = 0; j < each_chapter_section_num[i]; j++) {
+                            for (let i = 0, k = 0; i < update_chapter_id_arr.length; i++) {
+                                for (let j = 0; j < each_chapter_section_num[i]; j++) {
                                     if (video_id_arr[k] == "") {
-                                        var new_video_name = req.files.class_video[m].key
+                                        let new_video_name = req.files.class_video[m].key
                                         console.log("-----------------------insert new video--------------------------")
                                         console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
                                         console.log("new_video_name " + req.files.class_video[m].key);
 
-                                        var insert_sql = {
+                                        let insert_sql = {
                                             course_id,
                                             chapter_auto_id: update_chapter_id_arr[i],
                                             section_id: k + 1,
@@ -201,20 +199,20 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                             section_intro: section_intro[k++],
                                             video: new_video_name,
                                         }
-                                        var insert_section_id_mysql = "INSERT INTO final_section SET ? ;"
+                                        let insert_section_id_mysql = "INSERT INTO final_section SET ? ;"
                                         mysql.con.query(insert_section_id_mysql, insert_sql, function(err5, insert_section_id) {
                                             if (err5) throw err5;
                                         })
                                         m++;
                                     } else {
-                                        var each_video_src = (req.body.each_video_src).split(",");
+                                        let each_video_src = (req.body.each_video_src).split(",");
                                         if (each_video_src[k].length == "") {
-                                            var new_video_name = req.files.class_video[m].key
+                                            let new_video_name = req.files.class_video[m].key
                                             console.log("-----------------------upadte video--------------------------")
                                             console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
                                             console.log("video_name " + each_video_src[k]);
                                             console.log("new_video_name " + req.files.class_video[m].key);
-                                            var update_sql = {
+                                            let update_sql = {
                                                 course_id,
                                                 chapter_auto_id: update_chapter_id_arr[i],
                                                 section_id: k + 1,
@@ -223,7 +221,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                                 video: new_video_name,
                                             }
 
-                                            var update_section_sql = "UPDATE final_section SET ? WHERE video_id= ? "
+                                            let update_section_sql = "UPDATE final_section SET ? WHERE video_id= ? "
                                             mysql.con.query(update_section_sql, [update_sql, video_id_arr[k]], function(err3, update_section_result) {
                                                 if (err3) throw err3;
                                                 console.log("updateeeeeee video")
@@ -234,7 +232,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                             console.log("-----------------------update but not video--------------------------")
                                             console.log("section_intro : " + section_intro[k] + " belong to update_chapter_id_arr " + update_chapter_id_arr[i]);
                                             console.log("video_name " + each_video_src[k]);
-                                            var update_section_detail = {
+                                            let update_section_detail = {
                                                 course_id,
                                                 chapter_auto_id: update_chapter_id_arr[i],
                                                 section_id: k + 1,
@@ -242,7 +240,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                                 section_intro: section_intro[k],
                                                 video: each_video_src[k]
                                             }
-                                            var update_section_sql = "UPDATE final_section SET ? WHERE  video_id=?;"
+                                            let update_section_sql = "UPDATE final_section SET ? WHERE  video_id=?;"
                                             mysql.con.query(update_section_sql, [update_section_detail, video_id_arr[k]], function(err3, update_section_result) {
                                                 if (err3) throw err3;
                                                 console.log("updateeeeeee section")
@@ -256,10 +254,10 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             next(null)
                         },
                         (next) => {
-                            var course_title_sql = "SELECT course_title FROM new_course where course_id = ?"
+                            let course_title_sql = "SELECT course_title FROM new_course where course_id = ?"
                             mysql.con.query(course_title_sql, course_id, function(err2, course_title_result) {
                                 if (err2) throw err2;
-                                var course_title = course_title_result[0].course_title;
+                                let course_title = course_title_result[0].course_title;
                                 console.log(course_title)
                                     // con.commit((error) => {
                                     //     if (error) {
@@ -297,11 +295,11 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
 
 //取差集
 function diff(array1, array2) {
-    var tmp = [];
-    var flag;
-    for (var i = 0; i < array1.length; i++) {
+    let tmp = [];
+    let flag;
+    for (let i = 0; i < array1.length; i++) {
         flag = true
-        for (var j = 0; j < array2.length; j++) {
+        for (let j = 0; j < array2.length; j++) {
             if (array1[i] == array2[j] || array1[i] == "undefined" || array1[i] == null) {
                 flag = false;
             }

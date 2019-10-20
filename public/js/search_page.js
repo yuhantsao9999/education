@@ -63,7 +63,7 @@ display_search_course_info();
 //image_for new_hand
 function display_classinfo_for_new_hand() {
     var xml_new_hand = new XMLHttpRequest();
-    xml_new_hand.open("get", "/education/classinfo/for_newHand", true);
+    xml_new_hand.open("get", "/education/classinfo/for_beginner", true);
     xml_new_hand.send(null);
     xml_new_hand.onreadystatechange = function() {
         if (xml_new_hand.readyState == 4) {

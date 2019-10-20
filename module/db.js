@@ -47,8 +47,12 @@ const sql_query = function(sql, params, callback) {
         return new Promise(function(resolve, reject) {
             mysqlCon.query(sql, params, function(error, results) {
                 if (error) {
+                    // throw error
                     reject(callback(error));
-                } else resolve(results);
+                } else {
+                    console.log(results)
+                    resolve(results);
+                }
             });
         });
     } else {
@@ -100,7 +104,6 @@ const sql_query_connection = function(sql, params, connection) {
 module.exports = {
     core: mysql,
     con: mysqlCon,
-    // pool: pool,
     sql_query: sql_query,
     sql_query_connection: sql_query_connection
 };
