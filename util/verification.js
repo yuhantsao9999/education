@@ -30,7 +30,7 @@ module.exports = {
             // return res.send("error");
         }
     },
-    verify_user_id: (req, res, next) => {
+    verify_user_id: async(req, res, next) => {
         try {
             console.log("vvvvvvvvvveeeeeeeeerrrrrrtoken")
             let token;
@@ -53,7 +53,7 @@ module.exports = {
                 }
             }
             let profile_check_member = "SELECT user_id FROM user WHERE access_token= ?"
-            let result = await mysql.pool.query(profile_check_member, token)
+            let result = await mysql.sql_query(profile_check_member, token)
 
             // if (err) throw err;
             if (String(result).length == 0) {

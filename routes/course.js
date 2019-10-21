@@ -1,27 +1,26 @@
 const express = require('express')
 const mysql = require('../module/db');
 const router = express.Router();
-const verification = require('../util/verification')
 
-router.post('/user/button', verification.verify_token, async function(req, res) {
+router.post('/user/button', async function(req, res) {
     let course_title = req.body.course_title;
-    // let token;
-    // //先判斷有是否是會員(有token)
-    // if (req.headers.authorization == null) {
-    //     token = "";
-    // } else {
-    //     let bearer_token = req.headers.authorization;
-    //     if (bearer_token.substr(0, 6) != "Bearer") {
-    //         // console.log(bearer_token.substr(0, 5))
-    //         // console.log("not a Bearer token");
-    //         return res.send("error");
-    //     } else {
-    //         let bearer = bearer_token.substr(0, 6);
-    //         token = bearer_token.substr(7);
-    //         // console.log("token : " + Token)
-    //     }
-    // }
-    let token = req.token
+    let token;
+    //先判斷有是否是會員(有token)
+    if (req.headers.authorization == null) {
+        token = "";
+    } else {
+        let bearer_token = req.headers.authorization;
+        if (bearer_token.substr(0, 6) != "Bearer") {
+            // console.log(bearer_token.substr(0, 5))
+            // console.log("not a Bearer token");
+            return res.send("error");
+        } else {
+            let bearer = bearer_token.substr(0, 6);
+            token = bearer_token.substr(7);
+            // console.log("token : " + Token)
+        }
+    }
+
     let profile_checkmember = `SELECT user_id,email FROM user WHERE access_token = ? `
     let checkmember = await mysql.sql_query(profile_checkmember, token);
     if (String(checkmember).length == 0) {
@@ -104,12 +103,12 @@ router.post('/user/addcourse', function(req, res) {
 
 
 //右下老師資訊
-// router.post("/course/teacher/info", async function(req, res) {
-//     let course_title = req.body.course_title;
-//     let mysql_course_info = "SELECT new_course.course_teacher,user.provider,user.user_image,user.about_me,user.PersonalWebsite,user.facebookProfile,user.youtubeProfile,user.user_image FROM new_course Join user ON new_course.course_teacher=user.name where course_title = ?";
-//     let teacher_info = await mysql.sql_query(mysql_course_info, course_title);
-//     res.send(teacher_info)
-// })
+router.post("/course/teacher/info", async function(req, res) {
+    let course_title = req.body.course_title;
+    let mysql_course_info = "SELECT new_course.course_teacher,user.provider,user.user_image,user.about_me,user.PersonalWebsite,user.facebookProfile,user.youtubeProfile,user.user_image FROM new_course Join user ON new_course.course_teacher=user.name where course_title = ?";
+    let teacher_info = await mysql.sql_query(mysql_course_info, course_title);
+    res.send(teacher_info)
+})
 
 
 
