@@ -121,42 +121,38 @@ router.post('/user/signin', function(req, res) {
             mysql.pool.getConnection(function(err, connection) {
                 connection.beginTransaction(async(err) => {
                     try {
+                        console.log("tryyyyyyyyy")
                         let user_email_list = `SELECT * from user where email = ?;`
                         let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
-                            //  function(err, result4_1) {
-                            // if (err) throw err;
-
+                        console.log(user_email)
                         if (user_email.length == 0) {
                             res.send("err")
                         } else {
                             let update_native_token = `UPDATE user SET ? WHERE email = ? and provider = 'native';`
-                            await mysql._connection(update_native_token, [update_user_access_token_sql, email], connection)
+                            await mysql.sql_query_transaction(update_native_token, [update_user_access_token_sql, email], connection)
                             let new_user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
                             let access_token = new_user_email[0].access_token
-                                // console.log(access_token);
-                                // console.log(token)
                             if (access_token == token) {
                                 array.push({ id: new_user_email[0].id, provider: new_user_email[0].provider, name: new_user_email[0].name, email: new_user_email[0].email, pricture: new_user_email[0].picture });
                                 test['data'] = ({ access_token: new_user_email[0].access_token, access_expired: new_user_email[0].access_expired, user: array[0] });
-
                             } else {
-                                res.send('"err": "Invalid token."')
+                                res.send('err')
                             }
                             connection.commit(function(err) {
                                 if (err) {
                                     return connection.rollback(function() {
-                                        res.send('"err": "Invalid token."')
-                                        throw error;
+                                        res.send('err')
                                     });
                                 }
-                                resolve("successful")
+                                // resolve("successful")
+
                                 res.json(test);
                             });
                         }
-                    } catch (err) {
-                        throw err;
-                        console.log("catch")
-                        res.send('"err": "Invalid token."')
+                    } catch (error) {
+
+                        // console.log(error)
+                        res.send('err')
                     }
                 })
 

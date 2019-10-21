@@ -16,8 +16,8 @@ document.getElementById("sumbit").addEventListener("click", function() {
         // console.log(profile)
     xml.send(JSON.stringify(profile));
     xml.onload = function() {
-        // console.log(xml.responseText)
-        if (xml.responseText == "error") {
+        console.log(xml.responseText)
+        if (xml.responseText == "err") {
             alert("please sign up first!")
             window.location.assign('./sign_up.html')
         } else if (xml.responseText == "沒有填寫全部登入欄位") {
@@ -25,7 +25,6 @@ document.getElementById("sumbit").addEventListener("click", function() {
             window.location.assign('./sign_in.html')
         } else {
             var accessToken = JSON.parse(xml.responseText).data.access_token;
-            // console.log(accessToken);
             localStorage.setItem("accessToken", accessToken);
             alert("sign in successful")
             window.location.assign('./profile.html')
