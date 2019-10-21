@@ -5,7 +5,7 @@ const { DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
 
 // connect mysql
 const mysqlCon = mysql.createPool({
-    connectionLimit: 10,
+    connectionLimit: 100,
     host: DB_HOST,
     user: DB_USER,
     password: DB_PASSWORD,
@@ -60,15 +60,8 @@ const sql_query_transaction = function(sql, params, connection) {
     return new Promise(function(resolve, reject) {
         connection.query(sql, params, function(error, results) {
             if (error) {
-                // return mysql.pool.rollback(function() {});
-                // connection.rollback(function() {
-                // console.log("connecttion_rollback")
-                // throw error
-                // connection.release();
-                //     console.log("rollback2")
                 reject("Database Query Error: " + error);
                 return (connection.rollback(() => connection.release()))
-                    // });
             } else
                 resolve(results);
         });

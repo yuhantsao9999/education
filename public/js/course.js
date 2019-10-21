@@ -171,12 +171,10 @@ function display_add_class_buttom() {
         if (xml.readyState == 4) {
             var registered = xml.responseText;
             // console.log(xml.responseText)
-            if (registered == "registered") {
+            if (registered == "registered" || !(accessToken)) {
                 // alert("課程已註冊過llllllll");
                 // display_buttom();
                 // document.getElementById("add_class").style.display = "none";
-
-
             } else { //error
                 // console.log("errrrrrr")
                 // alert("課程尚未註冊過");

@@ -121,7 +121,6 @@ router.post('/user/signin', function(req, res) {
             mysql.pool.getConnection(function(err, connection) {
                 connection.beginTransaction(async(err) => {
                     try {
-                        console.log("tryyyyyyyyy")
                         let user_email_list = `SELECT * from user where email = ?;`
                         let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
                         console.log(user_email)
@@ -144,14 +143,10 @@ router.post('/user/signin', function(req, res) {
                                         res.send('err')
                                     });
                                 }
-                                // resolve("successful")
-
                                 res.json(test);
                             });
                         }
                     } catch (error) {
-
-                        // console.log(error)
                         res.send('err')
                     }
                 })

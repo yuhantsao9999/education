@@ -16,7 +16,6 @@ module.exports = {
                     let main_image = req.files.main_image[0].key;
                     let chapter_num = Number(req.body.chapter_num);
 
-
                     let mysql_user_name = `select name,user_id from user where access_token = ?`;
                     let result_user_name = await mysql.sql_query_transaction(mysql_user_name, access_token, connection)
                         // console.log("11111111     :     " + result_user_name);
@@ -143,5 +142,104 @@ module.exports = {
         } catch (err) {
             throw err
         }
+    },
+    get_course_info: async(title) => {
+        try {
+            let mysql_course = `select * from new_course where course_title=?`;
+            let result_course = await mysql.sql_query(mysql_course, title)
+                //所有課程資訊
+            let course_id = result_course[0].course_id;
+            //以chapter id做排序大到小
+            let mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
+            let result_chapter = await mysql.sql_query(mysql_chapter, course_id)
+                //所有章節資訊
+            let mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
+            let result_section = await mysql.sql_query(mysql_section, course_id)
+            let obj = {};
+            obj['Course_id'] = result_course[0].course_id; //添加名稱
+            obj['Course_title'] = result_course[0].course_title;
+            obj['Course_intro'] = result_course[0].course_intro;
+            obj['Course_teacher'] = result_course[0].course_teacher;
+            obj['Course_teacher_intro'] = result_course[0].course_teacher_intro;
+            obj['For_who'] = result_course[0].for_who;
+            obj['star_number'] = result_course[0].star_number;
+            obj['average_star'] = result_course[0].average_star;
+            obj['comment_number'] = result_course[0].comment_number;
+            obj["Course_detail"] = []
+            for (let i = 0; i < result_chapter.length; i++) {
+                const chp_obj = {}
+                chp_obj['Chapter_id'] = result_chapter[i].chapter_id
+                chp_obj['Chapter_auto_id'] = result_chapter[i].chapter_auto_id
+                chp_obj['Chapter_title'] = result_chapter[i].chapter_title
+                chp_obj['Chapter_detail'] = []
+                for (let j = 0; j < result_section.length; j++) {
+                    if (result_section[j].chapter_auto_id == chp_obj['Chapter_auto_id']) {
+                        const obj_tmp = {}
+                        obj_tmp['Section_id'] = result_section[j].section_id
+                        obj_tmp['Section_title'] = result_section[j].section_title
+                        obj_tmp['Section_intro'] = result_section[j].section_intro
+                        obj_tmp['Video'] = result_section[j].video
+                        chp_obj['Chapter_detail'].push(obj_tmp)
+                    }
+                }
+                obj["Course_detail"].push(chp_obj)
+            }
+            let test = {};
+            test["data"] = obj
+            return test
+        } catch (err) {
+            // console.log(err)
+            throw err
+        }
+    },
+    get_course_update_info: async(course_id) => {
+        try {
+            let mysql_course = `select * from new_course where course_id=?`;
+            let result_course = await mysql.sql_query(mysql_course, course_id)
+                //以chapter id做排序大到小
+            let mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
+            let result_chapter = await mysql.sql_query(mysql_chapter, course_id)
+                //所有章節資訊
+            let mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
+            let result_section = await mysql.sql_query(mysql_section, course_id)
+            let obj = {};
+            obj['Course_id'] = result_course[0].course_id; //添加名稱
+            obj['Course_title'] = result_course[0].course_title;
+            obj['main_image'] = result_course[0].main_image;
+            obj['Course_intro'] = result_course[0].course_intro;
+            obj['Course_teacher'] = result_course[0].course_teacher;
+            obj['Course_teacher_intro'] = result_course[0].course_teacher_intro;
+            obj['For_who'] = result_course[0].for_who;
+            obj['star_number'] = result_course[0].star_number;
+            obj['average_star'] = result_course[0].average_star;
+            obj['comment_number'] = result_course[0].comment_number;
+            obj["Course_detail"] = []
+            for (let i = 0; i < result_chapter.length; i++) {
+                const chp_obj = {}
+                chp_obj['Chapter_id'] = result_chapter[i].chapter_id
+                chp_obj['Chapter_auto_id'] = result_chapter[i].chapter_auto_id
+                chp_obj['Chapter_title'] = result_chapter[i].chapter_title
+                chp_obj['Chapter_detail'] = []
+                for (let j = 0; j < result_section.length; j++) {
+                    if (result_section[j].chapter_auto_id == chp_obj['Chapter_auto_id']) {
+                        const obj_tmp = {}
+                        obj_tmp['Section_id'] = result_section[j].section_id
+                        obj_tmp['Section_title'] = result_section[j].section_title
+                        obj_tmp['Section_intro'] = result_section[j].section_intro
+                        obj_tmp['Video'] = result_section[j].video
+                        chp_obj['Chapter_detail'].push(obj_tmp)
+                    }
+                }
+                obj["Course_detail"].push(chp_obj)
+            }
+            let test = {};
+            test["data"] = obj
+                // res.send(test)
+            return test
+        } catch (err) {
+            throw err
+        }
     }
+
+
 }
