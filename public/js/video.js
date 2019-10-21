@@ -4,7 +4,7 @@ function display_table_of_course_content() {
     var title = urlParams.get('title');
     var chapter = urlParams.get('chapter');
     var section = urlParams.get('section');
-    var section_id = urlParams.get('section_id');
+    // var section_id = urlParams.get('section_id');
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("get", "/education/classinfo?title=" + title, true)
@@ -155,7 +155,7 @@ function update_user_video_percentage() {
                 window.location.assign("./course.html?title=" + title)
             } else {
                 var obj = JSON.parse(xmlhttp_video.responseText)
-                    // console.log("obj" + JSON.stringify(obj.data))
+                console.log("obj" + JSON.stringify(obj.data))
                 var video_name = obj.data[0].video;
                 var video_user_currentTime = obj.data[0].user_currentTime;
                 var video = document.createElement("video");

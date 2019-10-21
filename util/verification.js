@@ -23,7 +23,7 @@ module.exports = {
             }
         }
         let profile_check_member = "SELECT user_id FROM user WHERE access_token= ?"
-        mysql.con.query(profile_check_member, token, function(err, result) {
+        mysql.pool.query(profile_check_member, token, function(err, result) {
             // if (err) throw err;
             if (String(result).length == 0) {
                 //如果沒有token，就傳失敗訊息

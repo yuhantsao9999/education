@@ -9,7 +9,7 @@ router.get("/gray/info", function(req, res) {
     async.waterfall([
         (next) => {
             let user_mysql = `SELECT user_id FROM user;`
-            mysql.con.query(user_mysql, function(err, user_result) {
+            mysql.pool.query(user_mysql, function(err, user_result) {
                 if (err) throw err;
                 let user_num = user_result.length;
                 console.log(user_num)
@@ -18,7 +18,7 @@ router.get("/gray/info", function(req, res) {
         },
         (user_num, next) => {
             let course_mysql = `SELECT course_id FROM new_course;`
-            mysql.con.query(course_mysql, function(err, course_result) {
+            mysql.pool.query(course_mysql, function(err, course_result) {
                 if (err) throw err;
                 let course_num = course_result.length;
                 console.log(course_num)
@@ -27,7 +27,7 @@ router.get("/gray/info", function(req, res) {
         },
         (user_num, course_num, next) => {
             let comment_mysql = `SELECT comment_id,star FROM comment;`
-            mysql.con.query(comment_mysql, function(err, comment_result) {
+            mysql.pool.query(comment_mysql, function(err, comment_result) {
                 if (err) throw err;
                 let comment_num = comment_result.length;
                 console.log(comment_num)

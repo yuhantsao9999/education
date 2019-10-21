@@ -7,17 +7,17 @@ const router = express.Router();
 router.get("/education/classinfo", function(req, res) {
     let title = req.query.title;
     let mysql_course = `select * from new_course where course_title=?`;
-    mysql.con.query(mysql_course, title, function(err, result_course) {
+    mysql.pool.query(mysql_course, title, function(err, result_course) {
         if (err) throw err
             //所有課程資訊
         let course_id = result_course[0].course_id;
         //以chapter id做排序大到小
         let mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
-        mysql.con.query(mysql_chapter, course_id, function(err, result_chapter) {
+        mysql.pool.query(mysql_chapter, course_id, function(err, result_chapter) {
             if (err) throw err
                 // console.log(result_chapter) //所有章節資訊
             let mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
-            mysql.con.query(mysql_section, course_id, function(err, result_section) {
+            mysql.pool.query(mysql_section, course_id, function(err, result_section) {
                 if (err) return err
                 let obj = {};
                 obj['Course_id'] = result_course[0].course_id; //添加名稱
@@ -61,15 +61,15 @@ router.get("/education/classinfo", function(req, res) {
 router.get("/course_update", function(req, res) {
     const course_id = req.query.course_id;
     let mysql_course = `select * from new_course where course_id=?`;
-    mysql.con.query(mysql_course, course_id, function(err, result_course) {
+    mysql.pool.query(mysql_course, course_id, function(err, result_course) {
         if (err) throw err
             //以chapter id做排序大到小
         let mysql_chapter = `select * from new_chapter where course_id=? ORDER BY chapter_id ASC`;
-        mysql.con.query(mysql_chapter, course_id, function(err, result_chapter) {
+        mysql.pool.query(mysql_chapter, course_id, function(err, result_chapter) {
             if (err) throw err
                 //所有章節資訊
             let mysql_section = `select * from final_section where course_id=? ORDER BY section_id ASC`;
-            mysql.con.query(mysql_section, course_id, function(err, result_section) {
+            mysql.pool.query(mysql_section, course_id, function(err, result_section) {
                 if (err) return err
                 let obj = {};
                 obj['Course_id'] = result_course[0].course_id; //添加名稱

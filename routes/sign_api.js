@@ -30,7 +30,7 @@ router.post('/user/signup', function(req, res) {
         email: email,
     }
     return new Promise(function(resolve, reject) {
-        mysql.con.getConnection(function(err, connection) {
+        mysql.pool.getConnection(function(err, connection) {
             if (err) {
                 reject("Database get connection err: " + err);
                 return;
@@ -118,11 +118,11 @@ router.post('/user/signin', function(req, res) {
             access_expired,
         }
         return new Promise(function(resolve, reject) {
-            mysql.con.getConnection(function(err, connection) {
+            mysql.pool.getConnection(function(err, connection) {
                 connection.beginTransaction(async(err) => {
                     try {
                         let user_email_list = `SELECT * from user where email = ?;`
-                        let user_email = await mysql.sql_query_connection(user_email_list, email, connection)
+                        let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
                             //  function(err, result4_1) {
                             // if (err) throw err;
 
@@ -130,8 +130,8 @@ router.post('/user/signin', function(req, res) {
                             res.send("err")
                         } else {
                             let update_native_token = `UPDATE user SET ? WHERE email = ? and provider = 'native';`
-                            await mysql.sql_query_connection(update_native_token, [update_user_access_token_sql, email], connection)
-                            let new_user_email = await mysql.sql_query_connection(user_email_list, email, connection)
+                            await mysql._connection(update_native_token, [update_user_access_token_sql, email], connection)
+                            let new_user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
                             let access_token = new_user_email[0].access_token
                                 // console.log(access_token);
                                 // console.log(token)
@@ -205,14 +205,14 @@ router.post('/user/signin', function(req, res) {
                 SELECT * from user where provider = 'facebook'
                 and email = '${email}';
                 `
-            mysql.con.query(fb_repeat, function(err, fb_repeat_result) {
+            mysql.pool.query(fb_repeat, function(err, fb_repeat_result) {
                 if (err) throw err;
                 //若mysql內有沒有這筆臉書的emil資料，沒有則存取資料
                 if (String(fb_repeat_result).length == 0) {
-                    mysql.con.query(fb_insert, fb_user, function(err, fb_result) {
+                    mysql.pool.query(fb_insert, fb_user, function(err, fb_result) {
                         if (err) throw err;
                         // 存取後再顯示資料
-                        mysql.con.query(fb_select, function(err, fb_user_info) {
+                        mysql.pool.query(fb_select, function(err, fb_user_info) {
                             if (err) throw err;
                             // console.log(fb_user_info)
                             let user = fb_user_info
@@ -223,9 +223,9 @@ router.post('/user/signin', function(req, res) {
                         })
                     })
                 } else { //若mysql內有這筆臉書的emil資料，則update資料並直接顯示資料
-                    mysql.con.query(fb_update_user_token, fb_user, function(err, fb_update) {
+                    mysql.pool.query(fb_update_user_token, fb_user, function(err, fb_update) {
                         if (err) throw err;
-                        mysql.con.query(fb_select_all_from_email, function(err, fb_user_info) {
+                        mysql.pool.query(fb_select_all_from_email, function(err, fb_user_info) {
                             if (err) throw err;
                             console.log("wwwwwqwwwww :" + JSON.stringify(fb_user_info))
                             let user = fb_user_info

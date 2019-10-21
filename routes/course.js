@@ -1,5 +1,5 @@
 const express = require('express')
-let mysql = require('../module/db');
+const mysql = require('../module/db');
 const router = express.Router();
 
 router.post('/user/button', async function(req, res) {
@@ -62,7 +62,7 @@ router.post('/user/addcourse', function(req, res) {
     }
 
     let profile_checkmember = "SELECT user_id,email FROM user WHERE access_token=?"
-    mysql.con.query(profile_checkmember, token, function(err, result) {
+    mysql.pool.query(profile_checkmember, token, function(err, result) {
         if (err) return err;
         let user_id = result[0].user_id;
         let email = result[0].email;
@@ -74,7 +74,7 @@ router.post('/user/addcourse', function(req, res) {
         } else {
             //有token是會員，將此課程加入course_progress資訊
             let video_id = "SELECT video_id FROM final_section JOIN new_course ON new_course.course_id=final_section.course_id where new_course.course_title= ? ;"
-            mysql.con.query(video_id, course_title, function(err, video_id_result) {
+            mysql.pool.query(video_id, course_title, function(err, video_id_result) {
                 // console.log(video_id_result)
                 for (let i = 0; i < video_id_result.length; i++) {
                     video_id_arr.push(video_id_result[i].video_id)
@@ -86,7 +86,7 @@ router.post('/user/addcourse', function(req, res) {
                         course_title: course_title,
                     }
                     let course_input_course_progress = "INSERT INTO course_progress SET ? "
-                    mysql.con.query(course_input_course_progress, insert_course_progress_info_detail, function(err, result) {
+                    mysql.pool.query(course_input_course_progress, insert_course_progress_info_detail, function(err, result) {
                         if (err) throw err;
                         // 0 表示 false
                         // 1 表示 true
@@ -105,7 +105,6 @@ router.post('/user/addcourse', function(req, res) {
 //右下老師資訊
 router.post("/course/teacher/info", async function(req, res) {
     let course_title = req.body.course_title;
-    // console.log("課程標題 : " + course_title)
     let mysql_course_info = "SELECT new_course.course_teacher,user.provider,user.user_image,user.about_me,user.PersonalWebsite,user.facebookProfile,user.youtubeProfile,user.user_image FROM new_course Join user ON new_course.course_teacher=user.name where course_title = ?";
     let teacher_info = await mysql.sql_query(mysql_course_info, course_title);
     res.send(teacher_info)

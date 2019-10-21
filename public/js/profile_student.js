@@ -2,9 +2,9 @@
 function display_all_registered_classinfo() {
     var accessToken = localStorage.getItem("accessToken")
     console.log("accessToken" + accessToken)
-    var js = document.getElementById('content')
+        // var js = document.getElementById('content')
     var xml = new XMLHttpRequest;
-    xml.open('post', '/profile/student/class', true);
+    xml.open('get', '/profile/student/class', true);
     xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);
     xml.send(null);
     xml.onreadystatechange = function() {

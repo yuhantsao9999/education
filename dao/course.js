@@ -3,7 +3,7 @@ const mysql = require('../module/db');
 
 module.exports = {
     course_input: async(req) => {
-        mysql.con.getConnection(function(err, connection) {
+        mysql.pool.getConnection(function(err, connection) {
             connection.beginTransaction(async(error) => {
                 try {
                     console.log(JSON.stringify(req.body))
@@ -18,7 +18,7 @@ module.exports = {
 
 
                     let mysql_user_name = `select name,user_id from user where access_token = ?`;
-                    let result_user_name = await mysql.sql_query_connection(mysql_user_name, access_token, connection)
+                    let result_user_name = await mysql.sql_query_transaction(mysql_user_name, access_token, connection)
                         // console.log("11111111     :     " + result_user_name);
                     let user_name = result_user_name[0].name;
                     let user_id = result_user_name[0].user_id;
@@ -35,11 +35,11 @@ module.exports = {
                     }
                     let mysql_course_input = `INSERT INTO new_course SET ?`;
 
-                    let result_course_input = await mysql.sql_query_connection(mysql_course_input, insert_course_sql, connection)
+                    let result_course_input = await mysql.sql_query_transaction(mysql_course_input, insert_course_sql, connection)
                         // console.log("22222222        ");
                     let mysql_course_id = `SELECT course_id FROM new_course WHERE course_title = ? and course_teacher = ?`;
 
-                    let result_course = await mysql.sql_query_connection(mysql_course_id, [course_title, user_name], connection);
+                    let result_course = await mysql.sql_query_transaction(mysql_course_id, [course_title, user_name], connection);
                     // console.log("33333333       " + JSON.stringify(result_course));
                     // console.log("33333333.222222      ");
                     let course_id = result_course[0].course_id
@@ -51,13 +51,13 @@ module.exports = {
                             chapter_title,
                         }
                         let mysql_chapter_input = `INSERT INTO new_chapter set ?`;
-                        let result_chapter_input = await mysql.sql_query_connection(mysql_chapter_input, insert_sql, connection)
+                        let result_chapter_input = await mysql.sql_query_transaction(mysql_chapter_input, insert_sql, connection)
                             // console.log("33333333.33333     ");
                     }
 
                     let mysql_chapter_auto_id = `SELECT chapter_auto_id FROM new_chapter WHERE course_id = ?`;
                     // console.log("4444444444    " + JSON.stringify(mysql_chapter_auto_id));
-                    let result_chapter_auto_id = await mysql.sql_query_connection(mysql_chapter_auto_id, course_id, connection)
+                    let result_chapter_auto_id = await mysql.sql_query_transaction(mysql_chapter_auto_id, course_id, connection)
                     let chapter_auto_id_arr = [];
                     for (i = 0; i < result_chapter_auto_id.length; i++) {
                         chapter_auto_id_arr.push(result_chapter_auto_id[i].chapter_auto_id)
@@ -96,7 +96,7 @@ module.exports = {
                             // console.log(insert_section_sql);
                         let mysql_section_input = "INSERT INTO final_section SET ?"
                             // console.log(mysql_section_input)
-                        await mysql.sql_query_connection(mysql_section_input, insert_section_sql, connection, function(error) {
+                        await mysql.sql_query_transaction(mysql_section_input, insert_section_sql, connection, function(error) {
                             // console.log("insert  section");
                         })
 
@@ -131,6 +131,15 @@ module.exports = {
             let beginner_course = {};
             beginner_course['data'] = result_beginner_course
             return beginner_course
+        } catch (err) {
+            throw err
+        }
+    },
+    course_search: async(keyword, error) => {
+        try {
+            let mysql_search = "SELECT * from new_course WHERE course_title LIKE '%" + keyword + "%'";
+            let result_search = await mysql.sql_query(mysql_search, keyword)
+            return result_search;
         } catch (err) {
             throw err
         }

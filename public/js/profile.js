@@ -98,7 +98,7 @@ display_profile_user_info();
 //公開資料確認登入以及修改
 function add_user_info() {
     var xml = new XMLHttpRequest;
-    xml.open('post', '/profile/info', true);
+    xml.open('post', '/profile/update_info', true);
     xml.setRequestHeader('content-type', 'application/json')
     var accessToken = localStorage.getItem("accessToken")
     xml.setRequestHeader("Authorization", "Bearer" + " " + accessToken);

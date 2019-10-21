@@ -34,12 +34,11 @@ const mixupload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'c
 router.post("/education/class_input", mixupload, async function(req, res) {
     try {
         let result = await course.course_input(req);
-        // console.log(result)
         if (result == "ok") {
             // res.json({ status: "Success" })
             return res.redirect("/profile_teacher.html");
         } else {
-            return res.redirect("/course_input.html");
+            return res.redirect("/profile_teacher");
             // res.json({ status: "input error" })
         }
     } catch (err) {

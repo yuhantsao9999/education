@@ -42,68 +42,42 @@ const mysqlCon = mysql.createPool({
 
 
 
-const sql_query = function(sql, params, callback) {
-    if (params) {
-        return new Promise(function(resolve, reject) {
-            mysqlCon.query(sql, params, function(error, results) {
-                if (error) {
-                    // throw error
-                    reject(callback(error));
-                } else {
-                    console.log(results)
-                    resolve(results);
-                }
-            });
+const sql_query = function(sql, params) {
+    return new Promise(function(resolve, reject) {
+        mysqlCon.query(sql, params, function(error, results) {
+            if (error) {
+                console.log(error)
+                reject(error);
+            } else {
+                // console.log(results)
+                resolve(results);
+            }
         });
-    } else {
-        return new Promise(function(resolve, reject) {
-            mysqlCon.query(sql, function(error, results) {
-                if (error) reject(callback(error));
-                else resolve(results);
-            });
-        });
-    }
+    });
 }
 
-const sql_query_connection = function(sql, params, connection) {
-    if (params) {
-        return new Promise(function(resolve, reject) {
-            connection.query(sql, params, function(error, results) {
-                if (error) {
-
-                    // return mysql.con.rollback(function() {});
-                    // connection.rollback(function() {
-                    console.log("connecttion_rollback")
-                        // throw error
-                        // connection.release();
-                        //     console.log("rollback2")
-                    reject("Database Query Error: " + error);
-                    return (connection.rollback(() => connection.release()))
-                        // });
-
-                } else
-                    resolve(results);
-            });
+const sql_query_transaction = function(sql, params, connection) {
+    return new Promise(function(resolve, reject) {
+        connection.query(sql, params, function(error, results) {
+            if (error) {
+                // return mysql.pool.rollback(function() {});
+                // connection.rollback(function() {
+                // console.log("connecttion_rollback")
+                // throw error
+                // connection.release();
+                //     console.log("rollback2")
+                reject("Database Query Error: " + error);
+                return (connection.rollback(() => connection.release()))
+                    // });
+            } else
+                resolve(results);
         });
-    } else {
-        return new Promise(function(resolve, reject) {
-            connection.query(sql, function(error, results) {
-                if (error) {
-                    // return mysql.con.rollback(function() {});
-                    connection.rollback(function() {
-                        connection.release();
-                        reject("Database Query Error: " + error);
-                        connection.release();
-                    });
-                } else resolve(results);
-            });
-        });
-    }
+    });
 }
 
 module.exports = {
     core: mysql,
-    con: mysqlCon,
+    pool: mysqlCon,
     sql_query: sql_query,
-    sql_query_connection: sql_query_connection
+    sql_query_transaction: sql_query_transaction
 };

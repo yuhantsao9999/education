@@ -74,13 +74,13 @@ function display_class_info() {
                 var chapterContent = document.createTextNode(i + 1);
                 chapterDiv.className = "row clearfix"
 
-                //TODO:應該要註冊過後才可以看影片
+
                 // accessToken = localStorage.getItem("accessToken")
                 if (accessToken) {
                     // 但如果token變了就gg
                     var chapterDiv_a = document.createElement("a");
                     // obj.data.Course_detail[i].Chapter_id
-                    //TODO:目前全部都會連到第一章第一個影片
+
                     chapterDiv_a.href = ("/video.html?title=" + obj.data.Course_title + "&chapter=1&section=1&section_id=1");
                 } else {
                     var chapterDiv_a = document.createElement("a");

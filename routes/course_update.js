@@ -43,7 +43,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
     let section_intro = req.body.section_intro;
 
     return new Promise(function(resolve, reject) {
-        mysql.con.getConnection(function(err, connection) {
+        mysql.pool.getConnection(function(err, connection) {
             connection.beginTransaction(async(error) => {
                 if (error) {
                     reject("Database Query Error: " + erorr);
@@ -66,10 +66,10 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                 console.log("new_image_path: " + new_image_path)
                                 console.log("course_id: " + course_id)
                                 let new_image_path_sql = "update new_course set main_image = ? where course_id = ? ;"
-                                mysql.con.query(new_image_path_sql, [new_image_path, course_id], function(err1, new_image_path_result) {
+                                mysql.pool.query(new_image_path_sql, [new_image_path, course_id], function(err1, new_image_path_result) {
                                     if (err1) {
                                         reject("Database Query Error: " + err1);
-                                        return con.rollback(function() {});
+                                        return pool.rollback(function() {});
                                     }
                                     // res.send("(๑•̀ㅂ•́)و✧ ٩(๑•̀ω•́๑)۶")
                                     next(null)
@@ -79,7 +79,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         (next) => {
                             console.log(course_id)
                             let origin_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
-                            mysql.con.query(origin_chapter_id_mysql, course_id, function(err2, origin_chapter_id) {
+                            mysql.pool.query(origin_chapter_id_mysql, course_id, function(err2, origin_chapter_id) {
                                 if (err2) throw err2;
                                 let origin_chapter_id_arr = [];
                                 for (i = 0; i < origin_chapter_id.length; i++) {
@@ -90,7 +90,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         },
                         (origin_chapter_id_arr, next) => {
                             let origin_vidoe_id_mysql = "SELECT video_id FROM final_section where course_id = ? ORDER BY section_id ASC"
-                            mysql.con.query(origin_vidoe_id_mysql, course_id, function(err7, origin_vidoe_id) {
+                            mysql.pool.query(origin_vidoe_id_mysql, course_id, function(err7, origin_vidoe_id) {
                                 if (err7) throw err7;
                                 let origin_video_id_arr = [];
                                 for (i = 0; i < origin_vidoe_id.length; i++) {
@@ -111,7 +111,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             console.log("video_id_different: " + video_id_different)
                             if (video_id_different.length != 0) {
                                 let delete_video_id_sql = "DELETE FROM final_section WHERE course_id = ? AND video_id = ? ;"
-                                mysql.con.query(delete_video_id_sql, [course_id, video_id_different[0]], function(err8, delete_video_result) {
+                                mysql.pool.query(delete_video_id_sql, [course_id, video_id_different[0]], function(err8, delete_video_result) {
                                     if (err8) throw err8;
                                     console.log("------------delete video id : " + video_id_different[0] + "------------")
                                 })
@@ -128,7 +128,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                             console.log("auto_id_different : " + auto_id_different)
                             if (auto_id_different.length != 0) {
                                 let delete_chapter_sql = "DELETE FROM new_chapter WHERE course_id = ? AND chapter_auto_id = ? ;"
-                                mysql.con.query(delete_chapter_sql, [course_id, auto_id_different[0]], function(err4, delete_chapter_result) {
+                                mysql.pool.query(delete_chapter_sql, [course_id, auto_id_different[0]], function(err4, delete_chapter_result) {
                                     if (err4) throw err4;
                                     console.log("delete")
                                 })
@@ -145,7 +145,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                         course_id: course_id,
                                     }
                                     let insert_chapter_sql = "INSERT INTO new_chapter SET ?"
-                                    mysql.con.query(insert_chapter_sql, insert_sql, function(err2, insert_chapter_result) {
+                                    mysql.pool.query(insert_chapter_sql, insert_sql, function(err2, insert_chapter_result) {
                                         if (err2) throw err2;
                                         console.log("inserttttttt")
                                     })
@@ -155,7 +155,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                         chapter_id: i + 1,
                                     }
                                     let update_chapter_sql = "UPDATE new_chapter SET ? WHERE course_id = ? AND chapter_auto_id = ?;"
-                                    mysql.con.query(update_chapter_sql, [update_sql_detail, course_id, chapter_auto_id[i]], function(err3, update_chapter_result) {
+                                    mysql.pool.query(update_chapter_sql, [update_sql_detail, course_id, chapter_auto_id[i]], function(err3, update_chapter_result) {
                                         if (err3) throw err3;
                                         console.log("updateeeeeee new_chapter")
                                     })
@@ -165,7 +165,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         },
                         (video_id_arr, next) => {
                             let updte_chapter_id_mysql = "SELECT chapter_auto_id FROM new_chapter where course_id = ?"
-                            mysql.con.query(updte_chapter_id_mysql, course_id, function(err2, update_chapter_id) {
+                            mysql.pool.query(updte_chapter_id_mysql, course_id, function(err2, update_chapter_id) {
                                 if (err2) throw err2;
                                 let update_chapter_id_arr = [];
                                 console.log("update_chapter_id : " + JSON.stringify(update_chapter_id))
@@ -200,7 +200,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                             video: new_video_name,
                                         }
                                         let insert_section_id_mysql = "INSERT INTO final_section SET ? ;"
-                                        mysql.con.query(insert_section_id_mysql, insert_sql, function(err5, insert_section_id) {
+                                        mysql.pool.query(insert_section_id_mysql, insert_sql, function(err5, insert_section_id) {
                                             if (err5) throw err5;
                                         })
                                         m++;
@@ -222,7 +222,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                             }
 
                                             let update_section_sql = "UPDATE final_section SET ? WHERE video_id= ? "
-                                            mysql.con.query(update_section_sql, [update_sql, video_id_arr[k]], function(err3, update_section_result) {
+                                            mysql.pool.query(update_section_sql, [update_sql, video_id_arr[k]], function(err3, update_section_result) {
                                                 if (err3) throw err3;
                                                 console.log("updateeeeeee video")
                                             })
@@ -241,7 +241,7 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                                                 video: each_video_src[k]
                                             }
                                             let update_section_sql = "UPDATE final_section SET ? WHERE  video_id=?;"
-                                            mysql.con.query(update_section_sql, [update_section_detail, video_id_arr[k]], function(err3, update_section_result) {
+                                            mysql.pool.query(update_section_sql, [update_section_detail, video_id_arr[k]], function(err3, update_section_result) {
                                                 if (err3) throw err3;
                                                 console.log("updateeeeeee section")
                                             })
@@ -255,11 +255,11 @@ router.post("/course_update/insertMysql", mixupload, function(req, res) {
                         },
                         (next) => {
                             let course_title_sql = "SELECT course_title FROM new_course where course_id = ?"
-                            mysql.con.query(course_title_sql, course_id, function(err2, course_title_result) {
+                            mysql.pool.query(course_title_sql, course_id, function(err2, course_title_result) {
                                 if (err2) throw err2;
                                 let course_title = course_title_result[0].course_title;
                                 console.log(course_title)
-                                    // con.commit((error) => {
+                                    // pool.commit((error) => {
                                     //     if (error) {
                                     //         reject("Database Query Error");
                                     //         return;
