@@ -23,6 +23,9 @@ document.getElementById("sumbit").addEventListener("click", function() {
         } else if (xml.responseText == "沒有填寫全部登入欄位") {
             alert("請確實填寫所有登入欄位")
             window.location.assign('./sign_in.html')
+        } else if (xml.responseText == "Invalid Token") {
+            alert("密碼錯誤，請重新登入")
+            window.location.assign('./sign_in.html')
         } else {
             var accessToken = JSON.parse(xml.responseText).data.access_token;
             localStorage.setItem("accessToken", accessToken);

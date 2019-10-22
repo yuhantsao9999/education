@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const express = require("express");
 const mysql = require('../module/db');
 const router = express.Router();
@@ -7,7 +8,6 @@ const crypto = require('crypto');
 
 //signup API
 router.post('/user/signup', function(req, res) {
-
     let { name, email } = req.body;
     let pwd = req.body.password;
     // 後端初步驗證資料是否確實填寫
@@ -21,78 +21,86 @@ router.post('/user/signup', function(req, res) {
     //加密讓token會隨著時間而變
     hash.update(pwd + Date.now() + 120000);
     let token = hash.digest('hex')
-        // console.log(token)
-    let user = {
-        access_token: token,
-        access_expired: Date.now() + 12000,
-        provider: "native",
-        name: name,
-        email: email,
-    }
+
     return new Promise(function(resolve, reject) {
-        mysql.pool.getConnection(function(err, connection) {
-            if (err) {
-                reject("Database get connection err: " + err);
-                return;
-            }
-            connection.beginTransaction((err) => {
+        try {
+            mysql.pool.getConnection(function(err, connection) {
                 if (err) {
-                    reject("Transcaction Error: " + err);
+                    reject("Database get connection err: " + err);
                     return;
                 }
-                // Check email for duplicates
-                let user_email_list = `SELECT email from user where email = ?;`
-                connection.query(user_email_list, email, function(err, email_list) {
+                connection.beginTransaction(async(err) => {
                     if (err) {
-                        // throw err;
-                        reject("Database Query err: " + err);
+                        reject("Transcaction Error: " + err);
                         return;
                     }
-                    if (email_list.length == 0) {
-                        let insert_user_info = "INSERT INTO user SET ?"
-                        connection.query(insert_user_info, user, function(err, result) {
-                            if (err) {
-                                // throw err;
-                                reject("Database Query err: " + err);
-                                connection.rollback(function() {});
-                                return;
-                            }
-                            let mysql_user_info_list = `SELECT * from user where email=?;`
-                            connection.query(mysql_user_info_list, email, function(err, user_info_list) {
-                                let user = user_info_list;
-                                console.log(user)
+                    let password = await bcrypt.hash(pwd, 10)
+                        // console.log(token)
+                    let user = {
+                            password: password,
+                            access_token: token,
+                            access_expired: Date.now() + 12000,
+                            provider: "native",
+                            name: name,
+                            email: email,
+                        }
+                        // Check email for duplicates
+                    let user_email_list = `SELECT email from user where email = ?;`
+                    connection.query(user_email_list, email, function(err, email_list) {
+                        console.log(email_list)
+                        if (email_list.length > 0) {
+                            //重複註冊
+                            res.send("error");
+                        } else if (email_list.length == 0) {
+                            let insert_user_info = "INSERT INTO user SET ?"
+                            connection.query(insert_user_info, user, function(err, result) {
                                 if (err) {
                                     // throw err;
                                     reject("Database Query err: " + err);
                                     connection.rollback(function() {});
                                     return;
                                 }
-
-                                // access.push({ access_token: user[0].access_token, access_expired: user[0].access_expired })
-                                array.push({ id: user[0].user_id, provider: user[0].provider, name: user[0].name, email: user[0].email });
-                                test['data'] = ({ access_token: user[0].access_token, access_expired: user[0].access_expired, user: array[0] });
-                                // res.json(test);
-                                connection.commit(function(err) {
+                                let mysql_user_info_list = `SELECT * from user where email=?;`
+                                connection.query(mysql_user_info_list, email, function(err, user_info_list) {
+                                    let user = user_info_list;
+                                    console.log(user)
                                     if (err) {
                                         // throw err;
                                         reject("Database Query err: " + err);
+                                        connection.rollback(function() {});
                                         return;
                                     }
-                                    resolve("successful")
-                                    res.json(test);
 
+                                    // access.push({ access_token: user[0].access_token, access_expired: user[0].access_expired })
+                                    array.push({ id: user[0].user_id, provider: user[0].provider, name: user[0].name, email: user[0].email });
+                                    test['data'] = ({ access_token: user[0].access_token, access_expired: user[0].access_expired, user: array[0] });
+                                    // res.json(test);
+                                    connection.commit(function(err) {
+                                        if (err) {
+                                            // throw err;
+                                            reject("Database Query err: " + err);
+                                            return;
+                                        }
+                                        resolve("successful")
+                                        console.log("successful")
+                                        res.json(test);
+
+                                    });
                                 });
                             });
-                        });
-                    } else {
-                        res.send('err')
-                    }
-                });
+                        } else {
+                            res.send('err')
+                        }
+                    });
 
+                });
+                connection.release();
             });
-            connection.release();
-        });
+        } catch (err) {
+            console.log(err)
+        }
     });
+
 });
 
 //signin API/user/signin
@@ -121,6 +129,13 @@ router.post('/user/signin', function(req, res) {
             mysql.pool.getConnection(function(err, connection) {
                 connection.beginTransaction(async(err) => {
                     try {
+                        let user_info_list = 'SELECT * FROM user WHERE email = ? AND provider = ?'
+
+                        let account = await mysql.sql_query_transaction(user_info_list, [email, req.body.provider], connection)
+                        let database_pwd = account[0].password
+                        let isMatch = await bcrypt.compare(pwd, database_pwd)
+                        if (!isMatch) return res.send('Invalid Token')
+
                         let user_email_list = `SELECT * from user where email = ?;`
                         let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
                         console.log(user_email)

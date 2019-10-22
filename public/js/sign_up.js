@@ -15,13 +15,16 @@ document.getElementById("sumbit").addEventListener("click", function() {
         // console.log(profile)
     xml.send(JSON.stringify(profile));
     xml.onload = function() {
+        console.log(xml.responseText)
         if (xml.responseText == "error") {
             // console.log("duplicate")
             alert("Cannot repeat registration!please sign in!")
             window.location.assign('./sign_in.html')
+
         } else if (xml.responseText == "沒有填寫全部註冊欄位") {
             alert("請確實填寫所有註冊欄位")
             window.location.assign('./sign_up.html')
+
         } else {
             console.log("not duplicate")
             alert("sign up successful")
