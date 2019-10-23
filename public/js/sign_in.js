@@ -16,7 +16,7 @@ document.getElementById("sumbit").addEventListener("click", function() {
         // console.log(profile)
     xml.send(JSON.stringify(profile));
     xml.onload = function() {
-        console.log(xml.responseText)
+        // console.log(xml.responseText)
         if (xml.responseText == "err") {
             alert("please sign up first!")
             window.location.assign('./sign_up.html')

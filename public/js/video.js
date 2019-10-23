@@ -150,7 +150,7 @@ function update_user_video_percentage() {
     xmlhttp_video.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log("oooooooooo : " + xmlhttp_video.responseText)
-            if (xmlhttp_video.responseText == "need to registered first") {
+            if (xmlhttp_video.responseText == "no registered") {
                 alert("請先註冊此課程才能觀看哦～")
                 window.location.assign("./course.html?title=" + title)
             } else {

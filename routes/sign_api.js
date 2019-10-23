@@ -47,7 +47,7 @@ router.post('/user/signup', function(req, res) {
                         // Check email for duplicates
                     let user_email_list = `SELECT email from user where email = ?;`
                     connection.query(user_email_list, email, function(err, email_list) {
-                        console.log(email_list)
+                        // console.log(email_list)
                         if (email_list.length > 0) {
                             //重複註冊
                             res.send("error");
@@ -63,7 +63,7 @@ router.post('/user/signup', function(req, res) {
                                 let mysql_user_info_list = `SELECT * from user where email=?;`
                                 connection.query(mysql_user_info_list, email, function(err, user_info_list) {
                                     let user = user_info_list;
-                                    console.log(user)
+                                    // console.log(user)
                                     if (err) {
                                         // throw err;
                                         reject("Database Query err: " + err);
@@ -82,7 +82,7 @@ router.post('/user/signup', function(req, res) {
                                             return;
                                         }
                                         resolve("successful")
-                                        console.log("successful")
+                                            // console.log("successful")
                                         res.json(test);
 
                                     });
@@ -97,7 +97,8 @@ router.post('/user/signup', function(req, res) {
                 connection.release();
             });
         } catch (err) {
-            console.log(err)
+            return err
+                // console.log(err)
         }
     });
 
@@ -122,52 +123,52 @@ router.post('/user/signin', function(req, res) {
             // console.log("this is token " + token)
         let access_expired = Date.now() + 12000
         let update_user_access_token_sql = {
-            access_token: token,
-            access_expired,
-        }
-        return new Promise(function(resolve, reject) {
-            mysql.pool.getConnection(function(err, connection) {
-                connection.beginTransaction(async(err) => {
-                    try {
-                        let user_info_list = 'SELECT * FROM user WHERE email = ? AND provider = ?'
+                access_token: token,
+                access_expired,
+            }
+            // return new Promise(function(resolve, reject) {
+        mysql.pool.getConnection(function(err, connection) {
+            connection.beginTransaction(async(err) => {
+                try {
+                    let user_info_list = 'SELECT * FROM user WHERE email = ? AND provider = ?'
 
-                        let account = await mysql.sql_query_transaction(user_info_list, [email, req.body.provider], connection)
-                        let database_pwd = account[0].password
-                        let isMatch = await bcrypt.compare(pwd, database_pwd)
-                        if (!isMatch) return res.send('Invalid Token')
+                    let account = await mysql.sql_query_transaction(user_info_list, [email, req.body.provider], connection)
+                    let database_pwd = account[0].password
+                    let isMatch = await bcrypt.compare(pwd, database_pwd)
+                    if (!isMatch) return res.send('Invalid Token')
 
-                        let user_email_list = `SELECT * from user where email = ?;`
-                        let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
-                        console.log(user_email)
-                        if (user_email.length == 0) {
-                            res.send("err")
+                    let user_email_list = `SELECT * from user where email = ?;`
+                    let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
+                    console.log(user_email)
+                    if (user_email.length == 0) {
+                        res.send("err")
+                    } else {
+                        let update_native_token = `UPDATE user SET ? WHERE email = ? and provider = 'native';`
+                        await mysql.sql_query_transaction(update_native_token, [update_user_access_token_sql, email], connection)
+                        let new_user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
+                        let access_token = new_user_email[0].access_token
+                        if (access_token == token) {
+                            array.push({ id: new_user_email[0].id, provider: new_user_email[0].provider, name: new_user_email[0].name, email: new_user_email[0].email, pricture: new_user_email[0].picture });
+                            test['data'] = ({ access_token: new_user_email[0].access_token, access_expired: new_user_email[0].access_expired, user: array[0] });
                         } else {
-                            let update_native_token = `UPDATE user SET ? WHERE email = ? and provider = 'native';`
-                            await mysql.sql_query_transaction(update_native_token, [update_user_access_token_sql, email], connection)
-                            let new_user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
-                            let access_token = new_user_email[0].access_token
-                            if (access_token == token) {
-                                array.push({ id: new_user_email[0].id, provider: new_user_email[0].provider, name: new_user_email[0].name, email: new_user_email[0].email, pricture: new_user_email[0].picture });
-                                test['data'] = ({ access_token: new_user_email[0].access_token, access_expired: new_user_email[0].access_expired, user: array[0] });
-                            } else {
-                                res.send('err')
-                            }
-                            connection.commit(function(err) {
-                                if (err) {
-                                    return connection.rollback(function() {
-                                        res.send('err')
-                                    });
-                                }
-                                res.json(test);
-                            });
+                            res.send('err')
                         }
-                    } catch (error) {
-                        res.send('err')
+                        connection.commit(function(err) {
+                            if (err) {
+                                return connection.rollback(function() {
+                                    res.send('err')
+                                });
+                            }
+                            res.json(test);
+                        });
                     }
-                })
-
-
+                } catch (error) {
+                    res.send('err')
+                }
             })
+
+
+            // })
         })
     } else {
         // 向 FB 要求使用者名稱和ID

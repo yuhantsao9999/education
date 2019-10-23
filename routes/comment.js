@@ -2,7 +2,6 @@ const express = require('express')
 const mysql = require('../module/db');
 const app = express();
 const router = express.Router();
-const async = require('async');
 const comment = require('../dao/comment')
     // const verification = require('../util/verification')
 

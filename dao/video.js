@@ -3,18 +3,21 @@ const mysql = require('../module/db');
 module.exports = {
     get_video_info: async(title, section_id, user_token, chapter_id) => {        
         try  {            
+            console.log("ooooooon")
             let  mysql_course = "select * from new_course where course_title =?;"; 
             let  result_course = await mysql.sql_query(mysql_course, title);         
-            let  course_id = result_course[0].course_id;            
+            let  course_id = result_course[0].course_id;
+            console.log("course_id : " + course_id)    
             let  mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter on final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id=? and new_chapter.chapter_id=? and final_section.section_id=?`;            
-            let  result_video = await  mysql.sql_query(mysql_video, [course_id, chapter_id, section_id])            
+            let  result_video = await  mysql.sql_query(mysql_video, [course_id, chapter_id, section_id])
+            console.log("ppppp: " + JSON.stringify(result_video))     
             let  video = result_video[0].video;            
             let  video_id = result_video[0].video_id; 
             let  mysql_video_current_time = `select video_time from course_progress join user on course_progress.user_id=user.user_id where course_progress.video_id=? and user.access_token=?;`           
             let result_video_current_time = await mysql.sql_query(mysql_video_current_time, [video_id, user_token])
             console.log("此影片面前時間 : " + JSON.stringify(result_video_current_time))
             if (result_video_current_time.length == 0)  {                    
-                return ("need to registered first")            
+                return ("no registered")            
             } 
             else {                             
                 let user_vider_current_time = result_video_current_time[0].video_time;                
@@ -25,7 +28,8 @@ module.exports = {
                 return (data)            
             } 
         } 
-        catch (err) {         
+        catch (err) {   
+            console.log(err)      
             throw err        
         }    
     },

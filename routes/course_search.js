@@ -1,5 +1,4 @@
 const express = require('express')
-const mysql = require('../module/db');
 const router = express.Router();
 const course = require('../dao/course')
 

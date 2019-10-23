@@ -5,7 +5,7 @@ document.getElementById("sumbit").addEventListener("click", function() {
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    console.log("this is" + name, email, password)
+    // console.log("this is" + name, email, password)
     var profile = {
             provider: "native",
             name: name,
@@ -15,7 +15,7 @@ document.getElementById("sumbit").addEventListener("click", function() {
         // console.log(profile)
     xml.send(JSON.stringify(profile));
     xml.onload = function() {
-        console.log(xml.responseText)
+        // console.log(xml.responseText)
         if (xml.responseText == "error") {
             // console.log("duplicate")
             alert("Cannot repeat registration!please sign in!")
@@ -26,7 +26,7 @@ document.getElementById("sumbit").addEventListener("click", function() {
             window.location.assign('./sign_up.html')
 
         } else {
-            console.log("not duplicate")
+            // console.log("not duplicate")
             alert("sign up successful")
                 // localStorage.setItem("accessToken", accessToken);
                 // var accessToken = JSON.parse(xml.responseText).data.access_token;

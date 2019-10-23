@@ -9,7 +9,8 @@ const video = require('../dao/video')
 router.post("/education/videoinfo", async function(req, res)  {    
     try {        
         let { title, section_id, user_token } = req.body.videoinfo_obj;        
-        let chapter_id = req.body.videoinfo_obj.chapter;        
+        let chapter_id = req.body.videoinfo_obj.chapter;    
+        // console.log("444444")    
         let video_detail_array = await video.get_video_info(title, section_id, user_token, chapter_id)        
             // console.log("5555555"  +  JSON.stringify(video_detail_array))        
         res.send(video_detail_array)    
@@ -43,7 +44,7 @@ router.post("/videoupdate", async function(req, res) {
         let current_time = req.body.currentTime;
         let total_time = req.body.totalTime;
         let token = req.body.accessToken;
-        let update_videotime_result = await video.video_update(title, chapter_id, section_id, current_time, total_time, token)
+        await video.video_update(title, chapter_id, section_id, current_time, total_time, token)
         res.send({ status: "successful" })
     } catch (err) {
         return err
