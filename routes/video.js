@@ -9,9 +9,8 @@ const video = require('../dao/video')
 router.post("/education/videoinfo", async function(req, res)  {    
     try {        
         let { title, section_id, user_token } = req.body.videoinfo_obj;        
-        let chapter_id = req.body.videoinfo_obj.chapter;    
-        // console.log("444444")    
-        let video_detail_array = await video.get_video_info(title, section_id, user_token, chapter_id)        
+        let chapter_id = req.body.videoinfo_obj.chapter;        
+        let video_detail_array = await video.get_video_info(title, chapter_id, section_id, user_token)        
             // console.log("5555555"  +  JSON.stringify(video_detail_array))        
         res.send(video_detail_array)    
     } catch (err) {        
@@ -23,11 +22,14 @@ router.post("/education/videoinfo", async function(req, res)  {    
 //vidoe_percent
 router.post("/video_percent", async function(req, res) {
     try {
-        let title = req.body.title;
-        let access_token = req.body.accessToken;
-        let progress_arr = await video.video_percent(title, access_token)
+        let { title, section_id, access_token } = req.body;
+        // let title = req.body.title;
+        let chapter_id = req.body.chapter;
+        // let access_token = req.body.accessToken;
+        let progress_arr = await video.video_percent(title, chapter_id, section_id, access_token)
         res.send(progress_arr)
     } catch (err) {
+        console.log(err)
         return err
     }
 

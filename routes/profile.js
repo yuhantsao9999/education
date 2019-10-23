@@ -29,12 +29,12 @@ router.get('/profile/getinfo', async function(req, res) {
         let user_id = req.user_id;
 
         let profile_info_obj = await profile.get_info(user_id)
-        console.log("crrecttttt")
-        console.log("get info info:")
+            // console.log("crrecttttt")
+            // console.log("get info info:")
         res.json(profile_info_obj)
     } catch (err) {
-        console.log("euuuuuuuuu")
-        console.log(err)
+        // console.log("euuuuuuuuu")
+        // console.log(err)
         return err
     }
 })

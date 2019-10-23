@@ -79,17 +79,25 @@ display_table_of_course_content();
 //新增使用者播放進度％
 function display_user_video_percentage() {
     window.addEventListener("load", function() {
-        var accessToken = localStorage.getItem("accessToken")
+        var access_token = localStorage.getItem("accessToken")
         var xml_percent = new XMLHttpRequest();
         xml_percent.open("post", "/video_percent", true)
         xml_percent.setRequestHeader('Content-Type', 'application/json');
-        console.log(accessToken)
+        console.log(access_token)
+            //TODO:要改
         var urlParams = new URLSearchParams(window.location.search);
         var title = urlParams.get('title');
+        var chapter = urlParams.get('chapter');
+        var section = urlParams.get('section');
+        var section_id = urlParams.get('section_id');
         var videopercent_obj = {
             title: title,
-            accessToken: accessToken
+            chapter: chapter,
+            section: section,
+            section_id: section_id,
+            access_token: access_token
         }
+
         xml_percent.send(JSON.stringify(videopercent_obj));
         xml_percent.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -134,6 +142,8 @@ function update_user_video_percentage() {
     var section = urlParams.get('section');
     var section_id = urlParams.get('section_id');
     var xmlhttp_video = new XMLHttpRequest();
+
+    //TODO:
     xmlhttp_video.open("post", "/education/videoinfo", true)
     var videoinfo_obj = {
         title: title,

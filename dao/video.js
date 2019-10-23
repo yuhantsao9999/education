@@ -1,21 +1,19 @@
 const mysql = require('../module/db');
 
 module.exports = {
-    get_video_info: async(title, section_id, user_token, chapter_id) => {        
+    get_video_info: async(title, chapter_id, section_id, user_token) => {        
         try  {            
-            console.log("ooooooon")
-            let  mysql_course = "select * from new_course where course_title =?;"; 
-            let  result_course = await mysql.sql_query(mysql_course, title);         
-            let  course_id = result_course[0].course_id;
-            console.log("course_id : " + course_id)    
-            let  mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter on final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id=? and new_chapter.chapter_id=? and final_section.section_id=?`;            
-            let  result_video = await  mysql.sql_query(mysql_video, [course_id, chapter_id, section_id])
-            console.log("ppppp: " + JSON.stringify(result_video))     
-            let  video = result_video[0].video;            
+            let  mysql_course = "select course_id from new_course where course_title =?;"; 
+            let  result_course = await mysql.sql_query(mysql_course, title); 
+            // console.log(result_course)       
+            let  course_id = result_course[0].course_id;          
+            let  mysql_video = `select final_section.video,final_section.video_id from final_section join new_chapter on final_section.chapter_auto_id=new_chapter.chapter_auto_id and final_section.course_id=? and new_chapter.chapter_id=? and final_section.section_id=?`;
+            let  result_video = await mysql.sql_query(mysql_video, [course_id, chapter_id, section_id])
+            let  video = result_video[0].video;          
             let  video_id = result_video[0].video_id; 
             let  mysql_video_current_time = `select video_time from course_progress join user on course_progress.user_id=user.user_id where course_progress.video_id=? and user.access_token=?;`           
             let result_video_current_time = await mysql.sql_query(mysql_video_current_time, [video_id, user_token])
-            console.log("此影片面前時間 : " + JSON.stringify(result_video_current_time))
+                // console.log("此影片面前時間 : " + JSON.stringify(result_video_current_time))
             if (result_video_current_time.length == 0)  {                    
                 return ("no registered")            
             } 
@@ -28,19 +26,20 @@ module.exports = {
                 return (data)            
             } 
         } 
-        catch (err) {   
-            console.log(err)      
+        catch (err) {  
             throw err        
         }    
     },
-    video_percent: async(title, access_token) => {
+    video_percent: async(title, chapter_id, section_id, access_token) => {
         try {
+            console.log("wowwwwwww")
             let profile_check_member = `SELECT user_id FROM user WHERE access_token = ? `
             let result_course = await mysql.sql_query(profile_check_member, access_token)
 
             let user_id = result_course[0].user_id;
-
-            let video_time_sql = `SELECT video_time,video_duration FROM course_progress WHERE course_title=? AND user_id=? ORDER BY video_id ASC;        `
+            console.log("tiitle: " + title)
+            console.log("user_id : " + user_id)
+            let video_time_sql = `SELECT status_id,video_time,video_duration FROM course_progress inner join final_section on final_section.video_id=course_progress.video_id WHERE course_title=? AND user_id=? ORDER BY final_section.section_id ASC;`
             let video_time_result = await mysql.sql_query(video_time_sql, [title, user_id])
 
             let progress_arr = []
@@ -57,6 +56,7 @@ module.exports = {
             console.log("progress_arr : " + progress_arr)
             return (progress_arr)
         } catch (err) {
+            console.log(err)
             throw err
         }
     },
