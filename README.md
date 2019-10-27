@@ -60,7 +60,7 @@ Course At Door is an education platform for teaching like Coursera.
 ## Database Schema
 
 <p align="center">
- <img src="https://i.imgur.com/FJ7Wszx.jpg" width="800">
+ <img src="https://i.imgur.com/gUN85MM.jpg" width="800">
 </p>
 
 ## Main Features
