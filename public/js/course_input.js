@@ -52,6 +52,11 @@ function add_section(obj) {
     video_input.required = true;
     video_div.appendChild(video_input);
 
+    var video_into_div = document.createElement("p")
+    var video_content = document.createTextNode("強烈建議影片格式:解析度為 1080p 畫質。檔案格式只支援 mp4, mov")
+    video_into_div.appendChild(video_content);
+    video_div.appendChild(video_into_div);
+
     var section_main_div = document.createElement("div");
     section_main_div.className = "section";
     section_main_div.id = "section" + video_count;

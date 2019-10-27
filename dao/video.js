@@ -32,13 +32,13 @@ module.exports = {
     },
     video_percent: async(title, chapter_id, section_id, access_token) => {
         try {
-            console.log("wowwwwwww")
+            // console.log("wowwwwwww")
             let profile_check_member = `SELECT user_id FROM user WHERE access_token = ? `
             let result_course = await mysql.sql_query(profile_check_member, access_token)
 
             let user_id = result_course[0].user_id;
-            console.log("tiitle: " + title)
-            console.log("user_id : " + user_id)
+            // console.log("tiitle: " + title)
+            // console.log("user_id : " + user_id)
             let video_time_sql = `SELECT status_id,video_time,video_duration FROM course_progress inner join final_section on final_section.video_id=course_progress.video_id WHERE course_title=? AND user_id=? ORDER BY final_section.section_id ASC;`
             let video_time_result = await mysql.sql_query(video_time_sql, [title, user_id])
 
@@ -53,10 +53,10 @@ module.exports = {
                     progress_arr.push("0");
                 }
             }
-            console.log("progress_arr : " + progress_arr)
+            // console.log("progress_arr : " + progress_arr)
             return (progress_arr)
         } catch (err) {
-            console.log(err)
+            // console.log(err)
             throw err
         }
     },
@@ -74,7 +74,7 @@ module.exports = {
             let video_id = video_id_result[0].video_id;
 
 
-            console.log(current_time)
+            // console.log(current_time)
             let complete = Math.round((current_time + 3) / total_time);
             let update_videotile_detail_sql = {
                 video_time: current_time,
