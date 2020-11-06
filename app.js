@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const mysql = require('./module/db');
 const bodyParser = require('body-parser');
 const check_member_token_and_status = require('./util/checkIsMemberLegal.js');
 

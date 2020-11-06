@@ -1,3 +1,4 @@
+const mysql = require('../module/db');
 //middleware
 let check_member_token_and_status = function (req, res, next) {
     //先判斷有是否是會員(有token)
