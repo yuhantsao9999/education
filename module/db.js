@@ -49,7 +49,6 @@ const sql_query = function(sql, params) {
                 console.log(error)
                 reject(error);
             } else {
-                // console.log(results)
                 resolve(results);
             }
         });

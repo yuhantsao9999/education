@@ -8,7 +8,6 @@ function search_course_enter() {
 function search_course() {
     var client_keyword = document.getElementsByClassName("search__input")[0].value;
     var result = capitalize_the_word(client_keyword);
-    console.log(result)
     window.location.replace("./search.html?keyword=" + result);
 }
 

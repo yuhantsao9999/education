@@ -1,18 +1,17 @@
-const bcrypt = require('bcryptjs')
-const express = require("express");
+const bcrypt = require('bcryptjs');
+const express = require('express');
 const mysql = require('../module/db');
 const router = express.Router();
 const request = require('request');
 const crypto = require('crypto');
 
-
 //signup API
-router.post('/user/signup', function(req, res) {
+router.post('/user/signup', function (req, res) {
     let { name, email } = req.body;
     let pwd = req.body.password;
     // 後端初步驗證資料是否確實填寫
-    if (!(name) || !(pwd) || !(email)) {
-        res.send("沒有填寫全部註冊欄位");
+    if (!name || !pwd || !email) {
+        res.send('沒有填寫全部註冊欄位');
         return;
     }
     let test = {};
@@ -20,98 +19,102 @@ router.post('/user/signup', function(req, res) {
     let hash = crypto.createHash('sha256');
     //加密讓token會隨著時間而變
     hash.update(pwd + Date.now() + 120000);
-    let token = hash.digest('hex')
+    let token = hash.digest('hex');
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         try {
-            mysql.pool.getConnection(function(err, connection) {
+            mysql.pool.getConnection(function (err, connection) {
                 if (err) {
-                    reject("Database get connection err: " + err);
+                    reject('Database get connection err: ' + err);
                     return;
                 }
-                connection.beginTransaction(async(err) => {
+                connection.beginTransaction(async (err) => {
                     if (err) {
-                        reject("Transcaction Error: " + err);
+                        reject('Transcaction Error: ' + err);
                         return;
                     }
-                    let password = await bcrypt.hash(pwd, 10)
-                        // console.log(token)
+                    let password = await bcrypt.hash(pwd, 10);
                     let user = {
-                            password: password,
-                            access_token: token,
-                            access_expired: Date.now() + 12000,
-                            provider: "native",
-                            name: name,
-                            email: email,
-                        }
-                        // Check email for duplicates
-                    let user_email_list = `SELECT email from user where email = ?;`
-                    connection.query(user_email_list, email, function(err, email_list) {
-                        // console.log(email_list)
+                        password: password,
+                        access_token: token,
+                        access_expired: Date.now() + 12000,
+                        provider: 'native',
+                        name: name,
+                        email: email,
+                    };
+                    // Check email for duplicates
+                    let user_email_list = `SELECT email from user where email = ?;`;
+                    connection.query(user_email_list, email, function (err, email_list) {
                         if (email_list.length > 0) {
                             //重複註冊
-                            res.send("error");
+                            res.send('error');
                         } else if (email_list.length == 0) {
-                            let insert_user_info = "INSERT INTO user SET ?"
-                            connection.query(insert_user_info, user, function(err, result) {
+                            let insert_user_info = 'INSERT INTO user SET ?';
+                            connection.query(insert_user_info, user, function (err, result) {
                                 if (err) {
                                     // throw err;
-                                    reject("Database Query err: " + err);
-                                    connection.rollback(function() {});
+                                    reject('Database Query err: ' + err);
+                                    connection.rollback(function () {});
                                     return;
                                 }
-                                let mysql_user_info_list = `SELECT * from user where email=?;`
-                                connection.query(mysql_user_info_list, email, function(err, user_info_list) {
+                                let mysql_user_info_list = `SELECT * from user where email=?;`;
+                                connection.query(mysql_user_info_list, email, function (err, user_info_list) {
                                     let user = user_info_list;
                                     // console.log(user)
                                     if (err) {
                                         // throw err;
-                                        reject("Database Query err: " + err);
-                                        connection.rollback(function() {});
+                                        reject('Database Query err: ' + err);
+                                        connection.rollback(function () {});
                                         return;
                                     }
 
                                     // access.push({ access_token: user[0].access_token, access_expired: user[0].access_expired })
-                                    array.push({ id: user[0].user_id, provider: user[0].provider, name: user[0].name, email: user[0].email });
-                                    test['data'] = ({ access_token: user[0].access_token, access_expired: user[0].access_expired, user: array[0] });
+                                    array.push({
+                                        id: user[0].user_id,
+                                        provider: user[0].provider,
+                                        name: user[0].name,
+                                        email: user[0].email,
+                                    });
+                                    test['data'] = {
+                                        access_token: user[0].access_token,
+                                        access_expired: user[0].access_expired,
+                                        user: array[0],
+                                    };
                                     // res.json(test);
-                                    connection.commit(function(err) {
+                                    connection.commit(function (err) {
                                         if (err) {
                                             // throw err;
-                                            reject("Database Query err: " + err);
+                                            reject('Database Query err: ' + err);
                                             return;
                                         }
-                                        resolve("successful")
-                                            // console.log("successful")
+                                        resolve('successful');
+                                        // console.log("successful")
                                         res.json(test);
-
                                     });
                                 });
                             });
                         } else {
-                            res.send('err')
+                            res.send('err');
                         }
                     });
-
                 });
                 connection.release();
             });
         } catch (err) {
-            return err
-                // console.log(err)
+            return err;
+            // console.log(err)
         }
     });
-
 });
 
 //signin API/user/signin
-router.post('/user/signin', function(req, res) {
-    if (req.body.provider == "native") {
+router.post('/user/signin', function (req, res) {
+    if (req.body.provider == 'native') {
         let { email } = req.body;
         // console.log(email)
         let pwd = req.body.password;
-        if (!(pwd) || !(email)) {
-            res.send("沒有填寫全部登入欄位");
+        if (!pwd || !email) {
+            res.send('沒有填寫全部登入欄位');
             return;
         }
         // console.log(name + " " + email + " " + pwd)
@@ -119,137 +122,173 @@ router.post('/user/signin', function(req, res) {
         let array = [];
         let hash = crypto.createHash('sha256');
         hash.update(pwd + Date.now() + 12000);
-        let token = hash.digest('hex')
-            // console.log("this is token " + token)
-        let access_expired = Date.now() + 12000
+        let token = hash.digest('hex');
+        // console.log("this is token " + token)
+        let access_expired = Date.now() + 12000;
         let update_user_access_token_sql = {
-                access_token: token,
-                access_expired,
-            }
-            // return new Promise(function(resolve, reject) {
-        mysql.pool.getConnection(function(err, connection) {
-            connection.beginTransaction(async(err) => {
+            access_token: token,
+            access_expired,
+        };
+        // return new Promise(function(resolve, reject) {
+        mysql.pool.getConnection(function (err, connection) {
+            connection.beginTransaction(async (err) => {
                 try {
-                    let user_info_list = 'SELECT * FROM user WHERE email = ? AND provider = ?'
+                    let user_info_list = 'SELECT * FROM user WHERE email = ? AND provider = ?';
 
-                    let account = await mysql.sql_query_transaction(user_info_list, [email, req.body.provider], connection)
-                    let database_pwd = account[0].password
-                    let isMatch = await bcrypt.compare(pwd, database_pwd)
-                    if (!isMatch) return res.send('Invalid Token')
+                    let account = await mysql.sql_query_transaction(
+                        user_info_list,
+                        [email, req.body.provider],
+                        connection
+                    );
+                    let database_pwd = account[0].password;
+                    let isMatch = await bcrypt.compare(pwd, database_pwd);
+                    if (!isMatch) return res.send('Invalid Token');
 
-                    let user_email_list = `SELECT * from user where email = ?;`
-                    let user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
-                    console.log(user_email)
+                    let user_email_list = `SELECT * from user where email = ?;`;
+                    let user_email = await mysql.sql_query_transaction(user_email_list, email, connection);
+                    console.log(user_email);
                     if (user_email.length == 0) {
-                        res.send("err")
+                        res.send('err');
                     } else {
-                        let update_native_token = `UPDATE user SET ? WHERE email = ? and provider = 'native';`
-                        await mysql.sql_query_transaction(update_native_token, [update_user_access_token_sql, email], connection)
-                        let new_user_email = await mysql.sql_query_transaction(user_email_list, email, connection)
-                        let access_token = new_user_email[0].access_token
+                        let update_native_token = `UPDATE user SET ? WHERE email = ? and provider = 'native';`;
+                        await mysql.sql_query_transaction(
+                            update_native_token,
+                            [update_user_access_token_sql, email],
+                            connection
+                        );
+                        let new_user_email = await mysql.sql_query_transaction(user_email_list, email, connection);
+                        let access_token = new_user_email[0].access_token;
                         if (access_token == token) {
-                            array.push({ id: new_user_email[0].id, provider: new_user_email[0].provider, name: new_user_email[0].name, email: new_user_email[0].email, pricture: new_user_email[0].picture });
-                            test['data'] = ({ access_token: new_user_email[0].access_token, access_expired: new_user_email[0].access_expired, user: array[0] });
+                            array.push({
+                                id: new_user_email[0].id,
+                                provider: new_user_email[0].provider,
+                                name: new_user_email[0].name,
+                                email: new_user_email[0].email,
+                                pricture: new_user_email[0].picture,
+                            });
+                            test['data'] = {
+                                access_token: new_user_email[0].access_token,
+                                access_expired: new_user_email[0].access_expired,
+                                user: array[0],
+                            };
                         } else {
-                            res.send('err')
+                            res.send('err');
                         }
-                        connection.commit(function(err) {
+                        connection.commit(function (err) {
                             if (err) {
-                                return connection.rollback(function() {
-                                    res.send('err')
+                                return connection.rollback(function () {
+                                    res.send('err');
                                 });
                             }
                             res.json(test);
                         });
                     }
                 } catch (error) {
-                    res.send('err')
+                    res.send('err');
                 }
-            })
-
+            });
 
             // })
-        })
+        });
     } else {
         // 向 FB 要求使用者名稱和ID
         let token = req.body.fb_token;
         // console.log(token)
-        request('https://graph.facebook.com/me?&fields=id,name,email,picture.width(160).height(160)&access_token=' + token, (err, response, body) => {
-            let profile = JSON.parse(body);
-            // console.log(profile)
-            let { name, email } = profile;
-            let user_image = profile.picture.data.url;
-            // console.log(email)
-            let test = {};
-            let array = [];
-            let hash = crypto.createHash('sha256');
-            hash.update(profile + email + Date.now() + 12000);
-            let mixtoken = hash.digest('hex')
+        request(
+            'https://graph.facebook.com/me?&fields=id,name,email,picture.width(160).height(160)&access_token=' + token,
+            (err, response, body) => {
+                let profile = JSON.parse(body);
+                // console.log(profile)
+                let { name, email } = profile;
+                let user_image = profile.picture.data.url;
+                // console.log(email)
+                let test = {};
+                let array = [];
+                let hash = crypto.createHash('sha256');
+                hash.update(profile + email + Date.now() + 12000);
+                let mixtoken = hash.digest('hex');
                 // console.log(mixtoken)
-            let fb_user = {
-                access_token: mixtoken, //更換會隨著時間變動的新token
-                access_expired: Date.now() + 12000,
-                provider: "facebook",
-                name: name,
-                email: email,
-                user_image: user_image,
-            };
-            let access_expired = Date.now() + 12000
-            let fb_insert = "INSERT INTO user SET ?";
-            let fb_update_user_token = `
+                let fb_user = {
+                    access_token: mixtoken, //更換會隨著時間變動的新token
+                    access_expired: Date.now() + 12000,
+                    provider: 'facebook',
+                    name: name,
+                    email: email,
+                    user_image: user_image,
+                };
+                let access_expired = Date.now() + 12000;
+                let fb_insert = 'INSERT INTO user SET ?';
+                let fb_update_user_token = `
             UPDATE user SET access_token = '${mixtoken}', access_expired = '${access_expired}'
             WHERE email = '${email}';
-            `
-            let fb_repeat = `
+            `;
+                let fb_repeat = `
             SELECT email from user where provider = 'facebook'
             and email = '${email}';
-            `
-            let fb_select = `
+            `;
+                let fb_select = `
                 SELECT * from user where provider = 'facebook'
                 and name = '${name}';
-                `
-            let fb_select_all_from_email = `
+                `;
+                let fb_select_all_from_email = `
                 SELECT * from user where provider = 'facebook'
                 and email = '${email}';
-                `
-            mysql.pool.query(fb_repeat, function(err, fb_repeat_result) {
-                if (err) throw err;
-                //若mysql內有沒有這筆臉書的emil資料，沒有則存取資料
-                if (String(fb_repeat_result).length == 0) {
-                    mysql.pool.query(fb_insert, fb_user, function(err, fb_result) {
-                        if (err) throw err;
-                        // 存取後再顯示資料
-                        mysql.pool.query(fb_select, function(err, fb_user_info) {
+                `;
+                mysql.pool.query(fb_repeat, function (err, fb_repeat_result) {
+                    if (err) throw err;
+                    //若mysql內有沒有這筆臉書的emil資料，沒有則存取資料
+                    if (String(fb_repeat_result).length == 0) {
+                        mysql.pool.query(fb_insert, fb_user, function (err, fb_result) {
                             if (err) throw err;
-                            // console.log(fb_user_info)
-                            let user = fb_user_info
-                            array.push({ id: user[0].id, provider: user[0].provider, name: user[0].name, email: user[0].email, pricture: user[0].user_image });
-                            test['data'] = ({ access_token: user[0].access_token, access_expired: user[0].access_expired, user: array[0] });
-                            // console.log(test)
-                            res.json(test);
-                        })
-                    })
-                } else { //若mysql內有這筆臉書的emil資料，則update資料並直接顯示資料
-                    mysql.pool.query(fb_update_user_token, fb_user, function(err, fb_update) {
-                        if (err) throw err;
-                        mysql.pool.query(fb_select_all_from_email, function(err, fb_user_info) {
-                            if (err) throw err;
-                            console.log("wwwwwqwwwww :" + JSON.stringify(fb_user_info))
-                            let user = fb_user_info
-                            array.push({ id: user[0].id, provider: user[0].provider, name: user[0].name, email: user[0].email, pricture: user[0].user_image });
-                            test['data'] = ({
-                                access_token: user[0].access_token,
-                                access_expired: user[0].access_expired,
-                                user: array[0],
+                            // 存取後再顯示資料
+                            mysql.pool.query(fb_select, function (err, fb_user_info) {
+                                if (err) throw err;
+                                // console.log(fb_user_info)
+                                let user = fb_user_info;
+                                array.push({
+                                    id: user[0].id,
+                                    provider: user[0].provider,
+                                    name: user[0].name,
+                                    email: user[0].email,
+                                    pricture: user[0].user_image,
+                                });
+                                test['data'] = {
+                                    access_token: user[0].access_token,
+                                    access_expired: user[0].access_expired,
+                                    user: array[0],
+                                };
+                                // console.log(test)
+                                res.json(test);
                             });
-                            // console.log(test)
-                            res.json(test);
-                        })
-                    })
-                }
-            })
-
-        })
+                        });
+                    } else {
+                        //若mysql內有這筆臉書的emil資料，則update資料並直接顯示資料
+                        mysql.pool.query(fb_update_user_token, fb_user, function (err, fb_update) {
+                            if (err) throw err;
+                            mysql.pool.query(fb_select_all_from_email, function (err, fb_user_info) {
+                                if (err) throw err;
+                                console.log('wwwwwqwwwww :' + JSON.stringify(fb_user_info));
+                                let user = fb_user_info;
+                                array.push({
+                                    id: user[0].id,
+                                    provider: user[0].provider,
+                                    name: user[0].name,
+                                    email: user[0].email,
+                                    pricture: user[0].user_image,
+                                });
+                                test['data'] = {
+                                    access_token: user[0].access_token,
+                                    access_expired: user[0].access_expired,
+                                    user: array[0],
+                                };
+                                // console.log(test)
+                                res.json(test);
+                            });
+                        });
+                    }
+                });
+            }
+        );
     }
 });
 
